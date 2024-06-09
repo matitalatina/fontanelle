@@ -23,12 +23,12 @@ export default function Map({
   children?: React.ReactNode;
 }) {
   const location = useLocation();
-  //   const center = location ?? { lat: 45.464664, lng: 9.18854 };
-  const center = { lat: 45.464664, lng: 9.18854 };
+  const center = location ?? { lat: 45.464664, lng: 9.18854 };
+  // const center = { lat: 45.464664, lng: 9.18854 };
   return (
     <MapContainer
       center={[center.lat, center.lng]}
-      zoom={13}
+      zoom={16}
       scrollWheelZoom={false}
       className={`w-full h-full ${className}`}
     >

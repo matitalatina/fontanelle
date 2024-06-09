@@ -21,14 +21,14 @@ export default function useLocation() {
       console.log("Geolocation is not supported by your browser");
       return;
     }
-    const id = navigator.geolocation.watchPosition(onSuccess, onError, {
-      enableHighAccuracy: true,
-    });
+    // const id = navigator.geolocation.watchPosition(onSuccess, onError, {
+    //   enableHighAccuracy: true,
+    // });
     navigator.geolocation.getCurrentPosition(onSuccess, onError, {
       enableHighAccuracy: true,
       timeout: 5000,
     });
-    return () => navigator.geolocation.clearWatch(id);
+    // return () => navigator.geolocation.clearWatch(id);
   }, []);
   return location;
 }
