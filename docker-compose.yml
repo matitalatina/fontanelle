@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: app
+    restart: unless-stopped
+    network_mode: host
+    ports:
+      - "3003:3000"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.fontanellemilano.rule=Host(`fontanellemilano.mattianatali.com`)
+      - traefik.http.routers.fontanellemilano.tls=true
+      - traefik.http.routers.fontanellemilano.tls.certresolver=myresolver
+      - traefik.http.services.fontanellemilano.loadbalancer.server.port=3003
