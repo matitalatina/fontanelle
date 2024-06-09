@@ -6,8 +6,6 @@ services:
     image: app
     restart: unless-stopped
     network_mode: host
-    ports:
-      - "3003:3000"
     labels:
       - traefik.enable=true
       - traefik.http.routers.fontanellemilano.rule=Host(`fontanellemilano.mattianatali.com`)
