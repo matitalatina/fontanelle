@@ -13,6 +13,7 @@
     "csv-parse": "^5.5.6",
     "leaflet": "^1.9.4",
     "leaflet-extra-markers": "^1.2.2",
+    "leaflet.markercluster": "^1.5.3",
     "lodash": "^4.17.21",
     "next": "14.2.3",
     "react": "^18",
@@ -21,6 +22,7 @@
     "sharp": "^0.33.4"
   },
   "devDependencies": {
+    "@types/leaflet.markercluster": "^1.5.4",
     "@types/leaflet": "^1.9.12",
     "@types/lodash": "^4.17.5",
     "@types/node": "^20",

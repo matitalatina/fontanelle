@@ -1,9 +1,11 @@
-import { getStations } from "@/lib/stations";
+"use client";
+import { Station, getStations } from "@/lib/stations";
 import StationMarker from "./StationMarker";
+import MarkerClusterGroup from "./MarkerCluster";
 
-export default async function StationMarkers() {
-  const markers = (await getStations()).stations.map((station) => (
+export default function StationMarkers({ stations }: { stations: Station[] }) {
+  const markers = stations.map((station) => (
     <StationMarker station={station} key={station.id} />
   ));
-  return <>{markers}</>;
+  return <MarkerClusterGroup>{markers}</MarkerClusterGroup>;
 }

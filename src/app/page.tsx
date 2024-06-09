@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import StationMarkers from "@/components/StationMarkers";
+import { getStations } from "@/lib/stations";
 
 const LazyMap = dynamic(() => import("../components/Map"), {
   ssr: false,
@@ -10,11 +11,10 @@ const LazyMap = dynamic(() => import("../components/Map"), {
   ),
 });
 export default async function Home() {
+  const stations = (await getStations()).stations;
   return (
     <main className="flex flex-1">
-      <LazyMap className="flex-auto">
-        <StationMarkers />
-      </LazyMap>
+      <LazyMap className="flex-auto" stations={stations}></LazyMap>
     </main>
   );
 }

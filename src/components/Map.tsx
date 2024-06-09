@@ -1,15 +1,17 @@
 "use client";
 
 import useLocation from "@/hooks/useLocation";
+import { Station } from "@/lib/stations";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "leaflet";
-import "leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js";
 import "leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css";
+import "leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js";
 import "leaflet/dist/leaflet.css";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
 import MapCenter from "./MapCenter";
 import PersonMarker from "./PersonMarker";
+import StationMarkers from "./StationMarkers";
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -17,9 +19,11 @@ import PersonMarker from "./PersonMarker";
 
 export default function Map({
   className,
+  stations,
   children,
 }: {
   className: string;
+  stations: Station[];
   children?: React.ReactNode;
 }) {
   const location = useLocation();
@@ -38,6 +42,7 @@ export default function Map({
         attribution='&copy; <a href="/copyright">OpenStreetMap contributors</a>. Tiles style by <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>. <a href="https://wiki.osmfoundation.org/wiki/Terms_of_Use">Website and API terms</a>'
         url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
       />
+      <StationMarkers stations={stations} />
       {location && <PersonMarker lat={location.lat} lng={location.lng} />}
     </MapContainer>
   );
