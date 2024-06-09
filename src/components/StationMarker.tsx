@@ -41,7 +41,9 @@ export default function StationMarker({ station }: { station: Station }) {
             <div className="text-base">
               {station.type === "fountain" ? "Vedovella" : "Casa dell'acqua"}
             </div>
-            <div className="text-sm font-light">{station.name}</div>
+            {station.name && (
+              <div className="text-sm font-light">{station.name}</div>
+            )}
           </div>
           <div className="flex flex-row justify-end">
             <button

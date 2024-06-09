@@ -1,5 +1,7 @@
+import { parse } from "csv-parse";
+import { createReadStream } from "fs";
 import fs from "fs/promises";
-import { upperFirst, toLower, startCase, capitalize } from "lodash";
+import { capitalize } from "lodash";
 
 type StationRaw = {
   objectID: number;
@@ -17,10 +19,10 @@ type StationType = "fountain" | "house";
 
 export type Station = {
   id: number;
-  cap: number;
+  cap: number | null;
   lat: number;
   lng: number;
-  name: string;
+  name: string | null;
   type: StationType;
 };
 
@@ -32,7 +34,7 @@ export async function getStations(): Promise<StationsResponse> {
   // Get json file from db folder
   const fountains = (
     JSON.parse(
-      await fs.readFile("db/vedovelle_20240603-002053_final.json", {
+      await fs.readFile("db/water/vedovelle_20240603-002053_final.json", {
         encoding: "utf-8",
       })
     ) as StationRaw[]
@@ -40,12 +42,45 @@ export async function getStations(): Promise<StationsResponse> {
 
   const houses = (
     JSON.parse(
-      await fs.readFile("db/caseacqua_20240603-002053_final.json", {
+      await fs.readFile("db/water/caseacqua_20240603-002053_final.json", {
         encoding: "utf-8",
       })
     ) as StationRaw[]
   ).map((x) => fromRaw(x, "house"));
-  return { stations: [...fountains, ...houses] };
+  const osmStations = await getStationsFromOSM();
+  return { stations: [...fountains, ...houses, ...osmStations] };
+}
+
+/*
+https://overpass-turbo.eu/#
+[out:csv(::"id", amenity, name, ::lat, ::lon; true;"|")];
+area[name="Segrate"]->.segrate;
+node
+  [amenity=drinking_water]
+  (area.segrate);
+out;
+*/
+
+export async function getStationsFromOSM(): Promise<Station[]> {
+  const records: Station[] = [];
+  const parser = createReadStream(`db/water/segrate.csv`).pipe(
+    parse({
+      delimiter: "|",
+      from: 2,
+    })
+  );
+  for await (const [id, amenity, name, lat, lng] of parser) {
+    // Work with each record
+    records.push({
+      id: parseInt(id),
+      cap: null,
+      lat: parseFloat(lat),
+      lng: parseFloat(lng),
+      name: null,
+      type: name === "Casa dell'Acqua" ? "house" : "fountain",
+    });
+  }
+  return records;
 }
 
 function fromRaw(raw: StationRaw, type: StationType): Station {

@@ -1,5 +1,5 @@
-import { getStations } from "@/lib/stations";
+import { getStations, getStationsFromOSM } from "@/lib/stations";
 
 export async function GET() {
-  return Response.json(await getStations());
+  return Response.json(await getStationsFromOSM());
 }
