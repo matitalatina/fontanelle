@@ -17,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="light" className="flex h-full w-full">
       <link rel="icon" href="/icon.png" sizes="any" />
+      <link rel="manifest" href="/manifest.json" />
       <body className={`flex flex-1 ${inter.className}`}>{children}</body>
     </html>
   );
