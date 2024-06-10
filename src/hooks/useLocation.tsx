@@ -16,6 +16,12 @@ export default function useLocation() {
     });
   };
   const onError = (error: GeolocationPositionError) => console.error(error);
+  const getCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+      enableHighAccuracy: true,
+      timeout: 5000,
+    });
+  };
   useEffect(() => {
     if (!navigator.geolocation) {
       console.log("Geolocation is not supported by your browser");
@@ -24,11 +30,8 @@ export default function useLocation() {
     // const id = navigator.geolocation.watchPosition(onSuccess, onError, {
     //   enableHighAccuracy: true,
     // });
-    navigator.geolocation.getCurrentPosition(onSuccess, onError, {
-      enableHighAccuracy: true,
-      timeout: 5000,
-    });
+
     // return () => navigator.geolocation.clearWatch(id);
   }, []);
-  return location;
+  return { location, getCurrentLocation };
 }

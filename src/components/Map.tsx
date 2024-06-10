@@ -26,24 +26,34 @@ export default function Map({
   stations: Station[];
   children?: React.ReactNode;
 }) {
-  const location = useLocation();
+  const { location, getCurrentLocation } = useLocation();
   const center = location ?? { lat: 45.464664, lng: 9.18854 };
   // const center = { lat: 45.464664, lng: 9.18854 };
   return (
-    <MapContainer
-      center={[center.lat, center.lng]}
-      zoom={16}
-      scrollWheelZoom={false}
-      className={`w-full h-full ${className}`}
-    >
-      {children}
-      <MapCenter position={center} />
-      <TileLayer
-        attribution='&copy; <a href="/copyright">OpenStreetMap contributors</a>. Tiles style by <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>. <a href="https://wiki.osmfoundation.org/wiki/Terms_of_Use">Website and API terms</a>'
-        url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
-      />
-      <StationMarkers stations={stations} />
-      {location && <PersonMarker lat={location.lat} lng={location.lng} />}
-    </MapContainer>
+    <>
+      <MapContainer
+        center={[center.lat, center.lng]}
+        zoom={16}
+        scrollWheelZoom={false}
+        className={`w-full h-full ${className}`}
+      >
+        {children}
+        <MapCenter position={center} />
+        <TileLayer
+          attribution='&copy; <a href="/copyright">OpenStreetMap contributors</a>. Tiles style by <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>. <a href="https://wiki.osmfoundation.org/wiki/Terms_of_Use">Website and API terms</a>'
+          url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
+        />
+        <StationMarkers stations={stations} />
+        {location && <PersonMarker lat={location.lat} lng={location.lng} />}
+        <button
+          type="button"
+          className="btn btn-circle btn-primary absolute bottom-12 right-4"
+          style={{ zIndex: 4000 }}
+          onClick={getCurrentLocation}
+        >
+          <i className="fas fa-location-crosshairs fa-lg"></i>
+        </button>
+      </MapContainer>
+    </>
   );
 }
