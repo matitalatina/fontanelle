@@ -12,6 +12,7 @@ import { TileLayer } from "react-leaflet/TileLayer";
 import MapCenter from "./MapCenter";
 import PersonMarker from "./PersonMarker";
 import StationMarkers from "./StationMarkers";
+import LocateButton from "./LocateButton";
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -26,8 +27,11 @@ export default function Map({
   stations: Station[];
   children?: React.ReactNode;
 }) {
-  const { location, getCurrentLocation } = useLocation();
-  const center = location ?? { lat: 45.464664, lng: 9.18854 };
+  const { locationState, getCurrentLocation } = useLocation();
+  const center =
+    locationState.status == "success"
+      ? locationState.location
+      : { lat: 45.464664, lng: 9.18854 };
   // const center = { lat: 45.464664, lng: 9.18854 };
   return (
     <>
@@ -44,15 +48,16 @@ export default function Map({
           url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
         />
         <StationMarkers stations={stations} />
-        {location && <PersonMarker lat={location.lat} lng={location.lng} />}
-        <button
-          type="button"
-          className="btn btn-circle btn-primary absolute bottom-12 right-4"
-          style={{ zIndex: 4000 }}
+        {locationState.status === "success" && (
+          <PersonMarker
+            lat={locationState.location.lat}
+            lng={locationState.location.lng}
+          />
+        )}
+        <LocateButton
           onClick={getCurrentLocation}
-        >
-          <i className="fas fa-location-crosshairs fa-lg"></i>
-        </button>
+          locationState={locationState}
+        />
       </MapContainer>
     </>
   );
