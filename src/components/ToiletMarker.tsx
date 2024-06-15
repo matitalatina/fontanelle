@@ -3,6 +3,7 @@ import { ExtraMarkers } from "leaflet";
 import { ReactNode } from "react";
 import { Marker, Popup } from "react-leaflet";
 import GoToButton from "./GoToButton";
+import FeatureIcon from "./FeatureIcon";
 
 const toiletMarker = ExtraMarkers.icon({
   icon: "fa-restroom",
@@ -10,23 +11,6 @@ const toiletMarker = ExtraMarkers.icon({
   shape: "star",
   prefix: "fas",
 });
-
-function enhanceIcon(icon: string, isPresent: boolean | null) {
-  if (isPresent === null) {
-    return null;
-  }
-
-  if (isPresent) {
-    return <i className={`${icon}`}></i>;
-  }
-
-  return (
-    <span className="fa-stack">
-      <i className={`fa-stack-1x ${icon}`}></i>
-      <i className="fa-solid fa-ban fa-stack-2x"></i>
-    </span>
-  );
-}
 
 export default function ToiletMarker({ toilet }: { toilet: Toilet }) {
   return (
@@ -39,8 +23,11 @@ export default function ToiletMarker({ toilet }: { toilet: Toilet }) {
               <div className="text-sm font-light">{toilet.openingHours}</div>
             )}
             <div className="flex flex-row space-x-2 items-center min-h-4 text-base">
-              {enhanceIcon("fas fa-euro-sign", toilet.fee)}
-              {enhanceIcon("fas fa-baby", toilet.changingTable)}
+              <FeatureIcon icon="fas fa-euro-sign" isPresent={toilet.fee} />
+              <FeatureIcon
+                icon="fas fa-baby"
+                isPresent={toilet.changingTable}
+              />
             </div>
           </div>
           <div className="flex flex-row justify-end">
