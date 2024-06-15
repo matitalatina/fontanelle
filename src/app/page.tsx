@@ -17,8 +17,7 @@ const LazyMap = dynamic(() => import("../components/Map"), {
 export default async function Home() {
   const stations = (await getStations()).stations;
   const toilets = await getToiletsFromOSM();
-  // const bicycleParkings = await getBicycleParkingsFromOSM();
-  const bicycleParkings: BicycleParking[] = [];
+  const bicycleParkings = await getBicycleParkingsFromOSM();
   return (
     <main className="flex flex-1">
       <LazyMap
