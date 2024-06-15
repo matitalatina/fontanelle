@@ -22,6 +22,8 @@ import PersonMarker from "./PersonMarker";
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />*/
 
+const bootstrapDate = new Date();
+
 export default function Map({
   className,
   stations,
@@ -40,6 +42,10 @@ export default function Map({
     locationState.status == "success"
       ? locationState.location
       : { lat: 45.464664, lng: 9.18854 };
+  const updatedAt =
+    locationState.status === "success"
+      ? locationState.updatedAt
+      : bootstrapDate;
   // const center = { lat: 45.464664, lng: 9.18854 };
   const [selectedOverlays, setSelectedOverlays] = useState<SelectedOverlays>({
     stations: true,
@@ -55,7 +61,7 @@ export default function Map({
         className={`w-full h-full ${className}`}
       >
         {children}
-        <MapCenter position={center} />
+        <MapCenter position={center} updatedAt={updatedAt} />
         <TileLayer
           attribution='&copy; <a href="/copyright">OpenStreetMap</a> | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a>'
           url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"

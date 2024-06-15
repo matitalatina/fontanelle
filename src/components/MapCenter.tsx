@@ -1,10 +1,21 @@
 import { LatLng } from "@/hooks/useLocation";
-import { useMap, useMapEvents } from "react-leaflet";
+import { differenceInSeconds } from "date-fns";
+import { useMap } from "react-leaflet";
 
-export default function MapCenter({ position }: { position: LatLng }) {
+export default function MapCenter({
+  position,
+  updatedAt,
+}: {
+  position: LatLng;
+  updatedAt: Date;
+}) {
   const map = useMap();
 
-  if (map.getCenter().equals(position)) return null;
+  if (
+    map.getCenter().equals(position) ||
+    differenceInSeconds(new Date(), updatedAt) > 1
+  )
+    return null;
 
   map.setView([position.lat, position.lng]);
   return null;

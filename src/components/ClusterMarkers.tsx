@@ -1,11 +1,11 @@
 "use client";
+import { BicycleParking } from "@/lib/bicycleParking";
 import { Station } from "@/lib/stations";
+import { Toilet } from "@/lib/toilets";
+import BicycleParkingMarker from "./BicycleParkingMarker";
 import MarkerClusterGroup from "./MarkerCluster";
 import StationMarker from "./StationMarker";
-import { Toilet } from "@/lib/toilets";
 import ToiletMarker from "./ToiletMarker";
-import { BicycleParking } from "@/lib/bicycleParking";
-import BicycleParkingMarker from "./BicycleParkingMarker";
 
 export default function ClusterMarkers({
   stations,
@@ -28,13 +28,12 @@ export default function ClusterMarkers({
       key={bicycleParking.id}
     />
   ));
+
   return (
-    <>
-      <MarkerClusterGroup>
-        {waters}
-        {toiletsMarkers}
-        {bicycleParkingsMarkers}
-      </MarkerClusterGroup>
-    </>
+    <MarkerClusterGroup>
+      {waters}
+      {toiletsMarkers}
+      {bicycleParkingsMarkers}
+    </MarkerClusterGroup>
   );
 }
