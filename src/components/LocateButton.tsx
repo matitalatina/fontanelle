@@ -8,11 +8,13 @@ export default function LocateButton({
   locationState: LocationState;
 }) {
   const zIndex = 4000;
+  const positionStyle = `absolute bottom-8 right-4`;
+
   if (locationState.status === "loading") {
     return (
       <button
         type="button"
-        className="btn btn-circle btn-primary absolute bottom-12 right-4"
+        className={`btn btn-circle btn-primary ${positionStyle}`}
         style={{ zIndex }}
         disabled
       >
@@ -39,7 +41,7 @@ export default function LocateButton({
 
     return (
       <div
-        className="tooltip tooltip-open tooltip-error absolute bottom-12 right-4 tooltip-left"
+        className={`tooltip tooltip-open tooltip-error ${positionStyle} tooltip-left`}
         data-tip={message}
         style={{ zIndex }}
       >
@@ -56,7 +58,7 @@ export default function LocateButton({
   return (
     <button
       type="button"
-      className="btn btn-circle btn-primary absolute bottom-12 right-4"
+      className={`btn btn-circle btn-primary ${positionStyle}`}
       style={{ zIndex }}
       onClick={onClick}
     >

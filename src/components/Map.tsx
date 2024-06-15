@@ -11,8 +11,9 @@ import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
 import MapCenter from "./MapCenter";
 import PersonMarker from "./PersonMarker";
-import StationMarkers from "./StationMarkers";
+import ClusterMarkers from "./ClusterMarkers";
 import LocateButton from "./LocateButton";
+import { Toilet } from "@/lib/toilets";
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -22,9 +23,11 @@ export default function Map({
   className,
   stations,
   children,
+  toilets,
 }: {
   className: string;
   stations: Station[];
+  toilets: Toilet[];
   children?: React.ReactNode;
 }) {
   const { locationState, getCurrentLocation } = useLocation();
@@ -44,10 +47,10 @@ export default function Map({
         {children}
         <MapCenter position={center} />
         <TileLayer
-          attribution='&copy; <a href="/copyright">OpenStreetMap contributors</a>. Tiles style by <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>. <a href="https://wiki.osmfoundation.org/wiki/Terms_of_Use">Website and API terms</a>'
+          attribution='&copy; <a href="/copyright">OpenStreetMap</a> | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a>'
           url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
         />
-        <StationMarkers stations={stations} />
+        <ClusterMarkers stations={stations} toilets={toilets} />
         {locationState.status === "success" && (
           <PersonMarker
             lat={locationState.location.lat}

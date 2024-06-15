@@ -6,6 +6,7 @@ import iconMarker from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import { Marker, Popup } from "react-leaflet";
 import { ExtraMarkers } from "leaflet";
+import GoToButton from "./GoToButton";
 
 const i = icon({
   iconRetinaUrl: iconRetina.src,
@@ -38,7 +39,7 @@ export default function StationMarker({ station }: { station: Station }) {
       <Popup className="station-popup" closeButton={false}>
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
-            <div className="text-base">
+            <div className="text-lg">
               {station.type === "fountain" ? "Vedovella" : "Casa dell'acqua"}
             </div>
             {station.name && (
@@ -46,16 +47,7 @@ export default function StationMarker({ station }: { station: Station }) {
             )}
           </div>
           <div className="flex flex-row justify-end">
-            <button
-              className="btn btn-outline btn-primary"
-              onClick={() =>
-                window.open(
-                  `https://www.google.com/maps/dir/?api=1&destination=${station.lat},${station.lng}&travelmode=bicycling`
-                )
-              }
-            >
-              <i className="fas fa-location-arrow"></i>
-            </button>
+            <GoToButton latLng={{ lat: station.lat, lng: station.lng }} />
           </div>
         </div>
       </Popup>
