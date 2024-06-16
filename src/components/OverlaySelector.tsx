@@ -13,7 +13,7 @@ export default function OverlaySelector({
   return (
     <div
       tabIndex={0}
-      className="collapse absolute top-8 right-4 w-auto bg-base-100 rounded-box shadow-xl"
+      className="collapse absolute top-4 right-4 w-auto bg-base-100 rounded-box shadow-xl"
       style={{ zIndex: 4000 }}
     >
       <input type="checkbox" className="absolute" />

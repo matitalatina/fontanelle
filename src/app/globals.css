@@ -17,3 +17,11 @@
 .station-popup .leaflet-popup-content {
 	margin: 1rem;
 }
+
+.map-fontanelle .leaflet-left .leaflet-control {
+    margin-left: 1rem;
+}
+
+.map-fontanelle .leaflet-top .leaflet-control {
+    margin-top: 1rem;
+}

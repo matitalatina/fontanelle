@@ -58,7 +58,7 @@ export default function Map({
         center={[center.lat, center.lng]}
         zoom={16}
         scrollWheelZoom={false}
-        className={`w-full h-full ${className}`}
+        className={`w-full h-full ${className} map-fontanelle`}
       >
         {children}
         <MapCenter position={center} updatedAt={updatedAt} />
