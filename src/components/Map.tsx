@@ -17,6 +17,8 @@ import LocateButton from "./LocateButton";
 import MapCenter from "./MapCenter";
 import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
 import PersonMarker from "./PersonMarker";
+import { useMapEvents } from "react-leaflet";
+import CustomMarker from "./CustomMarker";
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -79,6 +81,7 @@ export default function Map({
             lng={locationState.location.lng}
           />
         )}
+        <CustomMarker />
         <OverlaySelector
           selectedOverlays={selectedOverlays}
           onChange={(a) => setSelectedOverlays(a)}

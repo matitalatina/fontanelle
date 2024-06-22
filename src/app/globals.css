@@ -25,3 +25,7 @@
 .map-fontanelle .leaflet-top .leaflet-control {
     margin-top: 1rem;
 }
+
+.map-fontanelle .leaflet-marker-icon.extra-marker i.fas {
+  padding-left: 1px;
+}
