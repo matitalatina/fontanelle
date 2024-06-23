@@ -18,6 +18,10 @@
 	margin: 1rem;
 }
 
+.leaflet-fade-anim .leaflet-popup.station-popup.custom-marker-popup:not(:has(button)) {
+  transition: none;
+}
+
 .map-fontanelle .leaflet-left .leaflet-control {
     margin-left: 1rem;
 }
