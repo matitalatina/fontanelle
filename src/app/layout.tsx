@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
       <link rel="icon" href="/icon.png" sizes="any" />
       <link rel="manifest" href="/manifest.json" />
       <body className={`flex flex-1 ${inter.className}`}>{children}</body>
+      <GoogleAnalytics gaId="G-N9WYWY07X6" />
     </html>
   );
 }
