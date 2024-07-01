@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Fontanelle a Milano",
   description: "Trova velocemente dove bere a Milano quando sei in bicicletta!",
+  metadataBase: new URL("https://fontanellemilano.mattianatali.com"),
 };
 
 export default function RootLayout({
