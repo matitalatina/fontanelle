@@ -31,7 +31,7 @@ export default function BicycleParkingMarker({
                 isPresent={bicycleParking.fee}
               />
               <FeatureIcon
-                icon="fas fa-shield"
+                icon="fas fa-umbrella"
                 isPresent={bicycleParking.covered}
               />
               <FeatureIcon
