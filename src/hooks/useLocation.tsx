@@ -50,7 +50,7 @@ export default function useLocation() {
     setLocationState({ status: "loading" });
     navigator.geolocation.getCurrentPosition(onSuccess, onError, {
       enableHighAccuracy: true,
-      timeout: 5000,
+      timeout: 10000,
     });
   }, []);
 

@@ -17,7 +17,7 @@ import LocateButton from "./LocateButton";
 import MapCenter from "./MapCenter";
 import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
 import PersonMarker from "./PersonMarker";
-import { useMapEvents } from "react-leaflet";
+import { useMapEvents, ZoomControl } from "react-leaflet";
 import CustomMarker from "./CustomMarker";
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -61,6 +61,7 @@ export default function Map({
         zoom={16}
         scrollWheelZoom={false}
         className={`w-full h-full ${className} map-fontanelle`}
+        zoomControl={false}
       >
         {children}
         <MapCenter position={center} updatedAt={updatedAt} />
@@ -90,6 +91,7 @@ export default function Map({
           onClick={getCurrentLocation}
           locationState={locationState}
         />
+        <ZoomControl position="bottomleft" />
       </MapContainer>
     </>
   );

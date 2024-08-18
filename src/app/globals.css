@@ -22,12 +22,12 @@
   transition: none;
 }
 
-.map-fontanelle .leaflet-left .leaflet-control {
+.map-fontanelle .leaflet-left .leaflet-control.leaflet-control-zoom {
     margin-left: 1rem;
 }
 
-.map-fontanelle .leaflet-top .leaflet-control {
-    margin-top: 1rem;
+.map-fontanelle .leaflet-bottom .leaflet-control.leaflet-control-zoom {
+    margin-bottom: 1rem;
 }
 
 .map-fontanelle .leaflet-marker-icon.extra-marker i.fas {
