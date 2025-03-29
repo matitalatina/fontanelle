@@ -39,3 +39,7 @@
 .map-fontanelle .leaflet-marker-icon.extra-marker i.fas {
   padding-left: 1px;
 }
+
+.map-fontanelle .leaflet-right .leaflet-control-scale {
+  margin-right: 5rem;
+}

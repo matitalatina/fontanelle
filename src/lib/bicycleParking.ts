@@ -15,6 +15,8 @@ out;
 
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
+import DB from "better-sqlite3";
+import path from "path";
 
 export type BicycleParking = {
   id: number;
@@ -66,4 +68,36 @@ export async function getBicycleParkingsFromOSM(): Promise<BicycleParking[]> {
     });
   }
   return records;
+}
+
+export async function getBicycleParkingsFromDB(
+  gh5List: string[]
+): Promise<BicycleParking[]> {
+  const dbPath = path.join(process.cwd(), "db", "db.db");
+  const db = DB(dbPath);
+
+  try {
+    const placeholders = gh5List.map(() => "?").join(",");
+    const query = `
+      SELECT id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance
+      FROM bicycle_parkings
+      WHERE gh5 IN (${placeholders})
+    `;
+
+    const rows = db.prepare(query).all(gh5List);
+
+    return rows.map((row: any) => ({
+      id: row.id,
+      lat: row.lat,
+      lng: row.lng,
+      covered: row.covered === 1,
+      indoor: row.indoor === 1,
+      access: row.access,
+      fee: row.fee === 1,
+      bicycleParking: row.bicycleParking,
+      surveillance: row.surveillance === 1,
+    }));
+  } finally {
+    db.close();
+  }
 }

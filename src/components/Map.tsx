@@ -1,6 +1,7 @@
 "use client";
 
 import useLocation from "@/hooks/useLocation";
+import useMapEntities from "@/hooks/useMapEntities";
 import { BicycleParking } from "@/lib/bicycleParking";
 import { Station } from "@/lib/stations";
 import { Toilet } from "@/lib/toilets";
@@ -12,13 +13,15 @@ import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
+import { ScaleControl, ZoomControl } from "react-leaflet";
+import BoundsListener from "./BoundsListener";
 import ClusterMarkers from "./ClusterMarkers";
+import CustomMarker from "./CustomMarker";
 import LocateButton from "./LocateButton";
 import MapCenter from "./MapCenter";
 import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
 import PersonMarker from "./PersonMarker";
-import { useMapEvents, ZoomControl } from "react-leaflet";
-import CustomMarker from "./CustomMarker";
+
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -28,10 +31,10 @@ const bootstrapDate = new Date();
 
 export default function Map({
   className,
-  stations,
+  stations: initialStations,
   children,
-  toilets,
-  bicycleParkings,
+  toilets: initialToilets,
+  bicycleParkings: initialBicycleParkings,
 }: {
   className: string;
   stations: Station[];
@@ -48,12 +51,21 @@ export default function Map({
     locationState.status === "success"
       ? locationState.updatedAt
       : bootstrapDate;
-  // const center = { lat: 45.464664, lng: 9.18854 };
+
   const [selectedOverlays, setSelectedOverlays] = useState<SelectedOverlays>({
     stations: true,
     toilets: false,
     bicycleParkings: false,
   });
+
+  // Use the custom hook to manage map entities and fetching
+  const { stations, toilets, bicycleParkings, handleBoundsChange } =
+    useMapEntities({
+      initialStations,
+      initialToilets,
+      initialBicycleParkings,
+    });
+
   return (
     <>
       <MapContainer
@@ -69,6 +81,7 @@ export default function Map({
           attribution='&copy; <a href="/copyright">OpenStreetMap</a> | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a>'
           url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
         />
+        <BoundsListener onBoundsChange={handleBoundsChange} />
         <ClusterMarkers
           stations={selectedOverlays.stations ? stations : []}
           toilets={selectedOverlays.toilets ? toilets : []}
@@ -92,6 +105,7 @@ export default function Map({
           locationState={locationState}
         />
         <ZoomControl position="bottomleft" />
+        <ScaleControl position="bottomright" imperial={false} />
       </MapContainer>
     </>
   );

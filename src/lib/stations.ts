@@ -2,6 +2,8 @@ import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import fs from "fs/promises";
 import { capitalize } from "lodash";
+import DB from "better-sqlite3";
+import path from "path";
 
 type StationRaw = {
   objectID: number;
@@ -92,4 +94,31 @@ function fromRaw(raw: StationRaw, type: StationType): Station {
     name: raw.NIL.replace(/\w+/g, capitalize),
     type,
   };
+}
+
+export async function getStationsFromDB(gh5List: string[]): Promise<Station[]> {
+  const dbPath = path.join(process.cwd(), "db", "db.db");
+  const db = DB(dbPath);
+
+  try {
+    const placeholders = gh5List.map(() => "?").join(",");
+    const query = `
+      SELECT id, cap, lat, lng, name, type
+      FROM stations
+      WHERE gh5 IN (${placeholders})
+    `;
+
+    const rows = db.prepare(query).all(gh5List);
+
+    return rows.map((row: any) => ({
+      id: row.id,
+      cap: row.cap,
+      lat: row.lat,
+      lng: row.lng,
+      name: row.name,
+      type: row.type,
+    }));
+  } finally {
+    db.close();
+  }
 }

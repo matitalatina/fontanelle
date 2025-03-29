@@ -1,13 +1,7 @@
-import { getStations } from "@/lib/stations";
-import { getToiletsFromOSM } from "@/lib/toilets";
-import { getBicycleParkingsFromOSM } from "@/lib/bicycleParking";
 import { LazyMap } from "@/components/LazyMap";
 import { LazyShareAppMenuItem } from "@/components/LazyShareAppMenuItem";
 
 export default async function Home() {
-  const stations = (await getStations()).stations;
-  const toilets = await getToiletsFromOSM();
-  const bicycleParkings = await getBicycleParkingsFromOSM();
   return (
     <div className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -22,9 +16,9 @@ export default async function Home() {
           </label>
           <LazyMap
             className="flex-auto"
-            stations={stations}
-            toilets={toilets}
-            bicycleParkings={bicycleParkings}
+            stations={[]}
+            toilets={[]}
+            bicycleParkings={[]}
           ></LazyMap>
         </main>
       </div>

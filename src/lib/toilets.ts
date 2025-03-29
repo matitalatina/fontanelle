@@ -1,5 +1,7 @@
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
+import DB from "better-sqlite3";
+import path from "path";
 
 export type Toilet = {
   id: number;
@@ -56,4 +58,31 @@ export async function getToiletsFromOSM(): Promise<Toilet[]> {
     });
   }
   return records;
+}
+
+export async function getToiletsFromDB(gh5List: string[]): Promise<Toilet[]> {
+  const dbPath = path.join(process.cwd(), "db", "db.db");
+  const db = DB(dbPath);
+
+  try {
+    const placeholders = gh5List.map(() => "?").join(",");
+    const query = `
+      SELECT id, lat, lng, fee, openingHours, changingTable
+      FROM toilets
+      WHERE gh5 IN (${placeholders})
+    `;
+
+    const rows = db.prepare(query).all(gh5List);
+
+    return rows.map((row: any) => ({
+      id: row.id,
+      lat: row.lat,
+      lng: row.lng,
+      fee: row.fee === 1,
+      openingHours: row.openingHours,
+      changingTable: row.changingTable === 1,
+    }));
+  } finally {
+    db.close();
+  }
 }
