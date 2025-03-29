@@ -23,6 +23,8 @@ const MarkerClusterGroup = createPathComponent(
     const markerClusterGroup = L.markerClusterGroup({
       ...clusterProps,
       disableClusteringAtZoom: 18,
+      chunkedLoading: true,
+      zoomToBoundsOnClick: true,
     });
 
     // Initializing event listeners
