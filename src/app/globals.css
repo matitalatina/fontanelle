@@ -1,33 +1,39 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui";
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+@theme {
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+}
+
+@utility text-balance {
+  text-wrap: balance;
 }
 
 .station-popup .leaflet-popup-tip,
 .station-popup .leaflet-popup-content-wrapper {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
 }
 
 .station-popup .leaflet-popup-content {
-	margin: 1rem;
+  margin: 1rem;
 }
 
-.leaflet-fade-anim .leaflet-popup.station-popup.custom-marker-popup:not(:has(button)) {
+.leaflet-fade-anim
+  .leaflet-popup.station-popup.custom-marker-popup:not(:has(button)) {
   transition: none;
 }
 
 .map-fontanelle .leaflet-left .leaflet-control.leaflet-control-zoom {
-    margin-left: 1rem;
+  margin-left: 1rem;
 }
 
 .map-fontanelle .leaflet-bottom .leaflet-control.leaflet-control-zoom {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .map-fontanelle .leaflet-marker-icon.extra-marker i.fas {
