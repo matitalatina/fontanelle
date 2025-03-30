@@ -10,6 +10,7 @@ export type Toilet = {
   fee: boolean | null;
   openingHours: string | null;
   changingTable: boolean | null;
+  gh5: string;
 };
 
 /*
@@ -25,12 +26,18 @@ node
 )->.result;
 .result
 out;
+---
+[out:csv(::"id", amenity, name, fee, opening_hours, changing_table, ::lat, ::lon; true;"|")];
+area[name="Italia"]->.italy;
+(node
+  [amenity=toilets]
+  (area.italy);
+)->.result;
+.result
+out;
 */
-export async function getToiletsFromOSM(): Promise<Toilet[]> {
-  const records: Toilet[] = [];
-  const parser = createReadStream(
-    `db/toilets/milano-segrate_20240615.csv`
-  ).pipe(
+export async function* getToiletsFromOSM(): AsyncGenerator<Toilet> {
+  const parser = createReadStream(`db/toilets/italy_20250330.csv`).pipe(
     parse({
       delimiter: "|",
       from: 2,
@@ -47,7 +54,7 @@ export async function getToiletsFromOSM(): Promise<Toilet[]> {
     lat,
     lng,
   ] of parser) {
-    records.push({
+    yield {
       id: parseInt(id),
       lat: parseFloat(lat),
       lng: parseFloat(lng),
@@ -55,9 +62,9 @@ export async function getToiletsFromOSM(): Promise<Toilet[]> {
       openingHours: openingHours || null,
       changingTable:
         changingTable === "yes" ? true : changingTable === "no" ? false : null,
-    });
+      gh5: "",
+    };
   }
-  return records;
 }
 
 export async function getToiletsFromDB(gh5List: string[]): Promise<Toilet[]> {
@@ -67,7 +74,7 @@ export async function getToiletsFromDB(gh5List: string[]): Promise<Toilet[]> {
   try {
     const placeholders = gh5List.map(() => "?").join(",");
     const query = `
-      SELECT id, lat, lng, fee, openingHours, changingTable
+      SELECT id, lat, lng, fee, openingHours, changingTable, gh5
       FROM toilets
       WHERE gh5 IN (${placeholders})
     `;
@@ -81,6 +88,7 @@ export async function getToiletsFromDB(gh5List: string[]): Promise<Toilet[]> {
       fee: row.fee === 1,
       openingHours: row.openingHours,
       changingTable: row.changingTable === 1,
+      gh5: row.gh5,
     }));
   } finally {
     db.close();

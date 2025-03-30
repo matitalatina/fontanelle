@@ -4,6 +4,11 @@ import geohash from "ngeohash";
 import { Station } from "@/lib/stations";
 import { Toilet } from "@/lib/toilets";
 import { BicycleParking } from "@/lib/bicycleParking";
+import {
+  AvailableOverlay,
+  SelectedOverlays,
+} from "@/components/OverlaySelector";
+import { useMapEvents } from "react-leaflet";
 
 // Generate geohashes for a bounding box
 function getBoundingBoxGeohashes(
@@ -49,60 +54,38 @@ interface EntityCache {
 }
 
 interface UseMapEntitiesProps {
-  initialStations: Station[];
-  initialToilets: Toilet[];
-  initialBicycleParkings: BicycleParking[];
+  selectedOverlays: AvailableOverlay[];
 }
 
 export default function useMapEntities({
-  initialStations,
-  initialToilets,
-  initialBicycleParkings,
+  selectedOverlays,
 }: UseMapEntitiesProps) {
   // State for entities
-  const [stations, setStations] = useState<Station[]>(initialStations);
-  const [toilets, setToilets] = useState<Toilet[]>(initialToilets);
-  const [bicycleParkings, setBicycleParkings] = useState<BicycleParking[]>(
-    initialBicycleParkings
-  );
+  const [stations, setStations] = useState<Station[]>([]);
+  const [toilets, setToilets] = useState<Toilet[]>([]);
+  const [bicycleParkings, setBicycleParkings] = useState<BicycleParking[]>([]);
 
-  // Cache for already fetched geohashes
-  const [requestedGeohashes, setRequestedGeohashes] = useState<Set<string>>(
-    new Set()
-  );
+  // Cache for already fetched geohashes and their associated overlays
+  const [requestedGeohashes, setRequestedGeohashes] = useState<
+    Map<string, string[]>
+  >(new Map());
   const [entitiesCache, setEntitiesCache] = useState<EntityCache>({
     stations: {},
     toilets: {},
     bicycleParkings: {},
   });
 
-  // Function to handle bounds change without debounce
-  const handleBoundsChangeWithoutDebounce = useCallback(
-    async (bounds: LatLngBounds, zoom: number) => {
-      if (zoom < 14) return;
-
-      // Get geohashes for the visible area
-      const geohashes = getBoundingBoxGeohashes(bounds);
-
-      // Filter out already requested geohashes
-      const newGeohashes = geohashes.filter(
-        (gh) => !requestedGeohashes.has(gh)
-      );
-
-      // If no new geohashes, do nothing
-      if (newGeohashes.length === 0) return;
-
-      // Mark these geohashes as requested
-      setRequestedGeohashes((prev) => {
-        const updated = new Set(prev);
-        newGeohashes.forEach((gh) => updated.add(gh));
-        return updated;
-      });
+  // Function to fetch data for specific geohashes and overlays
+  const fetchDataForGeohashes = useCallback(
+    async (geohashes: string[], overlays: string[]) => {
+      if (geohashes.length === 0 || overlays.length === 0) return;
 
       try {
-        // Fetch data for new geohashes
+        // Fetch data for new geohashes with selected overlays
         const response = await fetch(
-          `/api/v1/entities?gh5=${newGeohashes.join(",")}`
+          `/api/v1/entities?gh5=${geohashes.join(",")}&overlays=${overlays.join(
+            ","
+          )}`
         );
 
         if (!response.ok) {
@@ -118,18 +101,24 @@ export default function useMapEntities({
         const newBicycleParkingsCache: Record<string, BicycleParking[]> = {};
 
         // Group entities by geohash
-        newGeohashes.forEach((gh) => {
-          newStationsCache[gh] = data.stations.filter(
-            (s: Station) => geohash.encode(s.lat, s.lng, 5) === gh
-          );
+        geohashes.forEach((gh) => {
+          if (overlays.includes("stations")) {
+            newStationsCache[gh] = data.stations.filter(
+              (s: Station) => s.gh5 === gh
+            );
+          }
 
-          newToiletsCache[gh] = data.toilets.filter(
-            (t: Toilet) => geohash.encode(t.lat, t.lng, 5) === gh
-          );
+          if (overlays.includes("toilets")) {
+            newToiletsCache[gh] = data.toilets.filter(
+              (t: Toilet) => t.gh5 === gh
+            );
+          }
 
-          newBicycleParkingsCache[gh] = data.bicycleParkings.filter(
-            (b: BicycleParking) => geohash.encode(b.lat, b.lng, 5) === gh
-          );
+          if (overlays.includes("bicycleParkings")) {
+            newBicycleParkingsCache[gh] = data.bicycleParkings.filter(
+              (b: BicycleParking) => b.gh5 === gh
+            );
+          }
         });
 
         // Update entity caches
@@ -143,75 +132,133 @@ export default function useMapEntities({
         }));
 
         // Update entities state with proper typing
-        setStations((prev) => {
-          // Combine previous stations with new ones
-          const allStations = [
-            ...prev,
-            ...Object.values(newStationsCache).flat(),
-          ];
+        if (overlays.includes("stations")) {
+          setStations((prev) => {
+            // Combine previous stations with new ones
+            const allStations = [
+              ...prev,
+              ...Object.values(newStationsCache).flat(),
+            ];
 
-          // Create an object for deduplication
-          const uniqueStations: Record<number, Station> = {};
+            // Use Map for faster deduplication (better performance than object)
+            const stationsMap = new Map<number, Station>();
 
-          // Deduplicate by ID
-          allStations.forEach((station) => {
-            uniqueStations[station.id] = station;
+            // Deduplicate by ID
+            allStations.forEach((station) => {
+              stationsMap.set(station.id, station);
+            });
+
+            // Convert back to array
+            return Array.from(stationsMap.values());
           });
+        }
 
-          // Convert back to array
-          return Object.values(uniqueStations);
-        });
+        if (overlays.includes("toilets")) {
+          setToilets((prev) => {
+            const allToilets = [
+              ...prev,
+              ...Object.values(newToiletsCache).flat(),
+            ];
 
-        setToilets((prev) => {
-          const allToilets = [
-            ...prev,
-            ...Object.values(newToiletsCache).flat(),
-          ];
+            // Use Map for faster deduplication
+            const toiletsMap = new Map<number, Toilet>();
 
-          // Create an object for deduplication
-          const uniqueToilets: Record<number, Toilet> = {};
+            // Deduplicate by ID
+            allToilets.forEach((toilet) => {
+              toiletsMap.set(toilet.id, toilet);
+            });
 
-          // Deduplicate by ID
-          allToilets.forEach((toilet) => {
-            uniqueToilets[toilet.id] = toilet;
+            return Array.from(toiletsMap.values());
           });
+        }
 
-          return Object.values(uniqueToilets);
-        });
+        if (overlays.includes("bicycleParkings")) {
+          setBicycleParkings((prev) => {
+            const allBicycleParkings = [
+              ...prev,
+              ...Object.values(newBicycleParkingsCache).flat(),
+            ];
 
-        setBicycleParkings((prev) => {
-          const allBicycleParkings = [
-            ...prev,
-            ...Object.values(newBicycleParkingsCache).flat(),
-          ];
+            // Use Map for faster deduplication
+            const bicycleParkingsMap = new Map<number, BicycleParking>();
 
-          // Create an object for deduplication
-          const uniqueBicycleParkings: Record<number, BicycleParking> = {};
+            // Deduplicate by ID
+            allBicycleParkings.forEach((bicycleParking) => {
+              bicycleParkingsMap.set(bicycleParking.id, bicycleParking);
+            });
 
-          // Deduplicate by ID
-          allBicycleParkings.forEach((bicycleParking) => {
-            uniqueBicycleParkings[bicycleParking.id] = bicycleParking;
+            return Array.from(bicycleParkingsMap.values());
           });
-
-          return Object.values(uniqueBicycleParkings);
-        });
+        }
       } catch (error) {
         console.error("Error fetching entities:", error);
       }
     },
-    [requestedGeohashes]
+    []
+  );
+
+  // Function to handle bounds change without debounce
+  const handleBoundsChangeWithoutDebounce = useCallback(
+    async (
+      bounds: LatLngBounds,
+      zoom: number,
+      selectedOverlays: AvailableOverlay[]
+    ) => {
+      if (zoom < 14) return;
+
+      // Get geohashes for the visible area
+      const geohashes = getBoundingBoxGeohashes(bounds);
+
+      if (selectedOverlays.length === 0) return;
+
+      // Filter out geohashes that have already been requested with all active overlays
+      const newGeohashes = geohashes.filter((gh) => {
+        const requestedOverlays = requestedGeohashes.get(gh) || [];
+        return !selectedOverlays.every((overlay) =>
+          requestedOverlays.includes(overlay)
+        );
+      });
+
+      // If no new geohashes, do nothing
+      if (newGeohashes.length === 0) return;
+
+      // Mark these geohashes as requested with the current active overlays
+      setRequestedGeohashes((prev) => {
+        const updated = new Map(prev);
+        newGeohashes.forEach((gh) => {
+          const existingOverlays = updated.get(gh) || [];
+          const newOverlays = [
+            ...new Set([...existingOverlays, ...selectedOverlays]),
+          ];
+          updated.set(gh, newOverlays);
+        });
+        return updated;
+      });
+
+      // Fetch data for the new geohashes
+      await fetchDataForGeohashes(newGeohashes, selectedOverlays);
+    },
+    [requestedGeohashes, selectedOverlays, fetchDataForGeohashes]
   );
 
   // Create a debounced version of the bounds change handler
   const handleBoundsChange = useMemo(
-    () => debounce(handleBoundsChangeWithoutDebounce, 500),
+    () => debounce(handleBoundsChangeWithoutDebounce, 150),
     [handleBoundsChangeWithoutDebounce]
   );
+
+  const map = useMapEvents({
+    moveend: () => {
+      handleBoundsChange(map.getBounds(), map.getZoom(), selectedOverlays);
+    },
+    zoomend: () => {
+      handleBoundsChange(map.getBounds(), map.getZoom(), selectedOverlays);
+    },
+  });
 
   return {
     stations,
     toilets,
     bicycleParkings,
-    handleBoundsChange,
   };
 }

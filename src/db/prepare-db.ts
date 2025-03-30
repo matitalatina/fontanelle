@@ -85,9 +85,6 @@ function generateGeohash(lat: number, lng: number): string {
 }
 
 async function populateTables(db: Database) {
-  const bicycleParkings = await getBicycleParkingsFromOSM();
-  const toilets = await getToiletsFromOSM();
-  const stations = (await getStations()).stations;
   const insertBicycleQuery = db.prepare(
     `
     INSERT INTO bicycle_parkings (id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance, gh5)
@@ -106,7 +103,9 @@ async function populateTables(db: Database) {
     VALUES (@id, @cap, @lat, @lng, @name, @type, @gh5)
   `
   );
-  bicycleParkings.forEach((bicycleParking) => {
+
+  // Process bicycle parkings using the async generator
+  for await (const bicycleParking of getBicycleParkingsFromOSM()) {
     // Convert boolean values to integers for SQLite
     insertBicycleQuery.run({
       id: bicycleParking.id,
@@ -120,8 +119,10 @@ async function populateTables(db: Database) {
       surveillance: bool2int(bicycleParking.surveillance),
       gh5: generateGeohash(bicycleParking.lat, bicycleParking.lng),
     });
-  });
-  toilets.forEach((toilet) => {
+  }
+
+  // Process toilets using the async generator
+  for await (const toilet of getToiletsFromOSM()) {
     // Convert boolean values to integers for SQLite
     insertToiletQuery.run({
       id: toilet.id,
@@ -132,13 +133,15 @@ async function populateTables(db: Database) {
       changingTable: bool2int(toilet.changingTable),
       gh5: generateGeohash(toilet.lat, toilet.lng),
     });
-  });
-  stations.forEach((station) => {
+  }
+
+  // Process stations using the async generator
+  for await (const station of getStations()) {
     insertStationQuery.run({
       ...station,
       gh5: generateGeohash(station.lat, station.lng),
     });
-  });
+  }
 }
 
 // Main function

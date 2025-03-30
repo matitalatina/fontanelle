@@ -11,6 +11,15 @@ node
 )->.result;
 .result
 out;
+---
+[out:csv(::"id", amenity, name, covered, indoor, access, fee, bicycle_parking, surveillance, ::lat, ::lon; true;"|")];
+area[name="Italia"]->.italy;
+(node
+  [amenity=bicycle_parking]
+  (area.italy);
+)->.result;
+.result
+out;
 */
 
 import { parse } from "csv-parse";
@@ -28,13 +37,11 @@ export type BicycleParking = {
   fee: boolean | null;
   bicycleParking: string | null;
   surveillance: boolean | null;
+  gh5: string;
 };
 
-export async function getBicycleParkingsFromOSM(): Promise<BicycleParking[]> {
-  const records: BicycleParking[] = [];
-  const parser = createReadStream(
-    `db/bicycleParking/milano-segrate_20240615.csv`
-  ).pipe(
+export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParking> {
+  const parser = createReadStream(`db/bicycleParking/italy_20250330.csv`).pipe(
     parse({
       delimiter: "|",
       from: 2,
@@ -54,7 +61,7 @@ export async function getBicycleParkingsFromOSM(): Promise<BicycleParking[]> {
     lat,
     lng,
   ] of parser) {
-    records.push({
+    yield {
       id: parseInt(id),
       lat: parseFloat(lat),
       lng: parseFloat(lng),
@@ -65,9 +72,9 @@ export async function getBicycleParkingsFromOSM(): Promise<BicycleParking[]> {
       bicycleParking: bicycleParking || null,
       surveillance:
         surveillance === "yes" ? true : surveillance === "no" ? false : null,
-    });
+      gh5: "",
+    };
   }
-  return records;
 }
 
 export async function getBicycleParkingsFromDB(
@@ -79,7 +86,7 @@ export async function getBicycleParkingsFromDB(
   try {
     const placeholders = gh5List.map(() => "?").join(",");
     const query = `
-      SELECT id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance
+      SELECT id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance, gh5
       FROM bicycle_parkings
       WHERE gh5 IN (${placeholders})
     `;
@@ -96,6 +103,7 @@ export async function getBicycleParkingsFromDB(
       fee: row.fee === 1,
       bicycleParking: row.bicycleParking,
       surveillance: row.surveillance === 1,
+      gh5: row.gh5,
     }));
   } finally {
     db.close();

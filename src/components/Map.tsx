@@ -14,12 +14,14 @@ import { useState } from "react";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
 import { ScaleControl, ZoomControl } from "react-leaflet";
-import BoundsListener from "./BoundsListener";
 import ClusterMarkers from "./ClusterMarkers";
 import CustomMarker from "./CustomMarker";
 import LocateButton from "./LocateButton";
 import MapCenter from "./MapCenter";
-import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
+import OverlaySelector, {
+  AvailableOverlay,
+  SelectedOverlays,
+} from "./OverlaySelector";
 import PersonMarker from "./PersonMarker";
 
 /*<TileLayer
@@ -58,20 +60,15 @@ export default function Map({
     bicycleParkings: false,
   });
 
-  // Use the custom hook to manage map entities and fetching
-  const { stations, toilets, bicycleParkings, handleBoundsChange } =
-    useMapEntities({
-      initialStations,
-      initialToilets,
-      initialBicycleParkings,
-    });
-
   return (
     <>
       <MapContainer
         center={[center.lat, center.lng]}
         zoom={16}
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
+        wheelDebounceTime={100}
+        zoomAnimation={true}
+        markerZoomAnimation={true}
         className={`w-full h-full ${className} map-fontanelle`}
         zoomControl={false}
       >
@@ -81,14 +78,7 @@ export default function Map({
           attribution='&copy; <a href="/copyright">OpenStreetMap</a> | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a>'
           url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
         />
-        <BoundsListener onBoundsChange={handleBoundsChange} />
-        <ClusterMarkers
-          stations={selectedOverlays.stations ? stations : []}
-          toilets={selectedOverlays.toilets ? toilets : []}
-          bicycleParkings={
-            selectedOverlays.bicycleParkings ? bicycleParkings : []
-          }
-        />
+        <ClusterMarkers selectedOverlays={selectedOverlays} />
         {locationState.status === "success" && (
           <PersonMarker
             lat={locationState.location.lat}
