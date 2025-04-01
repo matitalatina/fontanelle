@@ -1,6 +1,7 @@
 import { getBicycleParkingsFromOSM } from "@/lib/bicycleParking";
 import { getStations, getStationsFromOSM } from "@/lib/stations";
 import { getToiletsFromOSM } from "@/lib/toilets";
+import { getPlaygroundsFromOSM } from "@/lib/playgrounds";
 import DB, { type Database } from "better-sqlite3";
 import * as fs from "fs";
 import path from "path";
@@ -71,6 +72,26 @@ function createTables(db: Database) {
     CREATE INDEX IF NOT EXISTS idx_stations_gh5 ON stations(gh5)
   `);
 
+  // Create playgrounds table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS playgrounds (
+      id INTEGER PRIMARY KEY,
+      lat REAL NOT NULL,
+      lng REAL NOT NULL,
+      name TEXT,
+      openingHours TEXT,
+      indoor INTEGER,
+      fee INTEGER,
+      supervised INTEGER,
+      gh5 TEXT NOT NULL
+    ) STRICT
+  `);
+
+  // Create index on gh5 for playgrounds
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_playgrounds_gh5 ON playgrounds(gh5)
+  `);
+
   console.log("Tables created successfully");
 }
 
@@ -101,6 +122,13 @@ async function populateTables(db: Database) {
     `
     INSERT INTO stations (id, cap, lat, lng, name, type, gh5)
     VALUES (@id, @cap, @lat, @lng, @name, @type, @gh5)
+  `
+  );
+
+  const insertPlaygroundQuery = db.prepare(
+    `
+    INSERT INTO playgrounds (id, lat, lng, name, openingHours, indoor, fee, supervised, gh5)
+    VALUES (@id, @lat, @lng, @name, @openingHours, @indoor, @fee, @supervised, @gh5)
   `
   );
 
@@ -140,6 +168,21 @@ async function populateTables(db: Database) {
     insertStationQuery.run({
       ...station,
       gh5: generateGeohash(station.lat, station.lng),
+    });
+  }
+
+  // Process playgrounds using the async generator
+  for await (const playground of getPlaygroundsFromOSM()) {
+    insertPlaygroundQuery.run({
+      id: playground.id,
+      lat: playground.lat,
+      lng: playground.lng,
+      name: playground.name,
+      openingHours: playground.openingHours,
+      indoor: bool2int(playground.indoor),
+      fee: bool2int(playground.fee),
+      supervised: bool2int(playground.supervised),
+      gh5: generateGeohash(playground.lat, playground.lng),
     });
   }
 }

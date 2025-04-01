@@ -1,4 +1,8 @@
-export type AvailableOverlay = "stations" | "toilets" | "bicycleParkings";
+export type AvailableOverlay =
+  | "stations"
+  | "toilets"
+  | "bicycleParkings"
+  | "playgrounds";
 export type SelectedOverlays = {
   [key in AvailableOverlay]: boolean;
 };
@@ -63,6 +67,19 @@ export default function OverlaySelector({
             }
           >
             <i className="fas fa-parking" />
+          </button>
+          <button
+            className={`btn join-item px-2 ${
+              selectedOverlays.playgrounds ? "btn-neutral" : ""
+            }`}
+            onClick={() =>
+              onChange({
+                ...selectedOverlays,
+                playgrounds: !selectedOverlays.playgrounds,
+              })
+            }
+          >
+            <i className="fas fa-futbol" />
           </button>
         </div>
       </div>
