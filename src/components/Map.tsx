@@ -58,6 +58,7 @@ export default function Map({
     stations: true,
     toilets: false,
     bicycleParkings: false,
+    playgrounds: false,
   });
 
   return (

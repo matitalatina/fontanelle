@@ -3,6 +3,7 @@ import BicycleParkingMarker from "./BicycleParkingMarker";
 import MarkerClusterGroup from "./MarkerCluster";
 import StationMarker from "./StationMarker";
 import ToiletMarker from "./ToiletMarker";
+import PlaygroundMarker from "./PlaygroundMarker";
 import { memo } from "react";
 import { AvailableOverlay, SelectedOverlays } from "./OverlaySelector";
 import useMapEntities from "@/hooks/useMapEntities";
@@ -18,7 +19,7 @@ function ClusterMarkers({
   selectedOverlays: SelectedOverlays;
 }) {
   // Use the custom hook to manage map entities and fetching
-  const { stations, toilets, bicycleParkings } = useMapEntities({
+  const { stations, toilets, bicycleParkings, playgrounds } = useMapEntities({
     selectedOverlays: getSelectedOverlays(selectedOverlays),
   });
 
@@ -34,12 +35,16 @@ function ClusterMarkers({
       key={bicycleParking.id}
     />
   ));
+  const playgroundsMarkers = playgrounds.map((playground) => (
+    <PlaygroundMarker playground={playground} key={playground.id} />
+  ));
 
   return (
     <MarkerClusterGroup>
       {stationsMarkers}
       {toiletsMarkers}
       {bicycleParkingsMarkers}
+      {playgroundsMarkers}
     </MarkerClusterGroup>
   );
 }

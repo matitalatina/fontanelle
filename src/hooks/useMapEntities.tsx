@@ -4,6 +4,7 @@ import geohash from "ngeohash";
 import { Station } from "@/lib/stations";
 import { Toilet } from "@/lib/toilets";
 import { BicycleParking } from "@/lib/bicycleParking";
+import { Playground } from "@/lib/playgrounds";
 import { AvailableOverlay } from "@/components/OverlaySelector";
 import { useMapEvents } from "react-leaflet";
 import { combineLatest, BehaviorSubject } from "rxjs";
@@ -35,6 +36,7 @@ interface EntityCache {
   stations: Record<string, Station[]>;
   toilets: Record<string, Toilet[]>;
   bicycleParkings: Record<string, BicycleParking[]>;
+  playgrounds: Record<string, Playground[]>;
 }
 
 interface UseMapEntitiesProps {
@@ -95,6 +97,7 @@ export default function useMapEntities({
       stations: {},
       toilets: {},
       bicycleParkings: {},
+      playgrounds: {},
     });
   }, []);
 
@@ -129,13 +132,17 @@ export default function useMapEntities({
         const bicycleParkings = selectedOverlays.includes("bicycleParkings")
           ? Object.values(entitiesCache.bicycleParkings).flat()
           : [];
-        return { stations, toilets, bicycleParkings };
+        const playgrounds = selectedOverlays.includes("playgrounds")
+          ? Object.values(entitiesCache.playgrounds).flat()
+          : [];
+        return { stations, toilets, bicycleParkings, playgrounds };
       }),
       distinctUntilChanged(
         (prev, curr) =>
           prev.bicycleParkings.length === curr.bicycleParkings.length &&
           prev.toilets.length === curr.toilets.length &&
-          prev.stations.length === curr.stations.length
+          prev.stations.length === curr.stations.length &&
+          prev.playgrounds.length === curr.playgrounds.length
       )
     );
   }, [onNeedChangeVisibleEntities$]);
@@ -143,6 +150,7 @@ export default function useMapEntities({
   const [stations, setStations] = useState<Station[]>([]);
   const [toilets, setToilets] = useState<Toilet[]>([]);
   const [bicycleParkings, setBicycleParkings] = useState<BicycleParking[]>([]);
+  const [playgrounds, setPlaygrounds] = useState<Playground[]>([]);
 
   // Cache for already fetched geohashes and their associated overlays
   const [requestedGeohashes, setRequestedGeohashes] = useState<
@@ -282,6 +290,46 @@ export default function useMapEntities({
           }
         }
 
+        // Fetch playgrounds
+        if (overlays.includes("playgrounds")) {
+          // Filter out geohashes that are already in the cache
+          const geohashesToFetch = geohashes.filter(
+            (gh) => !currentCache.playgrounds[gh]
+          );
+
+          if (geohashesToFetch.length > 0) {
+            promises.push(
+              fetch(`/api/v1/playgrounds?gh5=${geohashesToFetch.join(",")}`)
+                .then((response) => {
+                  if (!response.ok)
+                    throw new Error("Failed to fetch playgrounds");
+                  return response.json();
+                })
+                .then((data) => {
+                  // Create cache for this data
+                  const newPlaygroundsCache: Record<string, Playground[]> = {};
+                  geohashesToFetch.forEach((gh) => {
+                    newPlaygroundsCache[gh] = data.filter(
+                      (p: Playground) => p.gh5 === gh
+                    );
+                  });
+
+                  // Update entities cache
+                  entitiesCache$.next({
+                    ...entitiesCache$.value,
+                    playgrounds: {
+                      ...entitiesCache$.value.playgrounds,
+                      ...newPlaygroundsCache,
+                    },
+                  });
+                })
+                .catch((error) =>
+                  console.error("Error fetching playgrounds:", error)
+                )
+            );
+          }
+        }
+
         // Wait for all fetch operations to complete
         await Promise.all(promises);
       } catch (error) {
@@ -356,10 +404,11 @@ export default function useMapEntities({
     );
 
     const updateVisibleSubscription = onVisibleEntities$.subscribe(
-      ({ stations, toilets, bicycleParkings }) => {
+      ({ stations, toilets, bicycleParkings, playgrounds }) => {
         setStations(stations);
         setToilets(toilets);
         setBicycleParkings(bicycleParkings);
+        setPlaygrounds(playgrounds);
       }
     );
 
@@ -407,5 +456,6 @@ export default function useMapEntities({
     stations,
     toilets,
     bicycleParkings,
+    playgrounds,
   };
 }
