@@ -23,6 +23,8 @@ import OverlaySelector, {
   SelectedOverlays,
 } from "./OverlaySelector";
 import PersonMarker from "./PersonMarker";
+import useTileLayer from "@/hooks/useTileLayer";
+import TileLayerSelector from "./TileLayerSelector";
 
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -61,6 +63,9 @@ export default function Map({
     playgrounds: false,
   });
 
+  const { selectedTileLayer, selectTileLayer, tileLayerConfig } =
+    useTileLayer();
+
   return (
     <>
       <MapContainer
@@ -76,8 +81,8 @@ export default function Map({
         {children}
         <MapCenter position={center} updatedAt={updatedAt} />
         <TileLayer
-          attribution='&copy; <a href="/copyright">OpenStreetMap</a> | <a href="https://www.cyclosm.org" target="_blank">CyclOSM</a>'
-          url="https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
+          attribution={tileLayerConfig.attribution}
+          url={tileLayerConfig.url}
         />
         <ClusterMarkers selectedOverlays={selectedOverlays} />
         {locationState.status === "success" && (
@@ -90,6 +95,10 @@ export default function Map({
         <OverlaySelector
           selectedOverlays={selectedOverlays}
           onChange={(a) => setSelectedOverlays(a)}
+        />
+        <TileLayerSelector
+          selectedTileLayer={selectedTileLayer}
+          onChange={selectTileLayer}
         />
         <LocateButton
           onClick={getCurrentLocation}

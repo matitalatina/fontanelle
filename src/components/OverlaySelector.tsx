@@ -20,14 +20,11 @@ export default function OverlaySelector({
       className="collapse absolute top-4 right-4 w-auto bg-base-100 rounded-box shadow-xl"
       style={{ zIndex: 4000 }}
     >
-      <input type="checkbox" className="absolute" />
-      <div className="collapse-title p-0 mx-auto w-4 min-h-12 top-5">
+      <input type="checkbox" className="absolute peer" />
+      <div className="collapse-title p-0 mx-auto w-4 min-h-14 top-5">
         <i className="fas fa-layer-group fa-lg"></i>
       </div>
-      <div
-        className="collapse-content px-2"
-        style={{ paddingBottom: "0.5rem" }}
-      >
+      <div className="collapse-content px-2 mt-0.5 peer-checked:pb-2">
         <div className="join join-vertical">
           <button
             className={`btn join-item px-2 ${
