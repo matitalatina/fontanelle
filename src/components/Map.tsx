@@ -19,8 +19,7 @@ import LocateButton from "./LocateButton";
 import MapCenter from "./MapCenter";
 import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
 import PersonMarker from "./PersonMarker";
-import useTileLayer from "@/hooks/useTileLayer";
-import TileLayerSelector from "./TileLayerSelector";
+import { TILE_LAYERS, TileLayerType } from "@/hooks/useTileLayer";
 
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -35,11 +34,13 @@ export default function Map({
   children,
   toilets: initialToilets,
   bicycleParkings: initialBicycleParkings,
+  tileLayer,
 }: {
   className: string;
   stations: Station[];
   toilets: Toilet[];
   bicycleParkings: BicycleParking[];
+  tileLayer: TileLayerType;
   children?: React.ReactNode;
 }) {
   const { locationState, getCurrentLocation } = useLocation();
@@ -59,8 +60,7 @@ export default function Map({
     playgrounds: false,
   });
 
-  const { selectedTileLayer, selectTileLayer, tileLayerConfig } =
-    useTileLayer();
+  const tileLayerConfig = TILE_LAYERS[tileLayer];
 
   return (
     <>
@@ -91,10 +91,6 @@ export default function Map({
         <OverlaySelector
           selectedOverlays={selectedOverlays}
           onChange={(a) => setSelectedOverlays(a)}
-        />
-        <TileLayerSelector
-          selectedTileLayer={selectedTileLayer}
-          onChange={selectTileLayer}
         />
         <LocateButton
           onClick={getCurrentLocation}
