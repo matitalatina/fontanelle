@@ -5,6 +5,14 @@
 //   (area.italy);
 // out;
 
+// [out:csv(::"id", leisure, name, opening_hours, indoor, fee, supervised, ::lat, ::lon; true;"|")];
+// area[name="Italia"]->.italy;
+// (
+//   node[leisure=playground](area.italy);
+//   way[leisure=playground](area.italy);
+// );
+// out center;
+
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import geohash from "ngeohash";
@@ -24,7 +32,7 @@ export type Playground = {
 };
 
 export async function* getPlaygroundsFromOSM(): AsyncGenerator<Playground> {
-  const parser = createReadStream(`db/playgrounds/italy_20250401.csv`).pipe(
+  const parser = createReadStream(`db/playgrounds/italy_20250404.csv`).pipe(
     parse({
       delimiter: "|",
       from: 2,
