@@ -16,7 +16,7 @@ export default function FeatureIcon({
   return (
     <span className="fa-stack">
       <i className={`fa-stack-1x ${icon}`}></i>
-      <i className="fa-solid fa-ban fa-stack-2x"></i>
+      <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
     </span>
   );
 }

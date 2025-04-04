@@ -27,6 +27,7 @@ function createTables(db: Database) {
       fee INTEGER,
       bicycleParking TEXT,
       surveillance INTEGER,
+      capacity INTEGER,
       gh5 TEXT NOT NULL
     ) STRICT  
   `);
@@ -108,8 +109,8 @@ function generateGeohash(lat: number, lng: number): string {
 async function populateTables(db: Database) {
   const insertBicycleQuery = db.prepare(
     `
-    INSERT INTO bicycle_parkings (id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance, gh5)
-    VALUES (@id, @lat, @lng, @covered, @indoor, @access, @fee, @bicycleParking, @surveillance, @gh5)
+    INSERT INTO bicycle_parkings (id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance, capacity, gh5)
+    VALUES (@id, @lat, @lng, @covered, @indoor, @access, @fee, @bicycleParking, @surveillance, @capacity, @gh5)
   `
   );
   const insertToiletQuery = db.prepare(
@@ -145,6 +146,7 @@ async function populateTables(db: Database) {
       fee: bool2int(bicycleParking.fee),
       bicycleParking: bicycleParking.bicycleParking,
       surveillance: bool2int(bicycleParking.surveillance),
+      capacity: bicycleParking.capacity,
       gh5: generateGeohash(bicycleParking.lat, bicycleParking.lng),
     });
   }

@@ -43,6 +43,13 @@ export default function BicycleParkingMarker({
                 isPresent={bicycleParking.surveillance}
               />
             </div>
+            {bicycleParking.capacity && (
+              <div className="items-center text-base">
+                <i className="fa-solid fa-bicycle mr-1"></i>
+                {bicycleParking.capacity}{" "}
+                {bicycleParking.capacity === 1 ? "posto" : "posti"}
+              </div>
+            )}
           </div>
           <div className="flex flex-row justify-end">
             <GoToButton

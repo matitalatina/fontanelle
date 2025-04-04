@@ -37,11 +37,12 @@ export type BicycleParking = {
   fee: boolean | null;
   bicycleParking: string | null;
   surveillance: boolean | null;
+  capacity: number | null;
   gh5: string;
 };
 
 export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParking> {
-  const parser = createReadStream(`db/bicycleParking/italy_20250330.csv`).pipe(
+  const parser = createReadStream(`db/bicycleParking/italy_20250404.csv`).pipe(
     parse({
       delimiter: "|",
       from: 2,
@@ -58,6 +59,7 @@ export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParkin
     fee,
     bicycleParking,
     surveillance,
+    capacity,
     lat,
     lng,
   ] of parser) {
@@ -72,6 +74,7 @@ export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParkin
       bicycleParking: bicycleParking || null,
       surveillance:
         surveillance === "yes" ? true : surveillance === "no" ? false : null,
+      capacity: capacity ? parseInt(capacity) : null,
       gh5: "",
     };
   }
@@ -86,7 +89,7 @@ export async function getBicycleParkingsFromDB(
   try {
     const placeholders = gh5List.map(() => "?").join(",");
     const query = `
-      SELECT id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance, gh5
+      SELECT id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance, capacity, gh5
       FROM bicycle_parkings
       WHERE gh5 IN (${placeholders})
     `;
@@ -103,6 +106,7 @@ export async function getBicycleParkingsFromDB(
       fee: row.fee === 1,
       bicycleParking: row.bicycleParking,
       surveillance: row.surveillance === 1,
+      capacity: row.capacity,
       gh5: row.gh5,
     }));
   } finally {
