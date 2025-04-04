@@ -34,23 +34,13 @@ export default function App() {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu menu-lg bg-base-200 text-base-content min-h-full w-80 p-4">
+        <ul className="menu menu-lg bg-base-200 text-base-content min-h-full w-80">
+          <TileLayerSelector
+            selectedTileLayer={selectedTileLayer}
+            onChange={selectTileLayer}
+          />
+          <div className="flex-1"></div>
           <ShareAppMenuItem />
-          <li className="menu-title mt-4">
-            <span>Impostazioni</span>
-          </li>
-          <li>
-            <details>
-              <summary>
-                <i className="fas fa-map fa-sm mr-2"></i>
-                Stile mappa
-              </summary>
-              <TileLayerSelector
-                selectedTileLayer={selectedTileLayer}
-                onChange={selectTileLayer}
-              />
-            </details>
-          </li>
         </ul>
       </div>
     </div>
