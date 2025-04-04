@@ -1,7 +1,6 @@
 "use client";
 
 import useLocation from "@/hooks/useLocation";
-import useMapEntities from "@/hooks/useMapEntities";
 import { BicycleParking } from "@/lib/bicycleParking";
 import { Station } from "@/lib/stations";
 import { Toilet } from "@/lib/toilets";
@@ -18,10 +17,7 @@ import ClusterMarkers from "./ClusterMarkers";
 import CustomMarker from "./CustomMarker";
 import LocateButton from "./LocateButton";
 import MapCenter from "./MapCenter";
-import OverlaySelector, {
-  AvailableOverlay,
-  SelectedOverlays,
-} from "./OverlaySelector";
+import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
 import PersonMarker from "./PersonMarker";
 import useTileLayer from "@/hooks/useTileLayer";
 import TileLayerSelector from "./TileLayerSelector";
