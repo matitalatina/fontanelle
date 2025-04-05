@@ -19,8 +19,8 @@ function canBrowserShareData(data: ShareData): boolean {
 function shareApp(showTooltip: () => void) {
   const shareData: ShareData = {
     title: "Fontanelle Milano",
-    text: "Trova velocemente dove bere a Milano",
-    url: "https://fontanellemilano.mattianatali.com",
+    text: "Trova velocemente dove bere in Italia",
+    url: "https://fontanelle.mattianatali.com",
   };
 
   if (canBrowserShareData(shareData)) {

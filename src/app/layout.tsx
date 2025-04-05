@@ -6,9 +6,10 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Fontanelle a Milano",
-  description: "Trova velocemente dove bere a Milano quando sei in bicicletta!",
-  metadataBase: new URL("https://fontanellemilano.mattianatali.com"),
+  title: "Fontanelle in Italia",
+  description:
+    "Trova velocemente dove bere in Italia quando sei in bicicletta!",
+  metadataBase: new URL("https://fontanelle.mattianatali.com"),
 };
 
 export default function RootLayout({
