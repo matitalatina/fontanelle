@@ -13,6 +13,8 @@ services:
       - traefik.http.routers.fontanelle.tls.certresolver=myresolver
       - traefik.http.services.fontanelle.loadbalancer.server.port=3003
       - traefik.http.routers.fontanellemilano.rule=Host(`fontanellemilano.mattianatali.com`)
+      - traefik.http.routers.fontanellemilano.tls=true
+      - traefik.http.routers.fontanellemilano.tls.certresolver=myresolver
       - traefik.http.routers.fontanellemilano.middlewares=fontanellemilano-redirect
       - traefik.http.middlewares.fontanellemilano-redirect.redirectregex.regex=^https://fontanellemilano.mattianatali.com/(.*)
       - traefik.http.middlewares.fontanellemilano-redirect.redirectregex.replacement=https://fontanelle.mattianatali.com/$${1}
