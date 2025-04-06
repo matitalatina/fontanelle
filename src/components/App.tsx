@@ -3,6 +3,7 @@ import Map from "./Map";
 import ShareAppMenuItem from "./ShareAppMenuItem";
 import TileLayerSelector from "./TileLayerSelector";
 import useTileLayer from "@/hooks/useTileLayer";
+import Link from "next/link";
 
 export default function App() {
   const { selectedTileLayer, selectTileLayer } = useTileLayer();
@@ -39,6 +40,11 @@ export default function App() {
             selectedTileLayer={selectedTileLayer}
             onChange={selectTileLayer}
           />
+          <li>
+            <Link href="/legend">
+              <i className="fa-solid fa-book-open mr-2"></i> Legenda
+            </Link>
+          </li>
           <div className="flex-1"></div>
           <ShareAppMenuItem />
         </ul>

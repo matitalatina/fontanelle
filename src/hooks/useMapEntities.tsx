@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LatLngBounds } from "leaflet";
 import geohash from "ngeohash";
@@ -383,7 +385,7 @@ export default function useMapEntities({
       // Fetch data for the new geohashes
       await fetchDataForGeohashes(newGeohashes, selectedOverlays);
     },
-    [requestedGeohashes$, fetchDataForGeohashes]
+    [requestedGeohashes$, fetchDataForGeohashes, requestedGeohashes]
   );
 
   useEffect(() => {
