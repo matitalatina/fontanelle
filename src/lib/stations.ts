@@ -71,17 +71,18 @@ node
   (area.segrate);
 out;
 ---
-[out:csv(::"id", amenity, name, ::lat, ::lon; true;"|")];
+[out:csv(::"id", amenity, name, ::lat, ::lon; true; "|")];
 area[name="Italia"]->.italy;
-node
-  [amenity=drinking_water]
-  (area.italy);
+(
+  node["amenity"="drinking_water"](area.italy);
+  node["man_made"="water_tap"](area.italy);
+);
 out;
 */
 
 export async function* getStationsFromOSM(): AsyncGenerator<Station> {
   // Process CSV files
-  yield* processCSVFile("db/water/italy_20250330.csv");
+  yield* processCSVFile("db/water/italy_20250406.csv");
 }
 
 async function* processCSVFile(filePath: string): AsyncGenerator<Station> {
