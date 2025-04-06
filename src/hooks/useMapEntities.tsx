@@ -385,7 +385,7 @@ export default function useMapEntities({
       // Fetch data for the new geohashes
       await fetchDataForGeohashes(newGeohashes, selectedOverlays);
     },
-    [requestedGeohashes$, fetchDataForGeohashes, requestedGeohashes]
+    [requestedGeohashes$, fetchDataForGeohashes]
   );
 
   useEffect(() => {
