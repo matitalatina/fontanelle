@@ -3,9 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: app
+    image: fontanelle:${VERSION}
     restart: unless-stopped
-    network_mode: host
     labels:
       - traefik.enable=true
       - traefik.http.routers.fontanelle.rule=Host(`fontanelle.mattianatali.com`)
