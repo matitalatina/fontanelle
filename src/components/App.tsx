@@ -45,6 +45,11 @@ export default function App() {
               <i className="fa-solid fa-book-open mr-2"></i> Legenda
             </Link>
           </li>
+          <li>
+            <Link href="/credits">
+              <i className="fa-solid fa-info-circle mr-2"></i> Crediti
+            </Link>
+          </li>
           <div className="flex-1"></div>
           <ShareAppMenuItem />
         </ul>

@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 
 type ShareData = {
   title: string;
@@ -16,7 +16,7 @@ function canBrowserShareData(data: ShareData): boolean {
   return navigator.canShare(data);
 }
 
-function shareApp(showTooltip: () => void) {
+export function shareApp(showTooltip: () => void) {
   const shareData: ShareData = {
     title: "Fontanelle in Italia",
     text: "Trova velocemente dove bere in Italia",
@@ -33,7 +33,7 @@ function shareApp(showTooltip: () => void) {
   }
 }
 
-function useTooltip() {
+export function useTooltip() {
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
 
   function showTooltip() {
