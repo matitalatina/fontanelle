@@ -51,8 +51,8 @@ export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParkin
   );
   for await (const [
     id,
-    amenity,
-    name,
+    ,
+    ,
     covered,
     indoor,
     access,
@@ -96,19 +96,34 @@ export async function getBicycleParkingsFromDB(
 
     const rows = db.prepare(query).all(gh5List);
 
-    return rows.map((row: any) => ({
-      id: row.id,
-      lat: row.lat,
-      lng: row.lng,
-      covered: row.covered === 1,
-      indoor: row.indoor === 1,
-      access: row.access,
-      fee: row.fee === 1,
-      bicycleParking: row.bicycleParking,
-      surveillance: row.surveillance === 1,
-      capacity: row.capacity,
-      gh5: row.gh5,
-    }));
+    return rows.map((row: unknown) => {
+      const typedRow = row as {
+        id: number;
+        lat: number;
+        lng: number;
+        covered: number;
+        indoor: number;
+        access: string;
+        fee: number;
+        bicycleParking: string;
+        surveillance: number;
+        capacity: number;
+        gh5: string;
+      };
+      return {
+        id: typedRow.id,
+        lat: typedRow.lat,
+        lng: typedRow.lng,
+        covered: typedRow.covered === 1,
+        indoor: typedRow.indoor === 1,
+        access: typedRow.access,
+        fee: typedRow.fee === 1,
+        bicycleParking: typedRow.bicycleParking,
+        surveillance: typedRow.surveillance === 1,
+        capacity: typedRow.capacity,
+        gh5: typedRow.gh5,
+      };
+    });
   } finally {
     db.close();
   }

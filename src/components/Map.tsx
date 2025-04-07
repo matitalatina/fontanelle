@@ -1,9 +1,6 @@
 "use client";
 
 import useLocation from "@/hooks/useLocation";
-import { BicycleParking } from "@/lib/bicycleParking";
-import { Station } from "@/lib/stations";
-import { Toilet } from "@/lib/toilets";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "leaflet";
 import "leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css";
@@ -30,16 +27,10 @@ const bootstrapDate = new Date();
 
 export default function Map({
   className,
-  stations: initialStations,
   children,
-  toilets: initialToilets,
-  bicycleParkings: initialBicycleParkings,
   tileLayer,
 }: {
   className: string;
-  stations: Station[];
-  toilets: Toilet[];
-  bicycleParkings: BicycleParking[];
   tileLayer: TileLayerType;
   children?: React.ReactNode;
 }) {

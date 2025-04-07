@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Meta from "./meta";
-import { baseMetadata, baseViewport, createViewport } from "./seo-config";
+import { baseMetadata, createViewport } from "./seo-config";
 
 const inter = Inter({ subsets: ["latin"] });
 

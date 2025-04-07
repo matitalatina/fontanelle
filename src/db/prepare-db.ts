@@ -1,5 +1,5 @@
 import { getBicycleParkingsFromOSM } from "@/lib/bicycleParking";
-import { getStations, getStationsFromOSM } from "@/lib/stations";
+import { getStations } from "@/lib/stations";
 import { getToiletsFromOSM } from "@/lib/toilets";
 import { getPlaygroundsFromOSM } from "@/lib/playgrounds";
 import DB, { type Database } from "better-sqlite3";

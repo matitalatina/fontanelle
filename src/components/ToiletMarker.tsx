@@ -1,6 +1,5 @@
 import { Toilet } from "@/lib/toilets";
 import { ExtraMarkers } from "leaflet";
-import { ReactNode } from "react";
 import { Marker, Popup } from "react-leaflet";
 import GoToButton from "./GoToButton";
 import FeatureIcon from "./FeatureIcon";

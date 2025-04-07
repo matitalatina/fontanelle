@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 // https://github.com/yuzhva/react-leaflet-markercluster/blob/master/src/react-leaflet-markercluster.js
 import { createPathComponent } from "@react-leaflet/core";
@@ -8,6 +9,7 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
 
 const MarkerClusterGroup = createPathComponent(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ({ children: _c, ...props }, ctx) => {
     const clusterProps: { [key: string]: any } = {};
     const clusterEvents: { [key: string]: any } = {};

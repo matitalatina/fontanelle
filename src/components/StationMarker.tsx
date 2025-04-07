@@ -1,20 +1,8 @@
 "use client";
 import { Station } from "@/lib/stations";
-import { icon } from "leaflet";
-import iconRetina from "leaflet/dist/images/marker-icon-2x.png";
-import iconMarker from "leaflet/dist/images/marker-icon.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import { Marker, Popup } from "react-leaflet";
 import { ExtraMarkers } from "leaflet";
 import GoToButton from "./GoToButton";
-
-const i = icon({
-  iconRetinaUrl: iconRetina.src,
-  iconUrl: iconMarker.src,
-  shadowUrl: iconShadow.src,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
 
 const fountainMarker = ExtraMarkers.icon({
   icon: "fa-faucet-drip",

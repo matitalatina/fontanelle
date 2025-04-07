@@ -20,13 +20,7 @@ export default function App() {
           >
             <i className="fa-solid fa-bars"></i>
           </label>
-          <Map
-            className="flex-auto"
-            stations={[]}
-            toilets={[]}
-            bicycleParkings={[]}
-            tileLayer={selectedTileLayer}
-          />
+          <Map className="flex-auto" tileLayer={selectedTileLayer} />
         </main>
       </div>
       <div className="drawer-side">

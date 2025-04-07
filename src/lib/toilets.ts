@@ -46,8 +46,8 @@ export async function* getToiletsFromOSM(): AsyncGenerator<Toilet> {
   );
   for await (const [
     id,
-    amenity,
-    name,
+    ,
+    ,
     fee,
     openingHours,
     changingTable,
@@ -80,16 +80,26 @@ export async function getToiletsFromDB(gh5List: string[]): Promise<Toilet[]> {
     `;
 
     const rows = db.prepare(query).all(gh5List);
-
-    return rows.map((row: any) => ({
-      id: row.id,
-      lat: row.lat,
-      lng: row.lng,
-      fee: row.fee === 1,
-      openingHours: row.openingHours,
-      changingTable: row.changingTable === 1,
-      gh5: row.gh5,
-    }));
+    return rows.map((row: unknown) => {
+      const typedRow = row as {
+        id: number;
+        lat: number;
+        lng: number;
+        fee: number;
+        openingHours: string;
+        changingTable: number;
+        gh5: string;
+      };
+      return {
+        id: typedRow.id,
+        lat: typedRow.lat,
+        lng: typedRow.lng,
+        fee: typedRow.fee === 1,
+        openingHours: typedRow.openingHours,
+        changingTable: typedRow.changingTable === 1,
+        gh5: typedRow.gh5,
+      };
+    });
   } finally {
     db.close();
   }

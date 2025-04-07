@@ -41,7 +41,7 @@ export async function* getPlaygroundsFromOSM(): AsyncGenerator<Playground> {
 
   for await (const [
     id,
-    _,
+    ,
     name,
     openingHours,
     indoor,
@@ -80,17 +80,30 @@ export async function getPlaygroundsFromDB(
 
     const rows = db.prepare(query).all(gh5List);
 
-    return rows.map((row: any) => ({
-      id: row.id,
-      lat: row.lat,
-      lng: row.lng,
-      name: row.name,
-      openingHours: row.openingHours,
-      indoor: row.indoor,
-      fee: row.fee,
-      supervised: row.supervised,
-      gh5: row.gh5,
-    }));
+    return rows.map((row: unknown) => {
+      const typedRow = row as {
+        id: number;
+        lat: number;
+        lng: number;
+        name: string;
+        openingHours: string;
+        indoor: number;
+        fee: number;
+        supervised: number;
+        gh5: string;
+      };
+      return {
+        id: typedRow.id,
+        lat: typedRow.lat,
+        lng: typedRow.lng,
+        name: typedRow.name,
+        openingHours: typedRow.openingHours,
+        indoor: typedRow.indoor === 1,
+        fee: typedRow.fee === 1,
+        supervised: typedRow.supervised === 1,
+        gh5: typedRow.gh5,
+      };
+    });
   } finally {
     db.close();
   }
