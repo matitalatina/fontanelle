@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LatLngBounds } from "leaflet";
 import geohash from "ngeohash";
@@ -55,7 +53,7 @@ export default function useMapEntities({
     []
   );
   const selectedOverlays$ = useMemo(
-    () => new BehaviorSubject<AvailableOverlay[]>(selectedOverlays),
+    () => new BehaviorSubject<AvailableOverlay[]>([]),
     []
   );
   const requestedGeohashes$ = useMemo(
@@ -92,7 +90,7 @@ export default function useMapEntities({
       })
     );
     return subscription;
-  }, []);
+  }, [bounds$, selectedOverlays$, zoom$]);
 
   const entitiesCache$ = useMemo(() => {
     return new BehaviorSubject<EntityCache>({
@@ -120,7 +118,7 @@ export default function useMapEntities({
         );
       })
     );
-  }, []);
+  }, [entitiesCache$, selectedOverlays$]);
 
   const onVisibleEntities$ = useMemo(() => {
     return onNeedChangeVisibleEntities$.pipe(
@@ -155,10 +153,6 @@ export default function useMapEntities({
   const [playgrounds, setPlaygrounds] = useState<Playground[]>([]);
 
   // Cache for already fetched geohashes and their associated overlays
-  const [requestedGeohashes, setRequestedGeohashes] = useState<
-    Map<string, string[]>
-  >(new Map());
-
   // Function to fetch data for specific geohashes and overlays
   const fetchDataForGeohashes = useCallback(
     async (geohashes: string[], overlays: string[]) => {
@@ -361,7 +355,7 @@ export default function useMapEntities({
 
       // Filter out geohashes that have already been requested with all active overlays
       const newGeohashes = geohashes.filter((gh) => {
-        const requestedOverlays = requestedGeohashes.get(gh) || [];
+        const requestedOverlays = requestedGeohashes$.value.get(gh) || [];
         return !selectedOverlays.every((overlay) =>
           requestedOverlays.includes(overlay)
         );
@@ -419,7 +413,7 @@ export default function useMapEntities({
       fetchSubscription.unsubscribe();
       updateVisibleSubscription.unsubscribe();
     };
-  }, []);
+  }, [fetchDataIfNeeded, onUpdateMap$, onVisibleEntities$]);
 
   // Update selectedOverlays$ whenever selectedOverlays changes
   useEffect(() => {
