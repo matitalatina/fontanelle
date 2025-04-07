@@ -15,7 +15,7 @@ export default function App() {
         <main className="flex flex-1">
           <label
             htmlFor="my-drawer"
-            className="btn drawer-button absolute top-4 left-4 w-auto bg-base-100 shadow-xl"
+            className="btn drawer-button absolute top-4 left-4 w-14 h-14 bg-base-100 rounded-box shadow-xl"
             style={{ zIndex: 4000 }}
           >
             <i className="fa-solid fa-bars"></i>
@@ -35,7 +35,7 @@ export default function App() {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu menu-lg bg-base-200 text-base-content min-h-full w-80">
+        <ul className="menu menu-xl bg-base-200 text-base-content min-h-full w-80">
           <TileLayerSelector
             selectedTileLayer={selectedTileLayer}
             onChange={selectTileLayer}

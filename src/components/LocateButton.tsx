@@ -14,7 +14,7 @@ export default function LocateButton({
     return (
       <button
         type="button"
-        className={`btn btn-circle btn-primary ${positionStyle}`}
+        className={`btn btn-circle btn-primary ${positionStyle} w-14 h-14 shadow-xl`}
         style={{ zIndex }}
         disabled
       >
@@ -47,7 +47,7 @@ export default function LocateButton({
       >
         <button
           type="button"
-          className="btn btn-circle btn-primary"
+          className="btn btn-circle btn-primary w-14 h-14 shadow-xl"
           onClick={onClick}
         >
           <i className="fas fa-location-crosshairs fa-lg"></i>
@@ -58,7 +58,7 @@ export default function LocateButton({
   return (
     <button
       type="button"
-      className={`btn btn-circle btn-primary ${positionStyle}`}
+      className={`btn btn-circle btn-primary ${positionStyle} w-14 h-14 shadow-xl`}
       style={{ zIndex }}
       onClick={onClick}
     >
