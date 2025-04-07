@@ -1,16 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import Meta from "./meta";
+import { baseMetadata, baseViewport, createViewport } from "./seo-config";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Fontanelle in Italia",
-  description:
-    "Trova velocemente dove bere in Italia quando sei in bicicletta!",
-  metadataBase: new URL("https://fontanelle.mattianatali.com"),
-};
+export const metadata: Metadata = baseMetadata;
+export const viewport: Viewport = createViewport({ themeColor: undefined });
 
 export default function RootLayout({
   children,
@@ -18,7 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="light" className="flex h-full w-full">
+    <html lang="it" data-theme="light" className="flex h-full w-full">
+      <Meta />
       <link rel="icon" href="/icon.png" sizes="any" />
       <link rel="manifest" href="/manifest.json" />
       <body className={`flex flex-1 ${inter.className}`}>{children}</body>

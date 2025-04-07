@@ -1,10 +1,19 @@
-"use client";
+import Link from "next/link";
+import { Metadata, Viewport } from "next/types";
+import { createViewport } from "../seo-config";
 
-import { useRouter } from "next/navigation";
+export const metadata: Metadata = {
+  title: "Legenda",
+  description:
+    "Legenda dei simboli della mappa delle fontanelle d'acqua potabile, case dell'acqua, bagni pubblici, parcheggi per biciclette e parchi giochi in Italia.",
+  alternates: {
+    canonical: "/legend",
+  },
+};
+
+export const viewport: Viewport = createViewport();
 
 export default function LegendaPage() {
-  const router = useRouter();
-
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6 ml-6">
@@ -12,10 +21,10 @@ export default function LegendaPage() {
           <i className="fa-solid fa-book-open mr-2"></i>
           Legenda
         </h1>
-        <button onClick={() => router.push("/")} className="btn btn-primary">
+        <Link href="/" className="btn btn-primary">
           <i className="fa-solid fa-arrow-left mr-2"></i>
           Torna alla mappa
-        </button>
+        </Link>
       </div>
 
       <div className="card bg-base-200 shadow-xl mb-8">

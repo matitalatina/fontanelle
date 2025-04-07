@@ -1,12 +1,20 @@
-"use client";
+import Link from "next/link";
+import ShareAppButton from "./ShareAppButton";
+import { Metadata, Viewport } from "next";
+import { createViewport } from "../seo-config";
 
-import { useRouter } from "next/navigation";
-import { shareApp, useTooltip } from "@/components/ShareAppMenuItem";
+export const metadata: Metadata = {
+  title: "Crediti",
+  description:
+    "Informazioni sul progetto Fontanelle in Italia, motivazioni, fonte dei dati OpenStreetMap e come supportare lo sviluppo dell'app.",
+  alternates: {
+    canonical: "/credits",
+  },
+};
+
+export const viewport: Viewport = createViewport();
 
 export default function CreditsPage() {
-  const router = useRouter();
-  const { tooltipIsOpen, showTooltip } = useTooltip();
-
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6 ml-6">
@@ -14,10 +22,10 @@ export default function CreditsPage() {
           <i className="fa-solid fa-info-circle mr-2"></i>
           Crediti
         </h1>
-        <button onClick={() => router.push("/")} className="btn btn-primary">
+        <Link href="/" className="btn btn-primary">
           <i className="fa-solid fa-arrow-left mr-2"></i>
           Torna alla mappa
-        </button>
+        </Link>
       </div>
 
       <div className="card bg-base-200 shadow-xl mb-8">
@@ -149,20 +157,7 @@ export default function CreditsPage() {
                   per far conoscere questa risorsa ad altri ciclisti e famiglie.
                 </p>
                 <div className="flex flex-col gap-2">
-                  <div
-                    className={`${
-                      tooltipIsOpen ? "tooltip tooltip-open" : ""
-                    } tooltip-bottom w-full`}
-                    data-tip="Link copiato"
-                  >
-                    <button
-                      onClick={() => shareApp(showTooltip)}
-                      className="btn btn-outline btn-sm w-full"
-                    >
-                      <i className="fa-solid fa-share-nodes mr-2"></i>
-                      Condividi App
-                    </button>
-                  </div>
+                  <ShareAppButton />
                 </div>
               </div>
             </div>
