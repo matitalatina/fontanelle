@@ -17,9 +17,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it" data-theme="light" className="flex h-full w-full">
-      <Meta />
-      <link rel="icon" href="/icon.png" sizes="any" />
-      <link rel="manifest" href="/manifest.json" />
+      <head>
+        <Meta />
+        <link rel="icon" href="/icon.png" sizes="any" />
+        <link rel="manifest" href="/manifest.json" />
+        <script
+          defer
+          src="https://umami.serina.mattianatali.com/script.js"
+          data-website-id="0532f00f-c7ff-4e8f-80ac-f09b1ad90d01"
+        ></script>
+      </head>
       <body className={`flex flex-1 ${inter.className}`}>
         {children}
         <AnalyticsProvider gaId="G-N9WYWY07X6" />
