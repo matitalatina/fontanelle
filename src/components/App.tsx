@@ -1,6 +1,7 @@
 "use client";
 import Map from "./Map";
 import ShareAppMenuItem from "./ShareAppMenuItem";
+import AddToHome from "./AddToHome";
 import TileLayerSelector from "./TileLayerSelector";
 import useTileLayer from "@/hooks/useTileLayer";
 import Link from "next/link";
@@ -45,6 +46,7 @@ export default function App() {
             </Link>
           </li>
           <div className="flex-1"></div>
+          <AddToHome />
           <ShareAppMenuItem />
         </ul>
       </div>
