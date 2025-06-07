@@ -3,6 +3,7 @@ import { ExtraMarkers } from "leaflet";
 import { Marker, Popup } from "react-leaflet";
 import GoToButton from "./GoToButton";
 import FeatureIcon from "./FeatureIcon";
+import SharePositionButton from "./SharePositionButton";
 
 const toiletMarker = ExtraMarkers.icon({
   icon: "fa-restroom",
@@ -29,7 +30,11 @@ export default function ToiletMarker({ toilet }: { toilet: Toilet }) {
               <div className="font-base">{toilet.openingHours}</div>
             )}
           </div>
-          <div className="flex flex-row justify-end">
+          <div className="flex flex-row justify-between">
+            <SharePositionButton
+              latLng={{ lat: toilet.lat, lng: toilet.lng }}
+              markerType="un bagno"
+            />
             <GoToButton latLng={{ lat: toilet.lat, lng: toilet.lng }} />
           </div>
         </div>

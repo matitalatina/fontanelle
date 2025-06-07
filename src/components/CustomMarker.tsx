@@ -4,6 +4,7 @@ import { ExtraMarkers, Marker as LMarker } from "leaflet";
 import { useRef, useState } from "react";
 import { Marker, Popup, useMapEvents } from "react-leaflet";
 import GoToButton from "./GoToButton";
+import SharePositionButton from "./SharePositionButton";
 
 const houseMarker = ExtraMarkers.icon({
   icon: "fa-map-pin",
@@ -69,6 +70,10 @@ export default function CustomMarker() {
             >
               <i className="fas fa-trash-alt"></i>
             </button>
+            <SharePositionButton
+              latLng={{ lat: position.lat, lng: position.lng }}
+              markerType="un punto personalizzato"
+            />
             <GoToButton latLng={{ lat: position.lat, lng: position.lng }} />
           </div>
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { BASE_URL } from "@/app/seo-config";
 import { useState } from "react";
 
 type ShareData = {
@@ -20,7 +21,7 @@ export function shareApp(showTooltip: () => void) {
   const shareData: ShareData = {
     title: "Fontanelle in Italia",
     text: "Trova velocemente dove bere in Italia",
-    url: "https://fontanelle.mattianatali.com",
+    url: BASE_URL,
   };
 
   if (canBrowserShareData(shareData)) {

@@ -3,6 +3,7 @@ import { Station } from "@/lib/stations";
 import { Marker, Popup } from "react-leaflet";
 import { ExtraMarkers } from "leaflet";
 import GoToButton from "./GoToButton";
+import SharePositionButton from "./SharePositionButton";
 
 const fountainMarker = ExtraMarkers.icon({
   icon: "fa-faucet-drip",
@@ -34,7 +35,11 @@ export default function StationMarker({ station }: { station: Station }) {
               <div className="text-sm font-light">{station.name}</div>
             )}
           </div>
-          <div className="flex flex-row justify-end">
+          <div className="flex flex-row justify-between">
+            <SharePositionButton
+              latLng={{ lat: station.lat, lng: station.lng }}
+              markerType="una fontanella"
+            />
             <GoToButton latLng={{ lat: station.lat, lng: station.lng }} />
           </div>
         </div>

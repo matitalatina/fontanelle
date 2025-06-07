@@ -3,6 +3,7 @@ import { ExtraMarkers } from "leaflet";
 import { Marker, Popup } from "react-leaflet";
 import FeatureIcon from "./FeatureIcon";
 import GoToButton from "./GoToButton";
+import SharePositionButton from "./SharePositionButton";
 
 const bicycleParkingMarker = ExtraMarkers.icon({
   icon: "fa-parking",
@@ -51,7 +52,11 @@ export default function BicycleParkingMarker({
               </div>
             )}
           </div>
-          <div className="flex flex-row justify-end">
+          <div className="flex flex-row justify-between">
+            <SharePositionButton
+              latLng={{ lat: bicycleParking.lat, lng: bicycleParking.lng }}
+              markerType="un parcheggio bici"
+            />
             <GoToButton
               latLng={{ lat: bicycleParking.lat, lng: bicycleParking.lng }}
             />

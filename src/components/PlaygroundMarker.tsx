@@ -3,6 +3,7 @@ import { ExtraMarkers } from "leaflet";
 import { Marker, Popup } from "react-leaflet";
 import FeatureIcon from "./FeatureIcon";
 import GoToButton from "./GoToButton";
+import SharePositionButton from "./SharePositionButton";
 
 const playgroundMarker = ExtraMarkers.icon({
   icon: "fa-futbol",
@@ -38,7 +39,11 @@ export default function PlaygroundMarker({
               <div className="font-base">{playground.openingHours}</div>
             )}
           </div>
-          <div className="flex flex-row justify-end">
+          <div className="flex flex-row justify-between">
+            <SharePositionButton
+              latLng={{ lat: playground.lat, lng: playground.lng }}
+              markerType="un parco giochi"
+            />
             <GoToButton latLng={{ lat: playground.lat, lng: playground.lng }} />
           </div>
         </div>
