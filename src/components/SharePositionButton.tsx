@@ -36,6 +36,9 @@ L'ho trovato grazie a questa app: ${BASE_URL}`;
 
   if (canBrowserShareData(shareData)) {
     navigator.share(shareData);
+    umami.track("share_position", {
+      markerType,
+    });
   } else if (navigator.clipboard) {
     navigator.clipboard.writeText(message);
     showTooltip();

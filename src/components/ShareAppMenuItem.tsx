@@ -26,6 +26,7 @@ export function shareApp(showTooltip: () => void) {
 
   if (canBrowserShareData(shareData)) {
     navigator.share(shareData);
+    umami.track("share_app");
   } else if (navigator.clipboard) {
     navigator.clipboard.writeText(shareData.url);
     showTooltip();

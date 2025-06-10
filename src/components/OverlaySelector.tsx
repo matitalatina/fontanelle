@@ -16,11 +16,14 @@ export default function OverlaySelector({
 }: OverlaySelectorProps) {
   return (
     <div
-      tabIndex={0}
       className="collapse absolute top-4 right-4 w-auto bg-base-100 rounded-box shadow-xl"
       style={{ zIndex: 4000 }}
     >
-      <input type="checkbox" className="absolute peer" />
+      <input
+        type="checkbox"
+        id="overlay-selector"
+        className="peer absolute top-0 h-14"
+      />
       <div className="collapse-title p-0 mx-auto w-4 min-h-14 top-5">
         <i className="fas fa-layer-group fa-lg"></i>
       </div>
