@@ -9,7 +9,7 @@ import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
-import { ScaleControl, ZoomControl } from "react-leaflet";
+import { ScaleControl } from "react-leaflet";
 import ClusterMarkers from "./ClusterMarkers";
 import CustomMarker from "./CustomMarker";
 import LocateButton from "./LocateButton";
@@ -87,7 +87,6 @@ export default function Map({
           onClick={getCurrentLocation}
           locationState={locationState}
         />
-        <ZoomControl position="bottomleft" />
         <ScaleControl position="bottomright" imperial={false} />
       </MapContainer>
     </>
