@@ -31,7 +31,7 @@ export default function OverlaySelector({
         <div className="join join-vertical">
           <button
             className={`btn join-item px-2 ${
-              selectedOverlays.stations ? "btn-neutral" : ""
+              selectedOverlays.stations ? "btn-neutral dark:btn-primary" : ""
             }`}
             onClick={() =>
               onChange({
@@ -44,7 +44,7 @@ export default function OverlaySelector({
           </button>
           <button
             className={`btn join-item px-2 ${
-              selectedOverlays.toilets ? "btn-neutral" : ""
+              selectedOverlays.toilets ? "btn-neutral dark:btn-primary" : ""
             }`}
             onClick={() =>
               onChange({
@@ -57,7 +57,9 @@ export default function OverlaySelector({
           </button>
           <button
             className={`btn join-item px-2 ${
-              selectedOverlays.bicycleParkings ? "btn-neutral" : ""
+              selectedOverlays.bicycleParkings
+                ? "btn-neutral dark:btn-primary"
+                : ""
             }`}
             onClick={() =>
               onChange({
@@ -70,7 +72,7 @@ export default function OverlaySelector({
           </button>
           <button
             className={`btn join-item px-2 ${
-              selectedOverlays.playgrounds ? "btn-neutral" : ""
+              selectedOverlays.playgrounds ? "btn-neutral dark:btn-primary" : ""
             }`}
             onClick={() =>
               onChange({

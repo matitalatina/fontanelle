@@ -1,5 +1,8 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
 
 @theme {
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
@@ -21,6 +24,10 @@
 
 .station-popup .leaflet-popup-content {
   margin: 1rem;
+}
+
+.map-fontanelle .leaflet-marker-icon.marker-cluster {
+  color: black;
 }
 
 .leaflet-fade-anim

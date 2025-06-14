@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" data-theme="light" className="flex h-full w-full">
+    <html lang="it" className="flex h-full w-full">
       <head>
         <Meta />
         <link rel="icon" href="/icon.png" sizes="any" />
