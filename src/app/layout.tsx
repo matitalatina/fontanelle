@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Meta from "./meta";
 import { baseMetadata, createViewport } from "./seo-config";
-import AnalyticsProvider from "@/components/AnalyticsProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,10 +26,7 @@ export default function RootLayout({
           data-website-id="0532f00f-c7ff-4e8f-80ac-f09b1ad90d01"
         ></script>
       </head>
-      <body className={`flex flex-1 ${inter.className}`}>
-        {children}
-        <AnalyticsProvider gaId="G-N9WYWY07X6" />
-      </body>
+      <body className={`flex flex-1 ${inter.className}`}>{children}</body>
     </html>
   );
 }

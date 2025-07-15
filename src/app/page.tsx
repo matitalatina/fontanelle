@@ -5,13 +5,13 @@ import { generateAppJsonLd } from "./lib/jsonld";
 import { createViewport } from "./seo-config";
 
 export const metadata: Metadata = {
-  title: "Trova dove bere in bicicletta",
+  title: "Fontanelle in Italia",
   openGraph: {
-    title: "Fontanelle in Italia - Trova dove bere in bicicletta",
+    title: "Fontanelle in Italia",
     images: ["/opengraph-image.jpg"],
   },
   twitter: {
-    title: "Fontanelle in Italia - Trova dove bere in bicicletta",
+    title: "Fontanelle in Italia",
     card: "summary_large_image",
   },
 };
