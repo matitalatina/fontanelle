@@ -25,6 +25,7 @@ export const AUTHOR_NAME = "Mattia Natali";
 export const AUTHOR_TWITTER = "@matitalatina";
 export const THEME_COLOR = "#74c0fc";
 export const DARK_THEME_COLOR = "#1971c2";
+export const LOCALE = "it_IT";
 
 // Base metadata object that will be used as a starting point
 export const baseMetadata: Metadata = {

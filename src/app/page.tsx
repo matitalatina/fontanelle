@@ -2,16 +2,19 @@ import { LazyApp } from "@/components/LazyApp";
 import Script from "next/script";
 import { Metadata, Viewport } from "next";
 import { generateAppJsonLd } from "./lib/jsonld";
-import { createViewport } from "./seo-config";
+import { APP_NAME, BASE_URL, createViewport, LOCALE } from "./seo-config";
 
 export const metadata: Metadata = {
-  title: "Fontanelle in Italia",
+  title: APP_NAME,
   openGraph: {
-    title: "Fontanelle in Italia",
-    images: ["/opengraph-image.jpg"],
+    title: APP_NAME,
+    url: BASE_URL,
+    locale: LOCALE,
+    type: "website",
+    siteName: APP_NAME,
   },
   twitter: {
-    title: "Fontanelle in Italia",
+    title: APP_NAME,
     card: "summary_large_image",
   },
 };
