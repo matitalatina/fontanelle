@@ -1,8 +1,5 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: fontanelle:${VERSION}
     restart: unless-stopped
     labels:
