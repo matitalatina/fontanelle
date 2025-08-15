@@ -26,6 +26,7 @@ import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import DB from "better-sqlite3";
 import path from "path";
+import { getLatestDataFile } from "./utils/file-utils";
 
 export type BicycleParking = {
   id: number;
@@ -42,7 +43,10 @@ export type BicycleParking = {
 };
 
 export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParking> {
-  const parser = createReadStream(`db/bicycleParking/italy_20250404.csv`).pipe(
+  const latestFile = getLatestDataFile("bicycleParking");
+  console.log(`Loading bicycle parkings from: ${latestFile}`);
+
+  const parser = createReadStream(latestFile).pipe(
     parse({
       delimiter: "|",
       from: 2,

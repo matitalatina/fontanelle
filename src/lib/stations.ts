@@ -2,6 +2,7 @@ import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import DB from "better-sqlite3";
 import path from "path";
+import { getLatestDataFile } from "./utils/file-utils";
 
 type StationType = "fountain" | "house";
 
@@ -68,7 +69,9 @@ out;
 
 export async function* getStationsFromOSM(): AsyncGenerator<Station> {
   // Process CSV files
-  yield* processCSVFile("db/water/italy_20250406.csv");
+  const latestFile = getLatestDataFile("water");
+  console.log(`Loading water stations from: ${latestFile}`);
+  yield* processCSVFile(latestFile);
 }
 
 async function* processCSVFile(filePath: string): AsyncGenerator<Station> {

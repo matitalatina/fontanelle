@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare-db": "tsx src/db/prepare-db.ts"
+    "download-data": "tsx scripts/download-overpass-data.ts",
+    "prepare-db": "tsx scripts/prepare-db.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.5.2",

@@ -2,6 +2,7 @@ import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import DB from "better-sqlite3";
 import path from "path";
+import { getLatestDataFile } from "./utils/file-utils";
 
 export type Toilet = {
   id: number;
@@ -37,7 +38,10 @@ area[name="Italia"]->.italy;
 out;
 */
 export async function* getToiletsFromOSM(): AsyncGenerator<Toilet> {
-  const parser = createReadStream(`db/toilets/italy_20250330.csv`).pipe(
+  const latestFile = getLatestDataFile("toilets");
+  console.log(`Loading toilets from: ${latestFile}`);
+
+  const parser = createReadStream(latestFile).pipe(
     parse({
       delimiter: "|",
       from: 2,

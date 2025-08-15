@@ -18,6 +18,7 @@ import { createReadStream } from "fs";
 import geohash from "ngeohash";
 import path from "path";
 import DB from "better-sqlite3";
+import { getLatestDataFile } from "./utils/file-utils";
 
 export type Playground = {
   id: number;
@@ -32,7 +33,10 @@ export type Playground = {
 };
 
 export async function* getPlaygroundsFromOSM(): AsyncGenerator<Playground> {
-  const parser = createReadStream(`db/playgrounds/italy_20250404.csv`).pipe(
+  const latestFile = getLatestDataFile("playgrounds");
+  console.log(`Loading playgrounds from: ${latestFile}`);
+
+  const parser = createReadStream(latestFile).pipe(
     parse({
       delimiter: "|",
       from: 2,
