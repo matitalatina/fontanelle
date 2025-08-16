@@ -95,7 +95,7 @@ export default async function Home() {
               </p>
               <Link href="/app" className="btn btn-primary btn-lg text-lg px-8">
                 <i className="fas fa-map-marked-alt mr-2"></i>
-                Apri la mappa delle fontanelle
+                Apri la mappa
               </Link>
             </div>
           </div>
@@ -430,7 +430,7 @@ export default async function Home() {
             </p>
             <Link href="/app" className="btn btn-secondary btn-lg text-lg px-8">
               <i className="fas fa-map-marked-alt mr-2"></i>
-              Apri la mappa delle fontanelle
+              Apri la mappa
             </Link>
           </div>
         </div>
