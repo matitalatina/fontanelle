@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" className="flex h-full w-full">
+    <html lang="it">
       <head>
         <Meta />
         <link rel="icon" href="/icon.png" sizes="any" />
@@ -26,7 +26,7 @@ export default function RootLayout({
           data-website-id="0532f00f-c7ff-4e8f-80ac-f09b1ad90d01"
         ></script>
       </head>
-      <body className={`flex flex-1 ${inter.className}`}>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Metadata, Viewport } from "next/types";
+import { Metadata, Viewport } from "next";
 import { createViewport } from "../seo-config";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function LegendaPage() {
           <i className="fa-solid fa-book-open mr-2"></i>
           Legenda
         </h1>
-        <Link href="/" className="btn btn-primary">
+        <Link href="/app" className="btn btn-primary">
           <i className="fa-solid fa-arrow-left mr-2"></i>
           Torna alla mappa
         </Link>

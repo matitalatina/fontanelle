@@ -1,7 +1,6 @@
 "use client";
 
 import useLocation from "@/hooks/useLocation";
-import "@fortawesome/fontawesome-free/css/all.css";
 import "leaflet";
 import "leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css";
 import "leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js";

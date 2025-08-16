@@ -22,7 +22,7 @@ export default function CreditsPage() {
           <i className="fa-solid fa-info-circle mr-2"></i>
           Crediti
         </h1>
-        <Link href="/" className="btn btn-primary">
+        <Link href="/app" className="btn btn-primary">
           <i className="fa-solid fa-arrow-left mr-2"></i>
           Torna alla mappa
         </Link>
