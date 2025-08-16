@@ -5,6 +5,7 @@ import { generateAppJsonLd, generateFAQJsonLd } from "./lib/jsonld";
 import { APP_NAME, BASE_URL, createViewport, LOCALE } from "./seo-config";
 import { getAmenityCounts } from "@/lib/amenity-counts";
 import AnimatedHeroBackground from "@/components/AnimatedHeroBackground";
+import ScrollDownArrow from "@/components/ScrollDownArrow";
 
 export const metadata: Metadata = {
   title:
@@ -70,14 +71,14 @@ export default async function Home() {
 
       <div className="min-h-screen bg-base-100">
         {/* Hero Section */}
-        <div className="hero min-h-screen relative overflow-hidden">
+        <div className="hero min-h-screen relative overflow-hidden flex flex-col">
           <AnimatedHeroBackground />
-          <div className="hero-content text-center relative z-10">
+          <div className="hero-content text-center relative z-10 flex-1 flex items-center justify-center pb-20 sm:pb-16">
             <div className="max-w-4xl">
-              <h1 className="text-5xl font-bold mb-6 text-balance">
+              <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-balance">
                 Trova fontanelle d&apos;acqua potabile in Italia
               </h1>
-              <p className="text-xl mb-4 text-balance max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl mb-4 text-balance max-w-3xl mx-auto leading-relaxed">
                 Scopri dove bere <strong>acqua potabile gratuita</strong> in
                 tutta Italia! La nostra mappa interattiva ti aiuta a trovare
                 <strong>
@@ -88,16 +89,24 @@ export default async function Home() {
                 tra fontanelle, parcheggi per biciclette, bagni pubblici e
                 parchi giochi nelle principali città italiane.
               </p>
-              <p className="text-lg mb-8 text-balance max-w-2xl mx-auto opacity-90">
+              <p className="text-base sm:text-lg mb-8 text-balance max-w-2xl mx-auto opacity-90">
                 Perfetto per ciclisti, turisti e famiglie che vogliono ridurre
                 l&apos;uso della plastica e contribuire alla sostenibilità
                 ambientale.
               </p>
-              <Link href="/app" className="btn btn-primary btn-lg text-lg px-8">
+              <Link
+                href="/app"
+                className="btn btn-primary btn-lg text-base sm:text-lg px-6 sm:px-8"
+              >
                 <i className="fas fa-map-marked-alt mr-2"></i>
                 Apri la mappa
               </Link>
             </div>
+          </div>
+
+          {/* Scroll down arrow positioned at the bottom of the hero with proper spacing */}
+          <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+            <ScrollDownArrow className="scale-90 sm:scale-100" />
           </div>
         </div>
 
