@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Metadata, Viewport } from "next";
 import { generateAppJsonLd, generateFAQJsonLd } from "./lib/jsonld";
 import { APP_NAME, BASE_URL, createViewport, LOCALE } from "./seo-config";
+import { getAmenityCounts } from "@/lib/amenity-counts";
+import AnimatedHeroBackground from "@/components/AnimatedHeroBackground";
 
 export const metadata: Metadata = {
   title:
@@ -47,6 +49,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = createViewport({ useColorScheme: true });
 
 export default async function Home() {
+  const counts = getAmenityCounts();
+
   return (
     <>
       <Script
@@ -66,8 +70,9 @@ export default async function Home() {
 
       <div className="min-h-screen bg-base-100">
         {/* Hero Section */}
-        <div className="hero min-h-screen bg-gradient-to-br from-primary/10 to-secondary/10">
-          <div className="hero-content text-center">
+        <div className="hero min-h-screen relative overflow-hidden">
+          <AnimatedHeroBackground />
+          <div className="hero-content text-center relative z-10">
             <div className="max-w-4xl">
               <h1 className="text-5xl font-bold mb-6 text-balance">
                 Trova fontanelle d&apos;acqua potabile in Italia
@@ -75,8 +80,13 @@ export default async function Home() {
               <p className="text-xl mb-4 text-balance max-w-3xl mx-auto leading-relaxed">
                 Scopri dove bere <strong>acqua potabile gratuita</strong> in
                 tutta Italia! La nostra mappa interattiva ti aiuta a trovare
-                fontanelle, parcheggi per biciclette, bagni pubblici e parchi
-                giochi nelle principali città italiane.
+                <strong>
+                  {" "}
+                  oltre {counts.total.toLocaleString("it-IT")} punti di
+                  interesse
+                </strong>{" "}
+                tra fontanelle, parcheggi per biciclette, bagni pubblici e
+                parchi giochi nelle principali città italiane.
               </p>
               <p className="text-lg mb-8 text-balance max-w-2xl mx-auto opacity-90">
                 Perfetto per ciclisti, turisti e famiglie che vogliono ridurre
@@ -87,6 +97,85 @@ export default async function Home() {
                 <i className="fas fa-map-marked-alt mr-2"></i>
                 Apri la mappa delle fontanelle
               </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Statistics Section */}
+        <div className="py-16 px-4 bg-base-200">
+          <div className="container mx-auto max-w-6xl">
+            <h2 className="text-4xl font-bold text-center mb-4">
+              La mappa più completa d&apos;Italia
+            </h2>
+            <p className="text-lg text-center mb-12 opacity-80">
+              Migliaia di punti di interesse verificati e costantemente
+              aggiornati
+            </p>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="stat bg-base-100 rounded-2xl shadow-lg">
+                <div className="stat-figure text-primary">
+                  <i className="fas fa-faucet-drip text-3xl"></i>
+                </div>
+                <div className="stat-title text-sm">Fontanelle</div>
+                <div className="stat-value text-primary text-2xl lg:text-3xl">
+                  {counts.fountains.toLocaleString("it-IT")}
+                </div>
+                <div className="stat-desc text-xs">Acqua potabile gratuita</div>
+              </div>
+
+              <div className="stat bg-base-100 rounded-2xl shadow-lg">
+                <div className="stat-figure text-info">
+                  <i className="fas fa-parking text-3xl"></i>
+                </div>
+                <div className="stat-title text-sm">Parcheggi bici</div>
+                <div className="stat-value text-info text-2xl lg:text-3xl">
+                  {counts.bicycleParkings.toLocaleString("it-IT")}
+                </div>
+                <div className="stat-desc text-xs break-words">
+                  Posti sicuri per biciclette
+                </div>
+              </div>
+
+              <div className="stat bg-base-100 rounded-2xl shadow-lg">
+                <div className="stat-figure text-secondary">
+                  <i className="fas fa-restroom text-3xl"></i>
+                </div>
+                <div className="stat-title text-sm">Bagni pubblici</div>
+                <div className="stat-value text-secondary text-2xl lg:text-3xl">
+                  {counts.toilets.toLocaleString("it-IT")}
+                </div>
+                <div className="stat-desc text-xs break-words">
+                  Servizi igienici
+                </div>
+              </div>
+
+              <div className="stat bg-base-100 rounded-2xl shadow-lg">
+                <div className="stat-figure text-warning">
+                  <i className="fas fa-futbol text-3xl"></i>
+                </div>
+                <div className="stat-title text-sm">Parchi giochi</div>
+                <div className="stat-value text-warning text-2xl lg:text-3xl">
+                  {counts.playgrounds.toLocaleString("it-IT")}
+                </div>
+                <div className="stat-desc text-xs break-words">
+                  Aree per bambini
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mt-8">
+              <div className="stat bg-primary text-primary-content rounded-2xl shadow-lg inline-block px-8 py-4">
+                <div className="stat-title text-primary-content opacity-80">
+                  Totale punti di interesse
+                </div>
+                <div className="stat-value text-4xl lg:text-5xl">
+                  {counts.total.toLocaleString("it-IT")}
+                </div>
+                <div className="stat-desc text-primary-content opacity-80">
+                  in tutta Italia
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -157,7 +246,7 @@ export default async function Home() {
         </div>
 
         {/* Cities Section */}
-        <div className="py-16 px-4 bg-base-200">
+        <div className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-4xl font-bold text-center mb-4">
               Fontanelle nelle principali città italiane
@@ -257,7 +346,7 @@ export default async function Home() {
         </div>
 
         {/* FAQ Section */}
-        <div className="py-16 px-4">
+        <div className="py-16 px-4 bg-base-200">
           <div className="container mx-auto max-w-4xl">
             <h2 className="text-4xl font-bold text-center mb-12">
               Domande frequenti
@@ -343,7 +432,7 @@ export default async function Home() {
             </p>
             <Link href="/app" className="btn btn-secondary btn-lg text-lg px-8">
               <i className="fas fa-map-marked-alt mr-2"></i>
-              Apri subito la mappa delle fontanelle
+              Apri la mappa delle fontanelle
             </Link>
           </div>
         </div>

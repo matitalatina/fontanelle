@@ -51,3 +51,159 @@
 .map-fontanelle .leaflet-right .leaflet-control-scale {
   margin-right: 5rem;
 }
+
+/* Hero Background Animations */
+@keyframes float-down {
+  0% {
+    transform: translateY(-20vh) translateX(0px) scale(var(--tw-scale-x, 1)) scale(var(--tw-scale-y, 1));
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(10px) scale(var(--tw-scale-x, 1)) scale(var(--tw-scale-y, 1));
+    opacity: 0;
+  }
+}
+
+@keyframes float-bubble {
+  0% {
+    transform: translateY(100vh) translateX(0px) scale(var(--tw-scale-x, 1)) scale(var(--tw-scale-y, 1));
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(50vh) translateX(-10px) scale(var(--tw-scale-x, 1)) scale(var(--tw-scale-y, 1));
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(-30px) scale(var(--tw-scale-x, 1)) scale(var(--tw-scale-y, 1));
+    opacity: 0;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-float-down {
+  animation: float-down linear infinite;
+}
+
+.animate-float-bubble {
+  animation: float-bubble ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 12s linear infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle ease-in-out infinite;
+}
+
+/* Water Droplet Shape */
+.water-droplet {
+  width: 12px;
+  height: 16px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  position: relative;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.water-droplet::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 4px solid inherit;
+  background: inherit;
+}
+
+.droplet-highlight {
+  opacity: 0.8;
+  animation: highlight-pulse 3s ease-in-out infinite;
+}
+
+@keyframes highlight-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+/* Performance optimizations for animations */
+.animate-float-down,
+.animate-float-bubble,
+.animate-gradient-shift,
+.animate-shimmer,
+.animate-twinkle {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-down,
+  .animate-float-bubble,
+  .animate-shimmer,
+  .animate-twinkle {
+    animation: none;
+  }
+  
+  .animate-gradient-shift {
+    animation: gradient-shift 15s ease-in-out infinite;
+  }
+}
