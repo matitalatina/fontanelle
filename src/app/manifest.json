@@ -6,7 +6,8 @@
   "display": "standalone",
   "orientation": "any",
   "scope": "/",
-  "start_url": "/app",
+  "start_url": "/app?source=pwa",
+  "id": "/app",
   "icons": [
     {
       "src": "images/icons/icon-mask-72x72.png",

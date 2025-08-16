@@ -1,10 +1,32 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useState, useEffect } from "react";
 
 const AnimatedHeroBackground: React.FC = () => {
-  // Reduce animation count on mobile devices for better performance
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const [isClient, setIsClient] = useState(false);
+  const [animationElements, setAnimationElements] = useState<{
+    droplets: Array<{
+      id: number;
+      left: number;
+      size: number;
+      delay: number;
+      duration: number;
+      type: string;
+    }>;
+    bubbles: Array<{
+      id: number;
+      left: number;
+      size: number;
+      delay: number;
+      duration: number;
+      type: string;
+    }>;
+    particles: number;
+  }>({
+    droplets: [],
+    bubbles: [],
+    particles: 0,
+  });
 
   // Generate random positions and delays for animated elements
   const generateFloatingElements = (
@@ -21,15 +43,29 @@ const AnimatedHeroBackground: React.FC = () => {
     }));
   };
 
-  // Memoize elements to prevent regeneration on re-renders
-  const { droplets, bubbles, particles } = useMemo(
-    () => ({
+  // Initialize animation elements only on client side to prevent hydration mismatch
+  useEffect(() => {
+    setIsClient(true);
+    const isMobile = window.innerWidth < 768;
+
+    setAnimationElements({
       droplets: generateFloatingElements(isMobile ? 6 : 12, "droplet"),
       bubbles: generateFloatingElements(isMobile ? 4 : 8, "bubble"),
       particles: isMobile ? 10 : 20,
-    }),
-    [isMobile]
-  );
+    });
+  }, []);
+
+  // Don't render animations until client-side hydration is complete
+  if (!isClient) {
+    return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Static gradient background only during SSR */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10"></div>
+      </div>
+    );
+  }
+
+  const { droplets, bubbles, particles } = animationElements;
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -42,6 +78,7 @@ const AnimatedHeroBackground: React.FC = () => {
           key={`droplet-${element.id}`}
           className="absolute animate-float-down opacity-20"
           style={{
+            top: `-100px`,
             left: `${element.left}%`,
             transform: `scale(${element.size})`,
             animationDelay: `${element.delay}s`,
@@ -60,6 +97,7 @@ const AnimatedHeroBackground: React.FC = () => {
           key={`bubble-${element.id}`}
           className="absolute animate-float-bubble opacity-30"
           style={{
+            top: `-100px`,
             left: `${element.left}%`,
             transform: `scale(${element.size})`,
             animationDelay: `${element.delay}s`,

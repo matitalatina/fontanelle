@@ -58,6 +58,9 @@
     transform: translateY(-20vh) translateX(0px) scale(var(--tw-scale-x, 1)) scale(var(--tw-scale-y, 1));
     opacity: 0;
   }
+  5% {
+    opacity: 0;
+  }
   10% {
     opacity: 0.3;
   }
@@ -153,19 +156,7 @@
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
-.water-droplet::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 3px solid transparent;
-  border-right: 3px solid transparent;
-  border-bottom: 4px solid inherit;
-  background: inherit;
-}
+
 
 .droplet-highlight {
   opacity: 0.8;
