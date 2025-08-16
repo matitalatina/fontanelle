@@ -112,68 +112,66 @@ export default async function Home() {
               aggiornati
             </p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="stat bg-base-100 rounded-2xl shadow-lg">
-                <div className="stat-figure text-primary">
-                  <i className="fas fa-faucet-drip text-3xl"></i>
+            <div className="flex justify-center">
+              <div className="stats stats-vertical lg:stats-horizontal shadow-lg bg-base-100 rounded-2xl">
+                <div className="stat">
+                  <div className="stat-figure text-primary">
+                    <i className="fas fa-faucet-drip text-3xl"></i>
+                  </div>
+                  <div className="stat-title">Fontanelle</div>
+                  <div className="stat-value text-primary">
+                    {counts.fountains.toLocaleString("it-IT")}
+                  </div>
+                  <div className="stat-desc">Acqua potabile gratuita</div>
                 </div>
-                <div className="stat-title text-sm">Fontanelle</div>
-                <div className="stat-value text-primary text-2xl lg:text-3xl">
-                  {counts.fountains.toLocaleString("it-IT")}
-                </div>
-                <div className="stat-desc text-xs">Acqua potabile gratuita</div>
-              </div>
 
-              <div className="stat bg-base-100 rounded-2xl shadow-lg">
-                <div className="stat-figure text-info">
-                  <i className="fas fa-parking text-3xl"></i>
+                <div className="stat">
+                  <div className="stat-figure text-info">
+                    <i className="fas fa-parking text-3xl"></i>
+                  </div>
+                  <div className="stat-title">Parcheggi bici</div>
+                  <div className="stat-value text-info">
+                    {counts.bicycleParkings.toLocaleString("it-IT")}
+                  </div>
+                  <div className="stat-desc">Posti sicuri per biciclette</div>
                 </div>
-                <div className="stat-title text-sm">Parcheggi bici</div>
-                <div className="stat-value text-info text-2xl lg:text-3xl">
-                  {counts.bicycleParkings.toLocaleString("it-IT")}
-                </div>
-                <div className="stat-desc text-xs break-words">
-                  Posti sicuri per biciclette
-                </div>
-              </div>
 
-              <div className="stat bg-base-100 rounded-2xl shadow-lg">
-                <div className="stat-figure text-secondary">
-                  <i className="fas fa-restroom text-3xl"></i>
+                <div className="stat">
+                  <div className="stat-figure text-secondary">
+                    <i className="fas fa-restroom text-3xl"></i>
+                  </div>
+                  <div className="stat-title">Bagni pubblici</div>
+                  <div className="stat-value text-secondary">
+                    {counts.toilets.toLocaleString("it-IT")}
+                  </div>
+                  <div className="stat-desc">Servizi igienici</div>
                 </div>
-                <div className="stat-title text-sm">Bagni pubblici</div>
-                <div className="stat-value text-secondary text-2xl lg:text-3xl">
-                  {counts.toilets.toLocaleString("it-IT")}
-                </div>
-                <div className="stat-desc text-xs break-words">
-                  Servizi igienici
-                </div>
-              </div>
 
-              <div className="stat bg-base-100 rounded-2xl shadow-lg">
-                <div className="stat-figure text-warning">
-                  <i className="fas fa-futbol text-3xl"></i>
-                </div>
-                <div className="stat-title text-sm">Parchi giochi</div>
-                <div className="stat-value text-warning text-2xl lg:text-3xl">
-                  {counts.playgrounds.toLocaleString("it-IT")}
-                </div>
-                <div className="stat-desc text-xs break-words">
-                  Aree per bambini
+                <div className="stat">
+                  <div className="stat-figure text-warning">
+                    <i className="fas fa-futbol text-3xl"></i>
+                  </div>
+                  <div className="stat-title">Parchi giochi</div>
+                  <div className="stat-value text-warning">
+                    {counts.playgrounds.toLocaleString("it-IT")}
+                  </div>
+                  <div className="stat-desc">Aree per bambini</div>
                 </div>
               </div>
             </div>
 
             <div className="text-center mt-8">
-              <div className="stat bg-primary text-primary-content rounded-2xl shadow-lg inline-block px-8 py-4">
-                <div className="stat-title text-primary-content opacity-80">
-                  Totale punti di interesse
-                </div>
-                <div className="stat-value text-4xl lg:text-5xl">
-                  {counts.total.toLocaleString("it-IT")}
-                </div>
-                <div className="stat-desc text-primary-content opacity-80">
-                  in tutta Italia
+              <div className="stats bg-primary text-primary-content rounded-2xl shadow-lg inline-block px-8 py-4">
+                <div className="stat">
+                  <div className="stat-title text-primary-content opacity-80">
+                    Totale punti di interesse
+                  </div>
+                  <div className="stat-value text-4xl lg:text-5xl">
+                    {counts.total.toLocaleString("it-IT")}
+                  </div>
+                  <div className="stat-desc text-primary-content opacity-80">
+                    in tutta Italia
+                  </div>
                 </div>
               </div>
             </div>
@@ -438,7 +436,7 @@ export default async function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="footer footer-center p-10 bg-base-200 text-base-content">
+        <footer className="footer footer-center p-10 bg-base-200 text-base-content flex flex-col sm:flex-row justify-between">
           <nav className="grid grid-flow-col gap-4">
             <Link href="/credits" className="link link-hover">
               <i className="fas fa-info-circle mr-1"></i>
