@@ -110,15 +110,20 @@ export function createViewport({
 export function createMetadata({
   title,
   description = APP_DESCRIPTION,
+  socialDescription,
+  keywords,
   path = "/",
   overrides = {},
 }: {
   title?: string;
   description?: string;
+  socialDescription?: string;
+  keywords?: string[];
   path?: string;
   overrides?: Partial<Metadata>;
 }): Metadata {
   const url = `${BASE_URL}${path}`;
+  const effectiveSocialDescription = socialDescription || description;
 
   const pageMetadata: Metadata = {
     alternates: {
@@ -136,17 +141,32 @@ export function createMetadata({
     pageMetadata.description = description;
   }
 
+  // Add keywords if provided
+  if (keywords) {
+    pageMetadata.keywords = keywords;
+  }
+
   // Add OpenGraph and Twitter metadata
-  if (title || description !== APP_DESCRIPTION || path !== "/") {
+  if (
+    title ||
+    description !== APP_DESCRIPTION ||
+    path !== "/" ||
+    socialDescription ||
+    keywords
+  ) {
     pageMetadata.openGraph = {
       url,
       title: title || APP_NAME,
-      description,
+      description: effectiveSocialDescription,
+      locale: LOCALE,
+      type: "website",
+      siteName: APP_NAME,
     };
 
     pageMetadata.twitter = {
       title: title || APP_NAME,
-      description,
+      description: effectiveSocialDescription,
+      card: "summary_large_image",
     };
   }
 

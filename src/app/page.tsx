@@ -2,50 +2,39 @@ import Script from "next/script";
 import Link from "next/link";
 import { Metadata, Viewport } from "next";
 import { generateAppJsonLd, generateFAQJsonLd } from "./lib/jsonld";
-import { APP_NAME, BASE_URL, createViewport, LOCALE } from "./seo-config";
+import { createViewport, createMetadata } from "./seo-config";
 import { getAmenityCounts } from "@/lib/amenity-counts";
 import AnimatedHeroBackground from "@/components/AnimatedHeroBackground";
 import ScrollDownArrow from "@/components/ScrollDownArrow";
 
-export const metadata: Metadata = {
-  title:
-    "Trova fontanelle d'acqua potabile in Italia - Mappa fontanelle gratis",
-  description:
-    "Trova fontanelle d'acqua potabile in Italia. Scopri la mappa delle fontanelle gratuite a Roma, Milano e in tutte le principali città. Bere acqua gratis ovunque!",
-  keywords: [
-    "fontanelle acqua potabile",
-    "mappa fontanelle",
-    "acqua gratis Italia",
-    "fontanelle Roma",
-    "fontanelle Milano",
-    "fontanelle Firenze",
-    "fontanelle Torino",
-    "fontanelle Napoli",
-    "bere acqua potabile gratis",
-    "fontanelle pubbliche",
-    "acqua pubblica Italia",
-  ],
-  openGraph: {
-    title:
-      "Trova fontanelle d'acqua potabile in Italia - Mappa fontanelle gratis",
-    description:
-      "Trova fontanelle d'acqua potabile in Italia. Scopri la mappa delle fontanelle gratuite a Roma, Milano e in tutte le principali città.",
-    url: BASE_URL,
-    locale: LOCALE,
-    type: "website",
-    siteName: APP_NAME,
-  },
-  twitter: {
-    title:
-      "Trova fontanelle d'acqua potabile in Italia - Mappa fontanelle gratis",
-    description:
-      "Trova fontanelle d'acqua potabile in Italia. Scopri la mappa delle fontanelle gratuite a Roma, Milano e in tutte le principali città.",
-    card: "summary_large_image",
-  },
-  alternates: {
-    canonical: "/",
-  },
-};
+// Landing page specific metadata constants
+const LANDING_PAGE_TITLE =
+  "Trova fontanelle d'acqua potabile in Italia - Mappa fontanelle gratis";
+const LANDING_PAGE_DESCRIPTION =
+  "Trova fontanelle d'acqua potabile in Italia. Scopri la mappa delle fontanelle gratuite a Roma, Milano e in tutte le principali città. Bere acqua gratis ovunque!";
+const LANDING_PAGE_DESCRIPTION_SHORT =
+  "Trova fontanelle d'acqua potabile in Italia. Scopri la mappa delle fontanelle gratuite a Roma, Milano e in tutte le principali città.";
+const LANDING_PAGE_KEYWORDS = [
+  "fontanelle acqua potabile",
+  "mappa fontanelle",
+  "acqua gratis Italia",
+  "fontanelle Roma",
+  "fontanelle Milano",
+  "fontanelle Firenze",
+  "fontanelle Torino",
+  "fontanelle Napoli",
+  "bere acqua potabile gratis",
+  "fontanelle pubbliche",
+  "acqua pubblica Italia",
+];
+
+export const metadata: Metadata = createMetadata({
+  title: LANDING_PAGE_TITLE,
+  description: LANDING_PAGE_DESCRIPTION,
+  socialDescription: LANDING_PAGE_DESCRIPTION_SHORT,
+  keywords: LANDING_PAGE_KEYWORDS,
+  path: "/",
+});
 
 export const viewport: Viewport = createViewport({ useColorScheme: true });
 
