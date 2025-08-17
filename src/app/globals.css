@@ -27,6 +27,29 @@
   margin: 1rem;
 }
 
+/* Dark mode styles for leaflet popup */
+@media (prefers-color-scheme: dark) {
+  .station-popup .leaflet-popup-tip,
+  .station-popup .leaflet-popup-content-wrapper {
+    background: rgba(31, 41, 55, 0.9);
+    color: rgba(243, 244, 246, 1);
+  }
+  
+  .station-popup .leaflet-popup-content {
+    color: rgba(243, 244, 246, 1);
+  }
+}
+
+[data-theme="dark"] .station-popup .leaflet-popup-tip,
+[data-theme="dark"] .station-popup .leaflet-popup-content-wrapper {
+  background: rgba(31, 41, 55, 0.9);
+  color: rgba(243, 244, 246, 1);
+}
+
+[data-theme="dark"] .station-popup .leaflet-popup-content {
+  color: rgba(243, 244, 246, 1);
+}
+
 .map-fontanelle .leaflet-marker-icon.marker-cluster {
   color: black;
 }
