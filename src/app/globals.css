@@ -31,23 +31,23 @@
 @media (prefers-color-scheme: dark) {
   .station-popup .leaflet-popup-tip,
   .station-popup .leaflet-popup-content-wrapper {
-    background: rgba(31, 41, 55, 0.9);
-    color: rgba(243, 244, 246, 1);
+    background: color-mix(in srgb, var(--color-base-100) 90%, transparent);
+    color: var(--color-base-content);
   }
   
   .station-popup .leaflet-popup-content {
-    color: rgba(243, 244, 246, 1);
+    color: var(--color-base-content);
   }
 }
 
 [data-theme="dark"] .station-popup .leaflet-popup-tip,
 [data-theme="dark"] .station-popup .leaflet-popup-content-wrapper {
-  background: rgba(31, 41, 55, 0.9);
-  color: rgba(243, 244, 246, 1);
+  background: color-mix(in srgb, var(--color-base-100) 90%, transparent);
+  color: var(--color-base-content);
 }
 
 [data-theme="dark"] .station-popup .leaflet-popup-content {
-  color: rgba(243, 244, 246, 1);
+  color: var(--color-base-content);
 }
 
 .map-fontanelle .leaflet-marker-icon.marker-cluster {
