@@ -212,7 +212,7 @@
   animation: shine 1.5s linear infinite;
 }
 
-.shine-text {
+.shine-text-primary {
   color: transparent;
   background-clip: text !important;
   -webkit-background-clip: text !important;

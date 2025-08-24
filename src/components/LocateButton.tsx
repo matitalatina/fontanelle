@@ -17,7 +17,7 @@ export default function LocateButton({
         style={{ zIndex }}
       >
         <div className="tooltip-content">
-          <div className="shine-text animate-shine">
+          <div className="shine-text-primary animate-shine">
             Localizzazione in corso...
           </div>
         </div>
