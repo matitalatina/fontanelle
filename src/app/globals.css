@@ -170,6 +170,15 @@
   }
 }
 
+@keyframes shine {
+  0% {
+    background-position: 200% 0%;
+  }
+  100% {
+    background-position: -200% 0%;
+  }
+}
+
 .animate-float-down {
   animation: float-down linear infinite;
 }
@@ -197,6 +206,17 @@
 
 .animate-fade-pulse {
   animation: fade-pulse 3s ease-in-out infinite;
+}
+
+.animate-shine {
+  animation: shine 1.5s linear infinite;
+}
+
+.shine-text {
+  color: transparent;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--color-primary) 85%, transparent), transparent) -200% 50% / 200% 100% no-repeat, var(--color-primary-content);
 }
 
 /* Water Droplet Shape */
@@ -233,7 +253,8 @@
 .animate-shimmer,
 .animate-twinkle,
 .animate-bounce-down,
-.animate-fade-pulse {
+.animate-fade-pulse,
+.animate-shine {
   will-change: transform, opacity;
   backface-visibility: hidden;
   transform-style: preserve-3d;
@@ -245,7 +266,8 @@
   .animate-float-bubble,
   .animate-shimmer,
   .animate-twinkle,
-  .animate-bounce-down {
+  .animate-bounce-down,
+  .animate-shine {
     animation: none;
   }
   

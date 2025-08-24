@@ -12,14 +12,22 @@ export default function LocateButton({
 
   if (locationState.status === "loading") {
     return (
-      <button
-        type="button"
-        className={`btn btn-circle btn-primary ${positionStyle} w-14 h-14 shadow-xl`}
+      <div
+        className={`tooltip tooltip-open tooltip-left ${positionStyle} tooltip-primary opacity-90`}
         style={{ zIndex }}
-        disabled
       >
-        <span className="loading loading-ring"></span>
-      </button>
+        <div className="tooltip-content">
+          <div className="shine-text animate-shine">
+            Localizzazione in corso...
+          </div>
+        </div>
+        <button
+          type="button"
+          className="btn btn-circle btn-primary w-14 h-14 shadow-xl pointer-events-none"
+        >
+          <span className="loading loading-ring"></span>
+        </button>
+      </div>
     );
   }
   if (locationState.status === "error") {
