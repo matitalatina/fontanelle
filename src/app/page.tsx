@@ -8,8 +8,7 @@ import AnimatedHeroBackground from "@/components/AnimatedHeroBackground";
 import ScrollDownArrow from "@/components/ScrollDownArrow";
 
 // Landing page specific metadata constants
-const LANDING_PAGE_TITLE =
-  "Trova fontanelle d'acqua potabile in Italia - Mappa fontanelle gratis";
+const LANDING_PAGE_TITLE = "Fontanelle in Italia";
 const LANDING_PAGE_DESCRIPTION =
   "Trova fontanelle d'acqua potabile in Italia. Scopri la mappa delle fontanelle gratuite a Roma, Milano e in tutte le principali città. Bere acqua gratis ovunque!";
 const LANDING_PAGE_DESCRIPTION_SHORT =
