@@ -42,13 +42,6 @@ export default async function Home() {
 
   return (
     <>
-      {/* Preload the main app route for faster navigation */}
-      <link rel="prefetch" href="/app" />
-
-      {/* Preload critical resources */}
-      <link rel="preload" href="/_next/static/css/app/globals.css" as="style" />
-      <link rel="dns-prefetch" href="https://umami.serina.mattianatali.com" />
-
       <Script
         id="schema-org-data"
         type="application/ld+json"
