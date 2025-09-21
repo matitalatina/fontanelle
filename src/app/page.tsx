@@ -42,9 +42,17 @@ export default async function Home() {
 
   return (
     <>
+      {/* Preload the main app route for faster navigation */}
+      <link rel="prefetch" href="/app" />
+
+      {/* Preload critical resources */}
+      <link rel="preload" href="/_next/static/css/app/globals.css" as="style" />
+      <link rel="dns-prefetch" href="https://umami.serina.mattianatali.com" />
+
       <Script
         id="schema-org-data"
         type="application/ld+json"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(generateAppJsonLd()),
         }}
@@ -52,6 +60,7 @@ export default async function Home() {
       <Script
         id="faq-schema-data"
         type="application/ld+json"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(generateFAQJsonLd()),
         }}
@@ -59,7 +68,7 @@ export default async function Home() {
 
       <div className="min-h-screen bg-base-100">
         {/* Hero Section */}
-        <div className="hero min-h-screen relative overflow-hidden flex flex-col">
+        <div className="hero min-h-screen relative overflow-hidden flex flex-col bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10">
           <AnimatedHeroBackground />
           <div className="hero-content text-center relative z-10 flex-1 flex items-center justify-center pb-20 sm:pb-16">
             <div className="max-w-4xl">

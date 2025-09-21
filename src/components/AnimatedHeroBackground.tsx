@@ -1,129 +1,21 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const AnimatedHeroBackground: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-  const [animationElements, setAnimationElements] = useState<{
-    droplets: Array<{
-      id: number;
-      left: number;
-      size: number;
-      delay: number;
-      duration: number;
-      type: string;
-    }>;
-    bubbles: Array<{
-      id: number;
-      left: number;
-      size: number;
-      delay: number;
-      duration: number;
-      type: string;
-    }>;
-    particles: number;
-  }>({
-    droplets: [],
-    bubbles: [],
-    particles: 0,
-  });
-
-  // Generate random positions and delays for animated elements
-  const generateFloatingElements = (
-    count: number,
-    type: "droplet" | "bubble"
-  ) => {
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      size: Math.random() * 0.5 + 0.3, // Size between 0.3 and 0.8
-      delay: Math.random() * 10, // Animation delay up to 10s
-      duration: Math.random() * 15 + 10, // Duration between 10-25s
-      type,
-    }));
-  };
-
-  // Initialize animation elements only on client side to prevent hydration mismatch
-  useEffect(() => {
-    setIsClient(true);
-    const isMobile = window.innerWidth < 768;
-
-    setAnimationElements({
-      droplets: generateFloatingElements(isMobile ? 6 : 12, "droplet"),
-      bubbles: generateFloatingElements(isMobile ? 4 : 8, "bubble"),
-      particles: isMobile ? 10 : 20,
-    });
-  }, []);
-
-  // Don't render animations until client-side hydration is complete
-  if (!isClient) {
-    return (
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Static gradient background only during SSR */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10"></div>
-      </div>
-    );
-  }
-
-  const { droplets, bubbles, particles } = animationElements;
-
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Animated gradient background */}
+      {/* Animated gradient background - always visible */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 animate-gradient-shift"></div>
 
-      {/* Falling water droplets */}
-      {droplets.map((element) => (
-        <div
-          key={`droplet-${element.id}`}
-          className="absolute animate-float-down opacity-20"
-          style={{
-            top: `-100px`,
-            left: `${element.left}%`,
-            transform: `scale(${element.size})`,
-            animationDelay: `${element.delay}s`,
-            animationDuration: `${element.duration}s`,
-          }}
-        >
-          <div className="water-droplet bg-primary/40 relative">
-            <div className="droplet-highlight absolute top-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white/60 rounded-full"></div>
-          </div>
-        </div>
-      ))}
+      {/* CSS-only floating elements - minimal for performance */}
+      <div className="hero-droplets">
+        <div className="hero-droplet hero-droplet-1"></div>
+        <div className="hero-droplet hero-droplet-2"></div>
+        <div className="hero-droplet hero-droplet-3"></div>
+        <div className="hero-droplet hero-droplet-4"></div>
+      </div>
 
-      {/* Floating bubbles */}
-      {bubbles.map((element) => (
-        <div
-          key={`bubble-${element.id}`}
-          className="absolute animate-float-bubble opacity-30"
-          style={{
-            top: `-100px`,
-            left: `${element.left}%`,
-            transform: `scale(${element.size})`,
-            animationDelay: `${element.delay}s`,
-            animationDuration: `${element.duration}s`,
-          }}
-        >
-          <div className="w-4 h-4 border-2 border-info/40 rounded-full bg-info/10"></div>
-        </div>
-      ))}
-
-      {/* Shimmer effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
-
-      {/* Floating particles for extra sparkle */}
-      {Array.from({ length: particles }, (_, i) => (
-        <div
-          key={`particle-${i}`}
-          className="absolute w-1 h-1 bg-secondary/30 rounded-full animate-twinkle"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 5}s`,
-            animationDuration: `${Math.random() * 3 + 2}s`,
-          }}
-        ></div>
-      ))}
+      {/* Subtle shimmer effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/3 to-transparent animate-shimmer"></div>
     </div>
   );
 };

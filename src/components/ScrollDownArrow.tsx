@@ -16,13 +16,10 @@ const ScrollDownArrow: React.FC<ScrollDownArrowProps> = ({
       onClick();
     } else {
       // Default behavior: scroll to next section
-      const heroElement = document.querySelector(".hero");
-      if (heroElement) {
-        const nextElement = heroElement.nextElementSibling;
-        if (nextElement) {
-          nextElement.scrollIntoView({ behavior: "smooth" });
-        }
-      }
+      window.scrollTo({
+        top: window.innerHeight,
+        behavior: "smooth",
+      });
     }
   };
 
