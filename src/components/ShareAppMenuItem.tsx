@@ -2,6 +2,8 @@
 
 import { BASE_URL } from "@/app/seo-config";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
 
 type ShareData = {
   title: string;
@@ -60,7 +62,7 @@ export default function ShareAppMenuItem() {
     >
       <li>
         <a onClick={() => shareApp(showTooltip)}>
-          <i className="fa-solid fa-share-nodes"></i> Condividi App
+          <FontAwesomeIcon icon={faShareNodes} /> Condividi App
         </a>
       </li>
     </div>

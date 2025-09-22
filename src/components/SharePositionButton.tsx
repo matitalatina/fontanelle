@@ -3,6 +3,8 @@
 import { BASE_URL } from "@/app/seo-config";
 import { LatLng } from "@/hooks/useLocation";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
 type ShareData = {
   title: string;
@@ -74,7 +76,7 @@ export default function SharePositionButton({
         className="btn btn-outline"
         onClick={() => sharePosition(latLng, markerType, showTooltip)}
       >
-        <i className="fas fa-share-alt"></i>
+        <FontAwesomeIcon icon={faShareAlt} />
       </button>
     </div>
   );

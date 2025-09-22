@@ -2,6 +2,20 @@ import Link from "next/link";
 import ShareAppButton from "./ShareAppButton";
 import { Metadata, Viewport } from "next";
 import { createViewport } from "../seo-config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faInfoCircle,
+  faArrowLeft,
+  faBicycle,
+  faDatabase,
+  faLightbulb,
+  faCode,
+  faHeart,
+  faShareAlt,
+  faDonate,
+  faCoffee,
+} from "@fortawesome/free-solid-svg-icons";
+import { faGithub, faPaypal } from "@fortawesome/free-brands-svg-icons";
 
 export const metadata: Metadata = {
   title: "Crediti",
@@ -19,11 +33,11 @@ export default function CreditsPage() {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6 ml-6">
         <h1 className="text-2xl font-bold">
-          <i className="fa-solid fa-info-circle mr-2"></i>
+          <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
           Crediti
         </h1>
         <Link href="/app" className="btn btn-primary">
-          <i className="fa-solid fa-arrow-left mr-2"></i>
+          <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
           Torna alla mappa
         </Link>
       </div>
@@ -31,7 +45,7 @@ export default function CreditsPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <i className="fas fa-bicycle text-primary mr-2"></i>
+            <FontAwesomeIcon icon={faBicycle} className="text-primary mr-2" />
             Motivazione
           </h2>
           <p className="py-2">
@@ -62,7 +76,7 @@ export default function CreditsPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <i className="fas fa-database text-primary mr-2"></i>
+            <FontAwesomeIcon icon={faDatabase} className="text-primary mr-2" />
             Fonte dei dati
           </h2>
           <p className="py-2">
@@ -84,7 +98,7 @@ export default function CreditsPage() {
             stazioni ferroviarie e molto altro ancora in tutto il mondo.
           </p>
           <div className="alert alert-info mt-4">
-            <i className="fas fa-lightbulb"></i>
+            <FontAwesomeIcon icon={faLightbulb} />
             <span>
               Se trovi informazioni mancanti o imprecise, puoi contribuire
               direttamente a OpenStreetMap per migliorare i dati non solo su
@@ -97,7 +111,7 @@ export default function CreditsPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <i className="fas fa-code text-primary mr-2"></i>
+            <FontAwesomeIcon icon={faCode} className="text-primary mr-2" />
             Sviluppo
           </h2>
           <p className="py-2">
@@ -126,7 +140,7 @@ export default function CreditsPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <i className="fas fa-heart text-primary mr-2"></i>
+            <FontAwesomeIcon icon={faHeart} className="text-primary mr-2" />
             Supportaci
           </h2>
           <p className="py-2">
@@ -148,7 +162,10 @@ export default function CreditsPage() {
             <div className="card bg-base-100 shadow-md">
               <div className="card-body">
                 <h3 className="card-title text-base">
-                  <i className="fas fa-share-alt text-info mr-2"></i>
+                  <FontAwesomeIcon
+                    icon={faShareAlt}
+                    className="text-info mr-2"
+                  />
                   Condividi il progetto
                 </h3>
                 <p className="mb-4">
@@ -165,7 +182,10 @@ export default function CreditsPage() {
             <div className="card bg-base-100 shadow-md">
               <div className="card-body">
                 <h3 className="card-title text-base">
-                  <i className="fas fa-donate text-success mr-2"></i>
+                  <FontAwesomeIcon
+                    icon={faDonate}
+                    className="text-success mr-2"
+                  />
                   Supporto finanziario
                 </h3>
                 <p className="mb-4">
@@ -179,7 +199,7 @@ export default function CreditsPage() {
                     rel="noopener noreferrer"
                     className="btn btn-outline btn-sm"
                   >
-                    <i className="fab fa-github mr-2"></i>
+                    <FontAwesomeIcon icon={faGithub} className="mr-2" />
                     GitHub Sponsors
                   </a>
                   <a
@@ -188,7 +208,7 @@ export default function CreditsPage() {
                     rel="noopener noreferrer"
                     className="btn btn-outline btn-sm"
                   >
-                    <i className="fas fa-coffee mr-2"></i>
+                    <FontAwesomeIcon icon={faCoffee} className="mr-2" />
                     Buy Me A Coffee
                   </a>
                   <a
@@ -197,7 +217,7 @@ export default function CreditsPage() {
                     rel="noopener noreferrer"
                     className="btn btn-outline btn-sm"
                   >
-                    <i className="fab fa-paypal mr-2"></i>
+                    <FontAwesomeIcon icon={faPaypal} className="mr-2" />
                     PayPal
                   </a>
                 </div>
@@ -206,7 +226,7 @@ export default function CreditsPage() {
           </div>
 
           <div className="alert alert-success mt-6">
-            <i className="fas fa-heart"></i>
+            <FontAwesomeIcon icon={faHeart} />
             <span>
               Ogni contributo, grande o piccolo, fa la differenza. Grazie per
               supportare questo progetto open source!

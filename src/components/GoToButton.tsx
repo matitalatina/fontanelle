@@ -1,4 +1,6 @@
 import { LatLng } from "@/hooks/useLocation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 
 export default function GoToButton({ latLng }: { latLng: LatLng }) {
   return (
@@ -10,7 +12,7 @@ export default function GoToButton({ latLng }: { latLng: LatLng }) {
         )
       }
     >
-      <i className="fas fa-location-arrow"></i>
+      <FontAwesomeIcon icon={faLocationArrow} />
     </button>
   );
 }

@@ -1,4 +1,6 @@
 import { LocationState } from "@/hooks/useLocation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 
 export default function LocateButton({
   onClick,
@@ -58,7 +60,7 @@ export default function LocateButton({
           className="btn btn-circle btn-primary w-14 h-14 shadow-xl"
           onClick={onClick}
         >
-          <i className="fas fa-location-crosshairs fa-lg"></i>
+          <FontAwesomeIcon icon={faLocationCrosshairs} size="lg" />
         </button>
       </div>
     );
@@ -70,7 +72,7 @@ export default function LocateButton({
       style={{ zIndex }}
       onClick={onClick}
     >
-      <i className="fas fa-location-crosshairs fa-lg"></i>
+      <FontAwesomeIcon icon={faLocationCrosshairs} size="lg" />
     </button>
   );
 }

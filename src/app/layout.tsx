@@ -4,6 +4,7 @@ import "./globals.css";
 import Meta from "./meta";
 import { baseMetadata, createViewport } from "./seo-config";
 import { InstallPromptProvider } from "@/contexts/InstallPromptContext";
+import "@/lib/fontawesome";
 
 const inter = Inter({ subsets: ["latin"] });
 

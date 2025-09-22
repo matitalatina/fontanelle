@@ -1,6 +1,8 @@
 "use client";
 
 import { shareApp, useTooltip } from "@/components/ShareAppMenuItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
 
 export default function ShareAppButton() {
   const { tooltipIsOpen, showTooltip } = useTooltip();
@@ -16,7 +18,7 @@ export default function ShareAppButton() {
         onClick={() => shareApp(showTooltip)}
         className="btn btn-outline btn-sm w-full"
       >
-        <i className="fa-solid fa-share-nodes mr-2"></i>
+        <FontAwesomeIcon icon={faShareNodes} className="mr-2" />
         Condividi App
       </button>
     </div>

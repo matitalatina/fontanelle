@@ -1,3 +1,12 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLayerGroup,
+  faFaucetDrip,
+  faRestroom,
+  faParking,
+  faFutbol,
+} from "@fortawesome/free-solid-svg-icons";
+
 export type AvailableOverlay =
   | "stations"
   | "toilets"
@@ -25,7 +34,7 @@ export default function OverlaySelector({
         className="peer absolute top-0 h-14"
       />
       <div className="collapse-title p-0 mx-auto w-4 min-h-14 top-5">
-        <i className="fas fa-layer-group fa-lg"></i>
+        <FontAwesomeIcon icon={faLayerGroup} size="lg" />
       </div>
       <div className="collapse-content px-2 mt-0.5 peer-checked:pb-2">
         <div className="join join-vertical">
@@ -40,7 +49,7 @@ export default function OverlaySelector({
               })
             }
           >
-            <i className="fas fa-faucet-drip fa-lg" />
+            <FontAwesomeIcon icon={faFaucetDrip} size="lg" />
           </button>
           <button
             className={`btn join-item px-2 ${
@@ -53,7 +62,7 @@ export default function OverlaySelector({
               })
             }
           >
-            <i className="fas fa-restroom fa-lg" />
+            <FontAwesomeIcon icon={faRestroom} size="lg" />
           </button>
           <button
             className={`btn join-item px-2 ${
@@ -68,7 +77,7 @@ export default function OverlaySelector({
               })
             }
           >
-            <i className="fas fa-parking" />
+            <FontAwesomeIcon icon={faParking} />
           </button>
           <button
             className={`btn join-item px-2 ${
@@ -81,7 +90,7 @@ export default function OverlaySelector({
               })
             }
           >
-            <i className="fas fa-futbol" />
+            <FontAwesomeIcon icon={faFutbol} />
           </button>
         </div>
       </div>

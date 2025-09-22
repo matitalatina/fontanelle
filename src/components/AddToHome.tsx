@@ -2,6 +2,12 @@
 
 import { useRef } from "react";
 import { useInstallPrompt } from "@/contexts/InstallPromptContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faDownload,
+  faPlusSquare,
+  faMobileScreen,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Safari Share Icon Component
 function SafariShareIcon() {
@@ -48,7 +54,7 @@ export default function AddToHome() {
     <>
       <li>
         <a onClick={handleClick}>
-          <i className="fa-solid fa-download"></i> Installa App
+          <FontAwesomeIcon icon={faDownload} /> Installa App
         </a>
       </li>
 
@@ -86,7 +92,10 @@ export default function AddToHome() {
                   <br />
                   <span className="inline-flex items-center gap-1 mt-1">
                     <span className="font-medium">Aggiungi a Home</span>
-                    <i className="fa-solid fa-plus-square text-base ml-1"></i>
+                    <FontAwesomeIcon
+                      icon={faPlusSquare}
+                      className="text-base ml-1"
+                    />
                   </span>
                 </p>
               </div>
@@ -110,7 +119,7 @@ export default function AddToHome() {
 
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 bg-base-200 rounded-xl mb-3">
-              <i className="fa-solid fa-mobile-screen text-xl"></i>
+              <FontAwesomeIcon icon={faMobileScreen} className="text-xl" />
             </div>
             <p className="text-xs text-base-content/60">
               L&apos;app apparirà nella tua schermata Home

@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 interface ScrollDownArrowProps {
   onClick?: () => void;
@@ -49,11 +51,15 @@ const ScrollDownArrow: React.FC<ScrollDownArrowProps> = ({
           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center group-hover:bg-white/20 group-hover:border-white/30 transition-all duration-300">
             {/* Double arrow for better visibility */}
             <div className="relative">
-              <i className="fas fa-chevron-down text-sm sm:text-lg animate-bounce-down group-hover:scale-110 transition-transform duration-300"></i>
-              <i
-                className="fas fa-chevron-down text-sm sm:text-lg absolute top-0 left-0 opacity-30 animate-bounce-down"
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className="text-sm sm:text-lg animate-bounce-down group-hover:scale-110 transition-transform duration-300"
+              />
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className="text-sm sm:text-lg absolute top-0 left-0 opacity-30 animate-bounce-down"
                 style={{ animationDelay: "0.2s" }}
-              ></i>
+              />
             </div>
           </div>
 

@@ -4,13 +4,13 @@ import { Marker, Popup } from "react-leaflet";
 import FeatureIcon from "./FeatureIcon";
 import GoToButton from "./GoToButton";
 import SharePositionButton from "./SharePositionButton";
+import { createMarkerIconHTML } from "@/lib/marker-icons";
+import { faFutbol } from "@fortawesome/free-solid-svg-icons";
 
 const playgroundMarker = ExtraMarkers.icon({
-  icon: "fa-futbol",
+  innerHTML: createMarkerIconHTML(faFutbol, "text-gray-800"),
   markerColor: "yellow",
-  iconColor: "#333",
   shape: "circle",
-  prefix: "fas",
 });
 
 export default function PlaygroundMarker({

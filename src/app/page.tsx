@@ -6,6 +6,26 @@ import { createViewport, createMetadata } from "./seo-config";
 import { getAmenityCounts } from "@/lib/amenity-counts";
 import AnimatedHeroBackground from "@/components/AnimatedHeroBackground";
 import ScrollDownArrow from "@/components/ScrollDownArrow";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMapMarkedAlt,
+  faFaucetDrip,
+  faParking,
+  faRestroom,
+  faFutbol,
+  faLeaf,
+  faUsers,
+  faSyncAlt,
+  faLandmark,
+  faBuilding,
+  faChurch,
+  faMountain,
+  faSun,
+  faMap,
+  faInfoCircle,
+  faBookOpen,
+} from "@fortawesome/free-solid-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 // Landing page specific metadata constants
 const LANDING_PAGE_TITLE = "Fontanelle in Italia";
@@ -88,7 +108,7 @@ export default async function Home() {
                 href="/app"
                 className="btn btn-primary btn-lg text-base sm:text-lg px-6 sm:px-8"
               >
-                <i className="fas fa-map-marked-alt mr-2"></i>
+                <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
                 Apri la mappa
               </Link>
             </div>
@@ -115,7 +135,7 @@ export default async function Home() {
               <div className="stats stats-vertical lg:stats-horizontal shadow-lg bg-base-100 rounded-2xl">
                 <div className="stat">
                   <div className="stat-figure text-primary">
-                    <i className="fas fa-faucet-drip text-3xl"></i>
+                    <FontAwesomeIcon icon={faFaucetDrip} className="text-3xl" />
                   </div>
                   <div className="stat-title">Fontanelle</div>
                   <div className="stat-value text-primary">
@@ -126,7 +146,7 @@ export default async function Home() {
 
                 <div className="stat">
                   <div className="stat-figure text-info">
-                    <i className="fas fa-parking text-3xl"></i>
+                    <FontAwesomeIcon icon={faParking} className="text-3xl" />
                   </div>
                   <div className="stat-title">Parcheggi bici</div>
                   <div className="stat-value text-info">
@@ -137,7 +157,7 @@ export default async function Home() {
 
                 <div className="stat">
                   <div className="stat-figure text-secondary">
-                    <i className="fas fa-restroom text-3xl"></i>
+                    <FontAwesomeIcon icon={faRestroom} className="text-3xl" />
                   </div>
                   <div className="stat-title">Bagni pubblici</div>
                   <div className="stat-value text-secondary">
@@ -148,7 +168,7 @@ export default async function Home() {
 
                 <div className="stat">
                   <div className="stat-figure text-warning">
-                    <i className="fas fa-futbol text-3xl"></i>
+                    <FontAwesomeIcon icon={faFutbol} className="text-3xl" />
                   </div>
                   <div className="stat-title">Parchi giochi</div>
                   <div className="stat-value text-warning">
@@ -187,7 +207,10 @@ export default async function Home() {
               <div className="card bg-base-200 shadow-lg">
                 <div className="card-body text-center">
                   <div className="flex justify-center mb-4">
-                    <i className="fas fa-faucet-drip text-4xl text-primary"></i>
+                    <FontAwesomeIcon
+                      icon={faFaucetDrip}
+                      className="text-4xl text-primary"
+                    />
                   </div>
                   <h3 className="card-title justify-center">
                     Acqua potabile gratis
@@ -201,7 +224,10 @@ export default async function Home() {
               <div className="card bg-base-200 shadow-lg">
                 <div className="card-body text-center">
                   <div className="flex justify-center mb-4">
-                    <i className="fas fa-leaf text-4xl text-success"></i>
+                    <FontAwesomeIcon
+                      icon={faLeaf}
+                      className="text-4xl text-success"
+                    />
                   </div>
                   <h3 className="card-title justify-center">
                     Rispetto dell&apos;ambiente
@@ -215,7 +241,10 @@ export default async function Home() {
               <div className="card bg-base-200 shadow-lg">
                 <div className="card-body text-center">
                   <div className="flex justify-center mb-4">
-                    <i className="fas fa-users text-4xl text-info"></i>
+                    <FontAwesomeIcon
+                      icon={faUsers}
+                      className="text-4xl text-info"
+                    />
                   </div>
                   <h3 className="card-title justify-center">Per tutti</h3>
                   <p>
@@ -227,7 +256,10 @@ export default async function Home() {
               <div className="card bg-base-200 shadow-lg">
                 <div className="card-body text-center">
                   <div className="flex justify-center mb-4">
-                    <i className="fas fa-sync-alt text-4xl text-warning"></i>
+                    <FontAwesomeIcon
+                      icon={faSyncAlt}
+                      className="text-4xl text-warning"
+                    />
                   </div>
                   <h3 className="card-title justify-center">
                     Sempre aggiornata
@@ -257,7 +289,10 @@ export default async function Home() {
               <div className="card bg-base-100 shadow-lg">
                 <div className="card-body">
                   <h3 className="card-title text-xl">
-                    <i className="fas fa-landmark text-primary mr-2"></i>
+                    <FontAwesomeIcon
+                      icon={faLandmark}
+                      className="text-primary mr-2"
+                    />
                     Fontanelle a Roma
                   </h3>
                   <p>
@@ -272,7 +307,10 @@ export default async function Home() {
               <div className="card bg-base-100 shadow-lg">
                 <div className="card-body">
                   <h3 className="card-title text-xl">
-                    <i className="fas fa-building text-primary mr-2"></i>
+                    <FontAwesomeIcon
+                      icon={faBuilding}
+                      className="text-primary mr-2"
+                    />
                     Fontanelle a Milano
                   </h3>
                   <p>
@@ -286,7 +324,10 @@ export default async function Home() {
               <div className="card bg-base-100 shadow-lg">
                 <div className="card-body">
                   <h3 className="card-title text-xl">
-                    <i className="fas fa-church text-primary mr-2"></i>
+                    <FontAwesomeIcon
+                      icon={faChurch}
+                      className="text-primary mr-2"
+                    />
                     Fontanelle a Firenze
                   </h3>
                   <p>
@@ -300,7 +341,10 @@ export default async function Home() {
               <div className="card bg-base-100 shadow-lg">
                 <div className="card-body">
                   <h3 className="card-title text-xl">
-                    <i className="fas fa-mountain text-primary mr-2"></i>
+                    <FontAwesomeIcon
+                      icon={faMountain}
+                      className="text-primary mr-2"
+                    />
                     Fontanelle a Torino
                   </h3>
                   <p>
@@ -314,7 +358,10 @@ export default async function Home() {
               <div className="card bg-base-100 shadow-lg">
                 <div className="card-body">
                   <h3 className="card-title text-xl">
-                    <i className="fas fa-sun text-primary mr-2"></i>
+                    <FontAwesomeIcon
+                      icon={faSun}
+                      className="text-primary mr-2"
+                    />
                     Fontanelle a Napoli
                   </h3>
                   <p>
@@ -328,8 +375,11 @@ export default async function Home() {
               <div className="card bg-base-100 shadow-lg">
                 <div className="card-body">
                   <h3 className="card-title text-xl">
-                    <i className="fas fa-map text-primary mr-2"></i>E molte
-                    altre città
+                    <FontAwesomeIcon
+                      icon={faMap}
+                      className="text-primary mr-2"
+                    />
+                    E molte altre città
                   </h3>
                   <p>
                     La nostra mappa copre tutta l&apos;Italia! Trova fontanelle
@@ -428,7 +478,7 @@ export default async function Home() {
               ambientale.
             </p>
             <Link href="/app" className="btn btn-secondary btn-lg text-lg px-8">
-              <i className="fas fa-map-marked-alt mr-2"></i>
+              <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
               Apri la mappa
             </Link>
           </div>
@@ -438,11 +488,11 @@ export default async function Home() {
         <footer className="footer footer-center p-10 bg-base-200 text-base-content flex flex-col sm:flex-row justify-between">
           <nav className="grid grid-flow-col gap-4">
             <Link href="/credits" className="link link-hover">
-              <i className="fas fa-info-circle mr-1"></i>
+              <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
               Crediti
             </Link>
             <Link href="/legend" className="link link-hover">
-              <i className="fas fa-book-open mr-1"></i>
+              <FontAwesomeIcon icon={faBookOpen} className="mr-1" />
               Legenda
             </Link>
             <a
@@ -451,7 +501,7 @@ export default async function Home() {
               rel="noopener noreferrer"
               className="link link-hover"
             >
-              <i className="fab fa-github mr-1"></i>
+              <FontAwesomeIcon icon={faGithub} className="mr-1" />
               GitHub
             </a>
           </nav>

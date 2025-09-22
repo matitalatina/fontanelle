@@ -4,12 +4,14 @@ import { Marker, Popup } from "react-leaflet";
 import FeatureIcon from "./FeatureIcon";
 import GoToButton from "./GoToButton";
 import SharePositionButton from "./SharePositionButton";
+import { createMarkerIconHTML } from "@/lib/marker-icons";
+import { faParking, faBicycle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const bicycleParkingMarker = ExtraMarkers.icon({
-  icon: "fa-parking",
+  innerHTML: createMarkerIconHTML(faParking),
   markerColor: "blue",
   shape: "square",
-  prefix: "fas",
 });
 
 export default function BicycleParkingMarker({
@@ -46,7 +48,7 @@ export default function BicycleParkingMarker({
             </div>
             {bicycleParking.capacity && (
               <div className="items-center text-base">
-                <i className="fa-solid fa-bicycle mr-1"></i>
+                <FontAwesomeIcon icon={faBicycle} className="mr-1" />
                 {bicycleParking.capacity}{" "}
                 {bicycleParking.capacity === 1 ? "posto" : "posti"}
               </div>

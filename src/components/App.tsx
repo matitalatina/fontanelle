@@ -5,6 +5,12 @@ import AddToHome from "./AddToHome";
 import TileLayerSelector from "./TileLayerSelector";
 import useTileLayer from "@/hooks/useTileLayer";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBars,
+  faBookOpen,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function App() {
   const { selectedTileLayer, selectTileLayer } = useTileLayer();
@@ -19,7 +25,7 @@ export default function App() {
             className="btn drawer-button absolute top-4 left-4 w-14 h-14 bg-base-100 rounded-box shadow-xl"
             style={{ zIndex: 4000 }}
           >
-            <i className="fa-solid fa-bars"></i>
+            <FontAwesomeIcon icon={faBars} />
           </label>
           <Map className="flex-auto" tileLayer={selectedTileLayer} />
         </main>
@@ -37,12 +43,12 @@ export default function App() {
           />
           <li>
             <Link href="/legend">
-              <i className="fa-solid fa-book-open mr-2"></i> Legenda
+              <FontAwesomeIcon icon={faBookOpen} className="mr-2" /> Legenda
             </Link>
           </li>
           <li>
             <Link href="/credits">
-              <i className="fa-solid fa-info-circle mr-2"></i> Crediti
+              <FontAwesomeIcon icon={faInfoCircle} className="mr-2" /> Crediti
             </Link>
           </li>
           <div className="flex-1"></div>

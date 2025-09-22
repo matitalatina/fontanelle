@@ -5,12 +5,14 @@ import { useRef, useState } from "react";
 import { Marker, Popup, useMapEvents } from "react-leaflet";
 import GoToButton from "./GoToButton";
 import SharePositionButton from "./SharePositionButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faMapPin } from "@fortawesome/free-solid-svg-icons";
+import { createMarkerIconHTML } from "@/lib/marker-icons";
 
 const houseMarker = ExtraMarkers.icon({
-  icon: "fa-map-pin",
+  innerHTML: createMarkerIconHTML(faMapPin),
   markerColor: "purple",
   shape: "circle",
-  prefix: "fas",
 });
 
 export default function CustomMarker() {
@@ -68,7 +70,7 @@ export default function CustomMarker() {
               className="btn btn-error btn-outline"
               onClick={() => setNewMarker(null)}
             >
-              <i className="fas fa-trash-alt"></i>
+              <FontAwesomeIcon icon={faTrashAlt} />
             </button>
             <SharePositionButton
               latLng={{ lat: position.lat, lng: position.lng }}

@@ -1,6 +1,27 @@
 import Link from "next/link";
 import { Metadata, Viewport } from "next";
 import { createViewport } from "../seo-config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBookOpen,
+  faArrowLeft,
+  faMapMarkerAlt,
+  faFaucetDrip,
+  faRestroom,
+  faParking,
+  faFutbol,
+  faEuroSign,
+  faBan,
+  faBaby,
+  faUmbrella,
+  faHouse,
+  faVideo,
+  faBicycle,
+  faInfoCircle,
+  faLayerGroup,
+  faShareNodes,
+  faUserShield,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const metadata: Metadata = {
   title: "Legenda",
@@ -18,11 +39,11 @@ export default function LegendaPage() {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6 ml-6">
         <h1 className="text-2xl font-bold">
-          <i className="fa-solid fa-book-open mr-2"></i>
+          <FontAwesomeIcon icon={faBookOpen} className="mr-2" />
           Legenda
         </h1>
         <Link href="/app" className="btn btn-primary">
-          <i className="fa-solid fa-arrow-left mr-2"></i>
+          <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
           Torna alla mappa
         </Link>
       </div>
@@ -30,7 +51,10 @@ export default function LegendaPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <i className="fas fa-map-marker-alt text-primary mr-2"></i>
+            <FontAwesomeIcon
+              icon={faMapMarkerAlt}
+              className="text-primary mr-2"
+            />
             Icone sulla mappa
           </h2>
 
@@ -46,7 +70,10 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-green-600 rounded-md">
-                      <i className="fas fa-faucet-drip text-white text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faFaucetDrip}
+                        className="text-white text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -59,7 +86,10 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-blue-600 rounded-md">
-                      <i className="fas fa-faucet-drip text-white text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faFaucetDrip}
+                        className="text-white text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -72,7 +102,10 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-purple-600 rounded-md">
-                      <i className="fas fa-restroom text-white text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faRestroom}
+                        className="text-white text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -83,7 +116,10 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-blue-600 rounded-md">
-                      <i className="fas fa-parking text-white text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faParking}
+                        className="text-white text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -96,7 +132,10 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-yellow-400 rounded-full">
-                      <i className="fas fa-futbol text-gray-800 text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faFutbol}
+                        className="text-gray-800 text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -115,7 +154,7 @@ export default function LegendaPage() {
         <div className="card-body">
           <h2 className="card-title">
             <div className="w-8 h-8 flex items-center justify-center bg-green-600 rounded-md mr-2">
-              <i className="fas fa-faucet-drip text-white"></i>
+              <FontAwesomeIcon icon={faFaucetDrip} className="text-white" />
             </div>
             Attributi Fontanelle
           </h2>
@@ -131,7 +170,10 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-green-600 rounded-md">
-                      <i className="fas fa-faucet-drip text-white text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faFaucetDrip}
+                        className="text-white text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -141,7 +183,10 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-blue-600 rounded-md">
-                      <i className="fas fa-faucet-drip text-white text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faFaucetDrip}
+                        className="text-white text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -159,7 +204,7 @@ export default function LegendaPage() {
         <div className="card-body">
           <h2 className="card-title">
             <div className="w-8 h-8 flex items-center justify-center bg-purple-600 rounded-md mr-2">
-              <i className="fas fa-restroom text-white"></i>
+              <FontAwesomeIcon icon={faRestroom} className="text-white" />
             </div>
             Attributi Bagni Pubblici
           </h2>
@@ -175,11 +220,17 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-euro-sign text-xl"></i>
+                      <FontAwesomeIcon icon={faEuroSign} className="text-xl" />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-euro-sign"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faEuroSign}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -190,11 +241,17 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-baby text-xl"></i>
+                      <FontAwesomeIcon icon={faBaby} className="text-xl" />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-baby"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faBaby}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -213,7 +270,7 @@ export default function LegendaPage() {
         <div className="card-body">
           <h2 className="card-title">
             <div className="w-8 h-8 flex items-center justify-center bg-blue-600 rounded-md mr-2">
-              <i className="fas fa-parking text-white"></i>
+              <FontAwesomeIcon icon={faParking} className="text-white" />
             </div>
             Attributi Parcheggi Bici
           </h2>
@@ -229,11 +286,17 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-euro-sign text-xl"></i>
+                      <FontAwesomeIcon icon={faEuroSign} className="text-xl" />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-euro-sign"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faEuroSign}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -244,11 +307,17 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-umbrella text-xl"></i>
+                      <FontAwesomeIcon icon={faUmbrella} className="text-xl" />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-umbrella"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faUmbrella}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -259,11 +328,17 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-house text-xl"></i>
+                      <FontAwesomeIcon icon={faHouse} className="text-xl" />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-house"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faHouse}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -274,11 +349,17 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-video text-xl"></i>
+                      <FontAwesomeIcon icon={faVideo} className="text-xl" />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-video"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faVideo}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -289,7 +370,7 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fa-solid fa-bicycle"></i>
+                      <FontAwesomeIcon icon={faBicycle} />
                       <span className="ml-1">N</span>
                     </div>
                   </td>
@@ -308,7 +389,7 @@ export default function LegendaPage() {
         <div className="card-body">
           <h2 className="card-title">
             <div className="w-8 h-8 flex items-center justify-center bg-yellow-400 rounded-full mr-2">
-              <i className="fas fa-futbol text-gray-800"></i>
+              <FontAwesomeIcon icon={faFutbol} className="text-gray-800" />
             </div>
             Attributi Parchi Giochi
           </h2>
@@ -324,11 +405,17 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-euro-sign text-xl"></i>
+                      <FontAwesomeIcon icon={faEuroSign} className="text-xl" />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-euro-sign"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faEuroSign}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -339,11 +426,17 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-home text-xl"></i>
+                      <FontAwesomeIcon icon={faHouse} className="text-xl" />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-home"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faHouse}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -354,11 +447,20 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-user-shield text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faUserShield}
+                        className="text-xl"
+                      />
                       <span className="mx-2">/</span>
                       <span className="fa-stack">
-                        <i className="fa-stack-1x fas fa-user-shield"></i>
-                        <i className="fa-solid fa-ban fa-stack-2x text-red-900"></i>
+                        <FontAwesomeIcon
+                          icon={faUserShield}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
                       </span>
                     </div>
                   </td>
@@ -376,7 +478,10 @@ export default function LegendaPage() {
       <div className="card bg-base-200 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">
-            <i className="fas fa-info-circle text-primary mr-2"></i>
+            <FontAwesomeIcon
+              icon={faInfoCircle}
+              className="text-primary mr-2"
+            />
             Informazioni Aggiuntive
           </h2>
           <div className="overflow-x-auto">
@@ -391,7 +496,11 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-map-marked-alt fa-sm text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faMapMarkerAlt}
+                        size="sm"
+                        className="text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -401,7 +510,11 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-bicycle fa-sm text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faBicycle}
+                        size="sm"
+                        className="text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -411,7 +524,11 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fas fa-layer-group fa-lg text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faLayerGroup}
+                        size="lg"
+                        className="text-xl"
+                      />
                     </div>
                   </td>
                   <td>
@@ -421,7 +538,10 @@ export default function LegendaPage() {
                 <tr>
                   <td className="text-right">
                     <div className="flex items-center justify-end">
-                      <i className="fa-solid fa-share-nodes text-xl"></i>
+                      <FontAwesomeIcon
+                        icon={faShareNodes}
+                        className="text-xl"
+                      />
                     </div>
                   </td>
                   <td>

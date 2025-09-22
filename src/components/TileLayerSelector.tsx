@@ -1,4 +1,10 @@
 import { TileLayerType } from "@/hooks/useTileLayer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMap,
+  faMapMarkedAlt,
+  faBicycle,
+} from "@fortawesome/free-solid-svg-icons";
 
 export interface TileLayerSelectorProps {
   selectedTileLayer: TileLayerType;
@@ -13,7 +19,7 @@ export default function TileLayerSelector({
     <li>
       <details>
         <summary>
-          <i className="fas fa-map fa-sm mr-2"></i>
+          <FontAwesomeIcon icon={faMap} size="sm" className="mr-2" />
           Stile mappa
         </summary>
         <ul>
@@ -22,7 +28,11 @@ export default function TileLayerSelector({
               className={selectedTileLayer === "osm" ? "menu-active" : ""}
               onClick={() => onChange("osm")}
             >
-              <i className="fas fa-map-marked-alt fa-sm mr-2" />
+              <FontAwesomeIcon
+                icon={faMapMarkedAlt}
+                size="sm"
+                className="mr-2"
+              />
               <span>OpenStreetMap</span>
             </a>
           </li>
@@ -31,7 +41,7 @@ export default function TileLayerSelector({
               className={selectedTileLayer === "cyclosm" ? "menu-active" : ""}
               onClick={() => onChange("cyclosm")}
             >
-              <i className="fas fa-bicycle fa-sm mr-2" />
+              <FontAwesomeIcon icon={faBicycle} size="sm" className="mr-2" />
               <span>CyclOSM</span>
             </a>
           </li>

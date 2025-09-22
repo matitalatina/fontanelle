@@ -2,12 +2,13 @@
 
 import { Marker } from "react-leaflet";
 import { ExtraMarkers } from "leaflet";
+import { createMarkerIconHTML } from "@/lib/marker-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const redMarker = ExtraMarkers.icon({
-  icon: "fa-user",
+  innerHTML: createMarkerIconHTML(faUser),
   markerColor: "red",
   shape: "square",
-  prefix: "fas",
 });
 
 export default function PersonMarker({

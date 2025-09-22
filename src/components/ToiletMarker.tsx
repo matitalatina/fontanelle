@@ -4,12 +4,13 @@ import { Marker, Popup } from "react-leaflet";
 import GoToButton from "./GoToButton";
 import FeatureIcon from "./FeatureIcon";
 import SharePositionButton from "./SharePositionButton";
+import { createMarkerIconHTML } from "@/lib/marker-icons";
+import { faRestroom } from "@fortawesome/free-solid-svg-icons";
 
 const toiletMarker = ExtraMarkers.icon({
-  icon: "fa-restroom",
+  innerHTML: createMarkerIconHTML(faRestroom),
   markerColor: "purple",
   shape: "star",
-  prefix: "fas",
 });
 
 export default function ToiletMarker({ toilet }: { toilet: Toilet }) {
