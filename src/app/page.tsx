@@ -25,7 +25,11 @@ import {
   faInfoCircle,
   faBookOpen,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import {
+  faGithub,
+  faFacebook,
+  faInstagram,
+} from "@fortawesome/free-brands-svg-icons";
 
 // Landing page specific metadata constants
 const LANDING_PAGE_TITLE = "Fontanelle in Italia";
@@ -495,6 +499,24 @@ export default async function Home() {
               <FontAwesomeIcon icon={faBookOpen} className="mr-1" />
               Legenda
             </Link>
+            <a
+              href="https://www.facebook.com/profile.php?id=61579750226046"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link link-hover"
+            >
+              <FontAwesomeIcon icon={faFacebook} className="mr-1" />
+              Facebook
+            </a>
+            <a
+              href="https://www.instagram.com/fontanelle.italia"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link link-hover"
+            >
+              <FontAwesomeIcon icon={faInstagram} className="mr-1" />
+              Instagram
+            </a>
             <a
               href="https://github.com/matitalatina/fontanelle"
               target="_blank"
