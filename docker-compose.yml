@@ -12,4 +12,6 @@ services:
       - traefik.http.middlewares.fontanellemn-redirect.redirectregex.replacement=https://fontanelleitalia.com/$${1}
       - traefik.http.middlewares.fontanellemn-redirect.redirectregex.permanent=true
       - traefik.http.routers.fontanellemn.rule=Host(`fontanelle.mattianatali.com`)
+      - traefik.http.routers.fontanellemn.tls=true
+      - traefik.http.routers.fontanellemn.tls.certresolver=myresolver
       - traefik.http.routers.fontanellemn.middlewares=fontanellemn-redirect
