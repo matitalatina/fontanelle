@@ -1,7 +1,7 @@
 import { Metadata, Viewport } from "next";
 
 // Base metadata that all pages will extend
-export const BASE_URL = "https://fontanelle.mattianatali.com";
+export const BASE_URL = "https://fontanelleitalia.com";
 export const APP_NAME = "Fontanelle in Italia";
 export const APP_DESCRIPTION =
   "Trova velocemente dove bere in Italia quando sei in bicicletta! Mappa interattiva di fontanelle, case dell'acqua, bagni pubblici, parcheggi per biciclette e parchi giochi in tutta Italia.";

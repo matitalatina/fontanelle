@@ -9,7 +9,7 @@
 
 A web application that helps cyclists and pedestrians find drinking fountains, water houses, public toilets, and bicycle parking spots in Milan, Italy.
 
-![Fontanelle in Italia Screenshot](https://fontanelle.mattianatali.com/opengraph-image.jpg)
+![Fontanelle in Italia Screenshot](https://fontanelleitalia.com/opengraph-image.jpg)
 
 ## 🌟 Features
 
@@ -71,7 +71,7 @@ A web application that helps cyclists and pedestrians find drinking fountains, w
 
 ## 🌐 Live Demo
 
-Visit [https://fontanelle.mattianatali.com](https://fontanelle.mattianatali.com) to see the application in action!
+Visit [https://fontanelleitalia.com](https://fontanelleitalia.com) to see the application in action!
 
 ## 📝 License
 
@@ -86,7 +86,7 @@ Mattia Natali - [LinkedIn](https://www.linkedin.com/in/mattian/)
 Everything I made is open source.
 If you like what I'm doing and you want to support me, you can help me 😄!
 
-- Increase awareness about the project [by sharing it](https://fontanelle.mattianatali.com) with your friends and family.
+- Increase awareness about the project [by sharing it](https://fontanelleitalia.com) with your friends and family.
 - Sponsor me with [Github](https://github.com/sponsors/matitalatina)
 - [Buy me a coffee](https://www.buymeacoffee.com/mattianatali)
 - [Paypal](https://paypal.me/mattianatali)
