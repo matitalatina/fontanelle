@@ -9,7 +9,6 @@ export type LatLng = {
 
 type LocationSuccess = {
   location: LatLng;
-  updatedAt: Date;
   status: "success";
 };
 
@@ -34,7 +33,6 @@ export default function useLocation() {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       },
-      updatedAt: new Date(),
       status: "success",
     });
   };

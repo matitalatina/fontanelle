@@ -62,33 +62,20 @@ export default function useMapEntities({
   );
 
   const onUpdateMap$ = useMemo(() => {
-    console.log("!!!!Creating onUpdateMap$");
     const subscription = combineLatest({
-      zoom: zoom$.pipe(distinctUntilChanged()).pipe(
-        tap((zoom) => {
-          console.log("zoom$", zoom);
-        })
-      ),
+      zoom: zoom$.pipe(distinctUntilChanged()),
       bounds: bounds$.pipe(
-        distinctUntilChanged(),
-        tap((bounds) => {
-          console.log("bounds$", bounds);
+        distinctUntilChanged((prev, curr) => {
+          if (!prev || !curr) return false;
+          return prev.equals(curr);
         })
       ),
       selectedOverlays: selectedOverlays$.pipe(
         distinctUntilChanged((prev, curr) =>
           isEqual(sortBy(prev), sortBy(curr))
-        ),
-        tap((selectedOverlays) => {
-          console.log("selectedOverlays$", selectedOverlays);
-        })
+        )
       ),
-    }).pipe(
-      debounceTime(150),
-      tap(({ zoom, bounds, selectedOverlays }) => {
-        console.log("updates$$", zoom, bounds, selectedOverlays);
-      })
-    );
+    }).pipe(debounceTime(200));
     return subscription;
   }, [bounds$, selectedOverlays$, zoom$]);
 
@@ -101,7 +88,7 @@ export default function useMapEntities({
     });
   }, []);
 
-  const onNeedChangeVisibleEntities$ = useMemo(() => {
+  const onVisibleEntities$ = useMemo(() => {
     return combineLatest([
       entitiesCache$,
       selectedOverlays$.pipe(
@@ -109,43 +96,34 @@ export default function useMapEntities({
           isEqual(sortBy(prev), sortBy(curr))
         )
       ),
-    ]).pipe(
-      tap(([entitiesCache, selectedOverlays]) => {
-        console.log(
-          "onNeedChangeVisibleEntities$",
-          entitiesCache,
-          selectedOverlays
-        );
-      })
-    );
+    ])
+      .pipe(debounceTime(200))
+      .pipe(
+        map(([entitiesCache, selectedOverlays]) => {
+          const stations = selectedOverlays.includes("stations")
+            ? Object.values(entitiesCache.stations).flat()
+            : [];
+          const toilets = selectedOverlays.includes("toilets")
+            ? Object.values(entitiesCache.toilets).flat()
+            : [];
+          const bicycleParkings = selectedOverlays.includes("bicycleParkings")
+            ? Object.values(entitiesCache.bicycleParkings).flat()
+            : [];
+          const playgrounds = selectedOverlays.includes("playgrounds")
+            ? Object.values(entitiesCache.playgrounds).flat()
+            : [];
+          return { stations, toilets, bicycleParkings, playgrounds };
+        }),
+        distinctUntilChanged(
+          (prev, curr) =>
+            prev.bicycleParkings.length === curr.bicycleParkings.length &&
+            prev.toilets.length === curr.toilets.length &&
+            prev.stations.length === curr.stations.length &&
+            prev.playgrounds.length === curr.playgrounds.length
+        )
+      );
   }, [entitiesCache$, selectedOverlays$]);
 
-  const onVisibleEntities$ = useMemo(() => {
-    return onNeedChangeVisibleEntities$.pipe(
-      map(([entitiesCache, selectedOverlays]) => {
-        const stations = selectedOverlays.includes("stations")
-          ? Object.values(entitiesCache.stations).flat()
-          : [];
-        const toilets = selectedOverlays.includes("toilets")
-          ? Object.values(entitiesCache.toilets).flat()
-          : [];
-        const bicycleParkings = selectedOverlays.includes("bicycleParkings")
-          ? Object.values(entitiesCache.bicycleParkings).flat()
-          : [];
-        const playgrounds = selectedOverlays.includes("playgrounds")
-          ? Object.values(entitiesCache.playgrounds).flat()
-          : [];
-        return { stations, toilets, bicycleParkings, playgrounds };
-      }),
-      distinctUntilChanged(
-        (prev, curr) =>
-          prev.bicycleParkings.length === curr.bicycleParkings.length &&
-          prev.toilets.length === curr.toilets.length &&
-          prev.stations.length === curr.stations.length &&
-          prev.playgrounds.length === curr.playgrounds.length
-      )
-    );
-  }, [onNeedChangeVisibleEntities$]);
   // State for entities
   const [stations, setStations] = useState<Station[]>([]);
   const [toilets, setToilets] = useState<Toilet[]>([]);
@@ -387,9 +365,14 @@ export default function useMapEntities({
     console.log("Setting up subscription");
     const fetchSubscription = onUpdateMap$.subscribe(
       ({ zoom, bounds, selectedOverlays: currentOverlays }) => {
-        console.log("onUpdateMap$ triggered with overlays:", currentOverlays);
+        console.log(
+          "onUpdateMap$ triggered with overlays:",
+          currentOverlays,
+          zoom,
+          bounds
+        );
         if (bounds) {
-          console.log("Handling bounds change");
+          console.log("fetchDataIfNeeded", zoom, bounds, currentOverlays);
           fetchDataIfNeeded({
             bounds,
             zoom,
@@ -401,6 +384,13 @@ export default function useMapEntities({
 
     const updateVisibleSubscription = onVisibleEntities$.subscribe(
       ({ stations, toilets, bicycleParkings, playgrounds }) => {
+        console.log(
+          "onVisibleEntities$ triggered",
+          stations,
+          toilets,
+          bicycleParkings,
+          playgrounds
+        );
         setStations(stations);
         setToilets(toilets);
         setBicycleParkings(bicycleParkings);
@@ -423,30 +413,29 @@ export default function useMapEntities({
 
   const mapInstance = useMapEvents({
     moveend: () => {
-      console.log("moveend");
+      console.log("moveend", mapInstance.getBounds());
       bounds$.next(mapInstance.getBounds());
       zoom$.next(mapInstance.getZoom());
     },
     zoomend: () => {
-      console.log("zoomend");
+      console.log("zoomend", mapInstance.getBounds());
       bounds$.next(mapInstance.getBounds());
       zoom$.next(mapInstance.getZoom());
     },
     load: () => {
-      console.log("map loaded");
+      console.log("map loaded", mapInstance.getBounds());
       bounds$.next(mapInstance.getBounds());
       zoom$.next(mapInstance.getZoom());
     },
   });
 
-  // Initialize map values when component mounts
-  useEffect(() => {
-    if (mapInstance) {
-      console.log("Initializing map values");
+  if (bounds$.value === null || zoom$.value === 0) {
+    mapInstance.whenReady(() => {
+      console.log("map ready", mapInstance.getBounds());
       bounds$.next(mapInstance.getBounds());
       zoom$.next(mapInstance.getZoom());
-    }
-  }, [mapInstance, bounds$, zoom$]);
+    });
+  }
 
   return {
     stations,
