@@ -1,5 +1,6 @@
-import { getToiletsFromDB } from "@/lib/toilets";
 import { NextRequest } from "next/server";
+import { serverContainer, SERVER_TYPES } from "@/server/container";
+import { IToiletRepository } from "@/server/repositories/ToiletRepository";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -12,7 +13,10 @@ export async function GET(request: NextRequest) {
   const gh5List = gh5Param.split(",");
 
   try {
-    const data = await getToiletsFromDB(gh5List);
+    const toiletRepository = serverContainer.get<IToiletRepository>(
+      SERVER_TYPES.ToiletRepository
+    );
+    const data = await toiletRepository.findByGeohashes(gh5List);
     return Response.json(data);
   } catch (error) {
     console.error("Error fetching toilets:", error);

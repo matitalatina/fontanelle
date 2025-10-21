@@ -1,7 +1,5 @@
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
-import DB from "better-sqlite3";
-import path from "path";
 import { getLatestDataFile } from "./utils/file-utils";
 
 export type Toilet = {
@@ -71,40 +69,7 @@ export async function* getToiletsFromOSM(): AsyncGenerator<Toilet> {
   }
 }
 
-export async function getToiletsFromDB(gh5List: string[]): Promise<Toilet[]> {
-  const dbPath = path.join(process.cwd(), "db", "db.db");
-  const db = DB(dbPath);
-
-  try {
-    const placeholders = gh5List.map(() => "?").join(",");
-    const query = `
-      SELECT id, lat, lng, fee, openingHours, changingTable, gh5
-      FROM toilets
-      WHERE gh5 IN (${placeholders})
-    `;
-
-    const rows = db.prepare(query).all(gh5List);
-    return rows.map((row: unknown) => {
-      const typedRow = row as {
-        id: number;
-        lat: number;
-        lng: number;
-        fee: number;
-        openingHours: string;
-        changingTable: number;
-        gh5: string;
-      };
-      return {
-        id: typedRow.id,
-        lat: typedRow.lat,
-        lng: typedRow.lng,
-        fee: typedRow.fee === 1,
-        openingHours: typedRow.openingHours,
-        changingTable: typedRow.changingTable === 1,
-        gh5: typedRow.gh5,
-      };
-    });
-  } finally {
-    db.close();
-  }
-}
+/**
+ * @deprecated Use ToiletRepository instead
+ * This function is kept only for backwards compatibility with scripts
+ */

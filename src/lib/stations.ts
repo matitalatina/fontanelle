@@ -1,7 +1,5 @@
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
-import DB from "better-sqlite3";
-import path from "path";
 import { getLatestDataFile } from "./utils/file-utils";
 
 type StationType = "fountain" | "house";
@@ -95,41 +93,7 @@ async function* processCSVFile(filePath: string): AsyncGenerator<Station> {
   }
 }
 
-export async function getStationsFromDB(gh5List: string[]): Promise<Station[]> {
-  const dbPath = path.join(process.cwd(), "db", "db.db");
-  const db = DB(dbPath);
-
-  try {
-    const placeholders = gh5List.map(() => "?").join(",");
-    const query = `
-      SELECT id, cap, lat, lng, name, type, gh5
-      FROM stations
-      WHERE gh5 IN (${placeholders})
-    `;
-
-    const rows = db.prepare(query).all(gh5List);
-
-    return rows.map((row: unknown) => {
-      const typedRow = row as {
-        id: number;
-        cap: number | null;
-        lat: number;
-        lng: number;
-        name: string | null;
-        type: StationType;
-        gh5: string;
-      };
-      return {
-        id: typedRow.id,
-        cap: typedRow.cap,
-        lat: typedRow.lat,
-        lng: typedRow.lng,
-        name: typedRow.name,
-        type: typedRow.type,
-        gh5: typedRow.gh5,
-      };
-    });
-  } finally {
-    db.close();
-  }
-}
+/**
+ * @deprecated Use StationRepository instead
+ * This function is kept only for backwards compatibility with scripts
+ */

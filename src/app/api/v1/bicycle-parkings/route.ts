@@ -1,5 +1,6 @@
-import { getBicycleParkingsFromDB } from "@/lib/bicycleParking";
 import { NextRequest } from "next/server";
+import { serverContainer, SERVER_TYPES } from "@/server/container";
+import { IBicycleParkingRepository } from "@/server/repositories/BicycleParkingRepository";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -12,7 +13,11 @@ export async function GET(request: NextRequest) {
   const gh5List = gh5Param.split(",");
 
   try {
-    const data = await getBicycleParkingsFromDB(gh5List);
+    const bicycleParkingRepository =
+      serverContainer.get<IBicycleParkingRepository>(
+        SERVER_TYPES.BicycleParkingRepository
+      );
+    const data = await bicycleParkingRepository.findByGeohashes(gh5List);
     return Response.json(data);
   } catch (error) {
     console.error("Error fetching bicycle parkings:", error);

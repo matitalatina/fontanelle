@@ -1,5 +1,6 @@
-import { getPlaygroundsFromDB } from "@/lib/playgrounds";
 import { NextRequest } from "next/server";
+import { serverContainer, SERVER_TYPES } from "@/server/container";
+import { IPlaygroundRepository } from "@/server/repositories/PlaygroundRepository";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -12,7 +13,10 @@ export async function GET(request: NextRequest) {
   const gh5List = gh5Param.split(",");
 
   try {
-    const data = await getPlaygroundsFromDB(gh5List);
+    const playgroundRepository = serverContainer.get<IPlaygroundRepository>(
+      SERVER_TYPES.PlaygroundRepository
+    );
+    const data = await playgroundRepository.findByGeohashes(gh5List);
     return Response.json(data);
   } catch (error) {
     console.error("Error fetching playgrounds:", error);

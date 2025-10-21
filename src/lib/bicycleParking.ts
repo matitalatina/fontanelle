@@ -24,8 +24,6 @@ out;
 
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
-import DB from "better-sqlite3";
-import path from "path";
 import { getLatestDataFile } from "./utils/file-utils";
 
 export type BicycleParking = {
@@ -84,51 +82,7 @@ export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParkin
   }
 }
 
-export async function getBicycleParkingsFromDB(
-  gh5List: string[]
-): Promise<BicycleParking[]> {
-  const dbPath = path.join(process.cwd(), "db", "db.db");
-  const db = DB(dbPath);
-
-  try {
-    const placeholders = gh5List.map(() => "?").join(",");
-    const query = `
-      SELECT id, lat, lng, covered, indoor, access, fee, bicycleParking, surveillance, capacity, gh5
-      FROM bicycle_parkings
-      WHERE gh5 IN (${placeholders})
-    `;
-
-    const rows = db.prepare(query).all(gh5List);
-
-    return rows.map((row: unknown) => {
-      const typedRow = row as {
-        id: number;
-        lat: number;
-        lng: number;
-        covered: number;
-        indoor: number;
-        access: string;
-        fee: number;
-        bicycleParking: string;
-        surveillance: number;
-        capacity: number;
-        gh5: string;
-      };
-      return {
-        id: typedRow.id,
-        lat: typedRow.lat,
-        lng: typedRow.lng,
-        covered: typedRow.covered === 1,
-        indoor: typedRow.indoor === 1,
-        access: typedRow.access,
-        fee: typedRow.fee === 1,
-        bicycleParking: typedRow.bicycleParking,
-        surveillance: typedRow.surveillance === 1,
-        capacity: typedRow.capacity,
-        gh5: typedRow.gh5,
-      };
-    });
-  } finally {
-    db.close();
-  }
-}
+/**
+ * @deprecated Use BicycleParkingRepository instead
+ * This function is kept only for backwards compatibility with scripts
+ */
