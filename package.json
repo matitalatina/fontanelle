@@ -20,6 +20,7 @@
     "better-sqlite3": "^12.2.0",
     "csv-parse": "^6.1.0",
     "date-fns": "^4.1.0",
+    "inversify": "^7.10.3",
     "leaflet": "^1.9.4",
     "leaflet-extra-markers": "^1.2.2",
     "leaflet.markercluster": "^1.5.3",
@@ -29,6 +30,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-leaflet": "^5.0.0",
+    "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "sharp": "^0.34.3",
     "sqlite3": "^5.1.7"

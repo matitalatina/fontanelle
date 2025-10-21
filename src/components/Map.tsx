@@ -22,8 +22,6 @@ import { TILE_LAYERS, TileLayerType } from "@/hooks/useTileLayer";
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />*/
 
-const bootstrapDate = new Date();
-
 export default function Map({
   className,
   children,

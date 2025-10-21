@@ -15,6 +15,8 @@ import {
   switchMap,
 } from "rxjs/operators";
 import { isEqual, sortBy } from "lodash";
+import { IEntityClient, EntityType, EntityData } from "@/services/EntityClient";
+import { container, TYPES } from "@/services/container";
 
 const ZOOM_THRESHOLD = 14;
 const DEBOUNCE_TIME = 200;
@@ -35,24 +37,13 @@ function getBoundingBoxGeohashes(
   return Array.from(new Set(ghs));
 }
 
-// Entity types configuration
-type EntityType = "stations" | "toilets" | "bicycleParkings" | "playgrounds";
-type EntityData = Station | Toilet | BicycleParking | Playground;
-
-interface EntityConfig {
-  apiPath: string;
-  overlayKey: AvailableOverlay;
-}
-
-const ENTITY_CONFIG: Record<EntityType, EntityConfig> = {
-  stations: { apiPath: "/api/v1/fountains", overlayKey: "stations" },
-  toilets: { apiPath: "/api/v1/toilets", overlayKey: "toilets" },
-  bicycleParkings: {
-    apiPath: "/api/v1/bicycle-parkings",
-    overlayKey: "bicycleParkings",
-  },
-  playgrounds: { apiPath: "/api/v1/playgrounds", overlayKey: "playgrounds" },
-};
+// Entity types that can be fetched
+const ENTITY_TYPES: EntityType[] = [
+  "stations",
+  "toilets",
+  "bicycleParkings",
+  "playgrounds",
+];
 
 // Interface for entity cache
 interface EntityCache {
@@ -64,6 +55,7 @@ interface EntityCache {
 
 interface UseMapEntitiesProps {
   selectedOverlays: AvailableOverlay[];
+  entityClient?: IEntityClient;
 }
 
 interface MapState {
@@ -74,7 +66,14 @@ interface MapState {
 
 export default function useMapEntities({
   selectedOverlays,
+  entityClient,
 }: UseMapEntitiesProps) {
+  // Get the entity client from the container if not provided (for testing)
+  const client = useMemo(
+    () => entityClient || container.get<IEntityClient>(TYPES.EntityClient),
+    [entityClient]
+  );
+
   // RxJS subjects for reactive state management
   const { mapState$, entitiesCache$, requestedGeohashes$ } = useMemo(
     () => ({
@@ -107,16 +106,7 @@ export default function useMapEntities({
   // Generic fetch function for any entity type
   const fetchEntityType = useCallback(
     async (entityType: EntityType, geohashes: string[]): Promise<void> => {
-      const config = ENTITY_CONFIG[entityType];
-      const response = await fetch(
-        `${config.apiPath}?gh5=${geohashes.join(",")}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${entityType}`);
-      }
-
-      const data: EntityData[] = await response.json();
+      const data = await client.fetchEntities(entityType, geohashes);
 
       // Group data by geohash
       const newCache: Record<string, EntityData[]> = {};
@@ -133,7 +123,7 @@ export default function useMapEntities({
         },
       });
     },
-    [entitiesCache$]
+    [client, entitiesCache$]
   );
 
   // Main RxJS pipeline
@@ -192,10 +182,8 @@ export default function useMapEntities({
         const cache = entitiesCache$.value;
         const fetchPromises: Promise<void>[] = [];
 
-        (Object.keys(ENTITY_CONFIG) as EntityType[]).forEach((entityType) => {
-          const config = ENTITY_CONFIG[entityType];
-
-          if (overlays.includes(config.overlayKey)) {
+        ENTITY_TYPES.forEach((entityType) => {
+          if (overlays.includes(entityType)) {
             const uncachedGeohashes = geohashes.filter(
               (gh) => !cache[entityType][gh]
             );
