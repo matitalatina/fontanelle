@@ -38,6 +38,7 @@ export default function Map({
     locationState.status == "success"
       ? locationState.location
       : { lat: 45.464664, lng: 9.18854 };
+  const centerNeedsUpdate = locationState.status === "success";
 
   const [selectedOverlays, setSelectedOverlays] = useState<SelectedOverlays>({
     stations: true,
@@ -61,7 +62,7 @@ export default function Map({
         zoomControl={false}
       >
         {children}
-        <MapCenter position={center} />
+        {centerNeedsUpdate && <MapCenter position={center} />}
         <TileLayer
           attribution={tileLayerConfig.attribution}
           url={tileLayerConfig.url}
