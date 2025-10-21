@@ -64,13 +64,13 @@ export function getOverpassQueries(): OverpassQuery[] {
     {
       name: "Bicycle Parkings (Italy)",
       query: `[out:csv(::"id", amenity, name, covered, indoor, access, fee, bicycle_parking, surveillance, capacity, ::lat, ::lon; true;"|")];
-area[name="Italia"]->.italy;
-(node
-  [amenity=bicycle_parking]
-  (area.italy);
-)->.result;
-.result
-out;`,
+    area[name="Italia"]->.italy;
+    (node
+      [amenity=bicycle_parking]
+      (area.italy);
+    )->.result;
+    .result
+    out;`,
       outputFile: `db/bicycleParking/italy_${today}.csv`,
     },
     {
