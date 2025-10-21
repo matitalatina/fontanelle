@@ -8,18 +8,23 @@ import { Playground } from "@/lib/playgrounds";
 import { AvailableOverlay } from "@/components/OverlaySelector";
 import { useMapEvents } from "react-leaflet";
 import { combineLatest, BehaviorSubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, tap, map } from "rxjs/operators";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  switchMap,
+} from "rxjs/operators";
 import { isEqual, sortBy } from "lodash";
 
-const zoomThreshold = 14;
+const ZOOM_THRESHOLD = 14;
+const DEBOUNCE_TIME = 200;
+const GEOHASH_PRECISION = 5;
 
 // Generate geohashes for a bounding box
 function getBoundingBoxGeohashes(
   bounds: LatLngBounds,
-  precision = 5
+  precision = GEOHASH_PRECISION
 ): string[] {
-  const geohashes = new Set<string>();
-
   const ghs = geohash.bboxes(
     bounds.getSouthWest().lat,
     bounds.getSouthWest().lng,
@@ -27,9 +32,27 @@ function getBoundingBoxGeohashes(
     bounds.getNorthEast().lng,
     precision
   );
-  ghs.forEach((gh) => geohashes.add(gh));
-  return Array.from(geohashes);
+  return Array.from(new Set(ghs));
 }
+
+// Entity types configuration
+type EntityType = "stations" | "toilets" | "bicycleParkings" | "playgrounds";
+type EntityData = Station | Toilet | BicycleParking | Playground;
+
+interface EntityConfig {
+  apiPath: string;
+  overlayKey: AvailableOverlay;
+}
+
+const ENTITY_CONFIG: Record<EntityType, EntityConfig> = {
+  stations: { apiPath: "/api/v1/fountains", overlayKey: "stations" },
+  toilets: { apiPath: "/api/v1/toilets", overlayKey: "toilets" },
+  bicycleParkings: {
+    apiPath: "/api/v1/bicycle-parkings",
+    overlayKey: "bicycleParkings",
+  },
+  playgrounds: { apiPath: "/api/v1/playgrounds", overlayKey: "playgrounds" },
+};
 
 // Interface for entity cache
 interface EntityCache {
@@ -43,404 +66,240 @@ interface UseMapEntitiesProps {
   selectedOverlays: AvailableOverlay[];
 }
 
+interface MapState {
+  zoom: number;
+  bounds: LatLngBounds | null;
+  selectedOverlays: AvailableOverlay[];
+}
+
 export default function useMapEntities({
   selectedOverlays,
 }: UseMapEntitiesProps) {
-  // Move RxJS subjects inside the hook to avoid sharing state across instances
-  const zoom$ = useMemo(() => new BehaviorSubject<number>(0), []);
-  const bounds$ = useMemo(
-    () => new BehaviorSubject<LatLngBounds | null>(null),
+  // RxJS subjects for reactive state management
+  const { mapState$, entitiesCache$, requestedGeohashes$ } = useMemo(
+    () => ({
+      mapState$: new BehaviorSubject<MapState>({
+        zoom: 0,
+        bounds: null,
+        selectedOverlays: [],
+      }),
+      entitiesCache$: new BehaviorSubject<EntityCache>({
+        stations: {},
+        toilets: {},
+        bicycleParkings: {},
+        playgrounds: {},
+      }),
+      requestedGeohashes$: new BehaviorSubject<Map<string, AvailableOverlay[]>>(
+        new Map()
+      ),
+    }),
     []
   );
-  const selectedOverlays$ = useMemo(
-    () => new BehaviorSubject<AvailableOverlay[]>([]),
-    []
-  );
-  const requestedGeohashes$ = useMemo(
-    () => new BehaviorSubject<Map<string, string[]>>(new Map()),
-    []
-  );
-
-  const onUpdateMap$ = useMemo(() => {
-    const subscription = combineLatest({
-      zoom: zoom$.pipe(distinctUntilChanged()),
-      bounds: bounds$.pipe(
-        distinctUntilChanged((prev, curr) => {
-          if (!prev || !curr) return false;
-          return prev.equals(curr);
-        })
-      ),
-      selectedOverlays: selectedOverlays$.pipe(
-        distinctUntilChanged((prev, curr) =>
-          isEqual(sortBy(prev), sortBy(curr))
-        )
-      ),
-    }).pipe(debounceTime(200));
-    return subscription;
-  }, [bounds$, selectedOverlays$, zoom$]);
-
-  const entitiesCache$ = useMemo(() => {
-    return new BehaviorSubject<EntityCache>({
-      stations: {},
-      toilets: {},
-      bicycleParkings: {},
-      playgrounds: {},
-    });
-  }, []);
-
-  const onVisibleEntities$ = useMemo(() => {
-    return combineLatest([
-      entitiesCache$,
-      selectedOverlays$.pipe(
-        distinctUntilChanged((prev, curr) =>
-          isEqual(sortBy(prev), sortBy(curr))
-        )
-      ),
-    ])
-      .pipe(debounceTime(200))
-      .pipe(
-        map(([entitiesCache, selectedOverlays]) => {
-          const stations = selectedOverlays.includes("stations")
-            ? Object.values(entitiesCache.stations).flat()
-            : [];
-          const toilets = selectedOverlays.includes("toilets")
-            ? Object.values(entitiesCache.toilets).flat()
-            : [];
-          const bicycleParkings = selectedOverlays.includes("bicycleParkings")
-            ? Object.values(entitiesCache.bicycleParkings).flat()
-            : [];
-          const playgrounds = selectedOverlays.includes("playgrounds")
-            ? Object.values(entitiesCache.playgrounds).flat()
-            : [];
-          return { stations, toilets, bicycleParkings, playgrounds };
-        }),
-        distinctUntilChanged(
-          (prev, curr) =>
-            prev.bicycleParkings.length === curr.bicycleParkings.length &&
-            prev.toilets.length === curr.toilets.length &&
-            prev.stations.length === curr.stations.length &&
-            prev.playgrounds.length === curr.playgrounds.length
-        )
-      );
-  }, [entitiesCache$, selectedOverlays$]);
 
   // State for entities
-  const [stations, setStations] = useState<Station[]>([]);
-  const [toilets, setToilets] = useState<Toilet[]>([]);
-  const [bicycleParkings, setBicycleParkings] = useState<BicycleParking[]>([]);
-  const [playgrounds, setPlaygrounds] = useState<Playground[]>([]);
+  const [entities, setEntities] = useState({
+    stations: [] as Station[],
+    toilets: [] as Toilet[],
+    bicycleParkings: [] as BicycleParking[],
+    playgrounds: [] as Playground[],
+  });
 
-  // Cache for already fetched geohashes and their associated overlays
-  // Function to fetch data for specific geohashes and overlays
-  const fetchDataForGeohashes = useCallback(
-    async (geohashes: string[], overlays: string[]) => {
-      if (geohashes.length === 0 || overlays.length === 0) return;
+  // Generic fetch function for any entity type
+  const fetchEntityType = useCallback(
+    async (entityType: EntityType, geohashes: string[]): Promise<void> => {
+      const config = ENTITY_CONFIG[entityType];
+      const response = await fetch(
+        `${config.apiPath}?gh5=${geohashes.join(",")}`
+      );
 
-      try {
-        const promises = [];
-        const currentCache = entitiesCache$.value;
-
-        // Fetch fountains/stations
-        if (overlays.includes("stations")) {
-          // Filter out geohashes that are already in the cache
-          const geohashesToFetch = geohashes.filter(
-            (gh) => !currentCache.stations[gh]
-          );
-
-          if (geohashesToFetch.length > 0) {
-            promises.push(
-              fetch(`/api/v1/fountains?gh5=${geohashesToFetch.join(",")}`)
-                .then((response) => {
-                  if (!response.ok)
-                    throw new Error("Failed to fetch fountains");
-                  return response.json();
-                })
-                .then((data) => {
-                  // Create cache for this data
-                  const newStationsCache: Record<string, Station[]> = {};
-                  geohashesToFetch.forEach((gh) => {
-                    newStationsCache[gh] = data.filter(
-                      (s: Station) => s.gh5 === gh
-                    );
-                  });
-
-                  // Update entities cache
-                  entitiesCache$.next({
-                    ...entitiesCache$.value,
-                    stations: {
-                      ...entitiesCache$.value.stations,
-                      ...newStationsCache,
-                    },
-                  });
-                })
-                .catch((error) =>
-                  console.error("Error fetching fountains:", error)
-                )
-            );
-          }
-        }
-
-        // Fetch toilets
-        if (overlays.includes("toilets")) {
-          // Filter out geohashes that are already in the cache
-          const geohashesToFetch = geohashes.filter(
-            (gh) => !currentCache.toilets[gh]
-          );
-
-          if (geohashesToFetch.length > 0) {
-            promises.push(
-              fetch(`/api/v1/toilets?gh5=${geohashesToFetch.join(",")}`)
-                .then((response) => {
-                  if (!response.ok) throw new Error("Failed to fetch toilets");
-                  return response.json();
-                })
-                .then((data) => {
-                  // Create cache for this data
-                  const newToiletsCache: Record<string, Toilet[]> = {};
-                  geohashesToFetch.forEach((gh) => {
-                    newToiletsCache[gh] = data.filter(
-                      (t: Toilet) => t.gh5 === gh
-                    );
-                  });
-
-                  // Update entities cache
-                  entitiesCache$.next({
-                    ...entitiesCache$.value,
-                    toilets: {
-                      ...entitiesCache$.value.toilets,
-                      ...newToiletsCache,
-                    },
-                  });
-                })
-                .catch((error) =>
-                  console.error("Error fetching toilets:", error)
-                )
-            );
-          }
-        }
-
-        // Fetch bicycle parkings
-        if (overlays.includes("bicycleParkings")) {
-          // Filter out geohashes that are already in the cache
-          const geohashesToFetch = geohashes.filter(
-            (gh) => !currentCache.bicycleParkings[gh]
-          );
-
-          if (geohashesToFetch.length > 0) {
-            promises.push(
-              fetch(
-                `/api/v1/bicycle-parkings?gh5=${geohashesToFetch.join(",")}`
-              )
-                .then((response) => {
-                  if (!response.ok)
-                    throw new Error("Failed to fetch bicycle parkings");
-                  return response.json();
-                })
-                .then((data) => {
-                  // Create cache for this data
-                  const newBicycleParkingsCache: Record<
-                    string,
-                    BicycleParking[]
-                  > = {};
-                  geohashesToFetch.forEach((gh) => {
-                    newBicycleParkingsCache[gh] = data.filter(
-                      (b: BicycleParking) => b.gh5 === gh
-                    );
-                  });
-
-                  // Update entities cache
-                  entitiesCache$.next({
-                    ...entitiesCache$.value,
-                    bicycleParkings: {
-                      ...entitiesCache$.value.bicycleParkings,
-                      ...newBicycleParkingsCache,
-                    },
-                  });
-                })
-                .catch((error) =>
-                  console.error("Error fetching bicycle parkings:", error)
-                )
-            );
-          }
-        }
-
-        // Fetch playgrounds
-        if (overlays.includes("playgrounds")) {
-          // Filter out geohashes that are already in the cache
-          const geohashesToFetch = geohashes.filter(
-            (gh) => !currentCache.playgrounds[gh]
-          );
-
-          if (geohashesToFetch.length > 0) {
-            promises.push(
-              fetch(`/api/v1/playgrounds?gh5=${geohashesToFetch.join(",")}`)
-                .then((response) => {
-                  if (!response.ok)
-                    throw new Error("Failed to fetch playgrounds");
-                  return response.json();
-                })
-                .then((data) => {
-                  // Create cache for this data
-                  const newPlaygroundsCache: Record<string, Playground[]> = {};
-                  geohashesToFetch.forEach((gh) => {
-                    newPlaygroundsCache[gh] = data.filter(
-                      (p: Playground) => p.gh5 === gh
-                    );
-                  });
-
-                  // Update entities cache
-                  entitiesCache$.next({
-                    ...entitiesCache$.value,
-                    playgrounds: {
-                      ...entitiesCache$.value.playgrounds,
-                      ...newPlaygroundsCache,
-                    },
-                  });
-                })
-                .catch((error) =>
-                  console.error("Error fetching playgrounds:", error)
-                )
-            );
-          }
-        }
-
-        // Wait for all fetch operations to complete
-        await Promise.all(promises);
-      } catch (error) {
-        console.error("Error fetching entities:", error);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${entityType}`);
       }
+
+      const data: EntityData[] = await response.json();
+
+      // Group data by geohash
+      const newCache: Record<string, EntityData[]> = {};
+      geohashes.forEach((gh) => {
+        newCache[gh] = data.filter((item: EntityData) => item.gh5 === gh);
+      });
+
+      // Update cache
+      entitiesCache$.next({
+        ...entitiesCache$.value,
+        [entityType]: {
+          ...entitiesCache$.value[entityType],
+          ...newCache,
+        },
+      });
     },
     [entitiesCache$]
   );
 
-  // Function to handle bounds change without debounce
-  const fetchDataIfNeeded = useCallback(
-    async ({
-      bounds,
-      zoom,
-      selectedOverlays,
-    }: {
-      bounds: LatLngBounds;
-      zoom: number;
-      selectedOverlays: AvailableOverlay[];
-    }) => {
-      if (zoom < zoomThreshold) return;
-
-      // Get geohashes for the visible area
-      const geohashes = getBoundingBoxGeohashes(bounds);
-
-      if (selectedOverlays.length === 0) return;
-
-      // Filter out geohashes that have already been requested with all active overlays
-      const newGeohashes = geohashes.filter((gh) => {
-        const requestedOverlays = requestedGeohashes$.value.get(gh) || [];
-        return !selectedOverlays.every((overlay) =>
-          requestedOverlays.includes(overlay)
-        );
-      });
-
-      // If no new geohashes, do nothing
-      if (newGeohashes.length === 0) return;
-
-      // Mark these geohashes as requested with the current active overlays
-      const prev = requestedGeohashes$.value;
-      const updated = new Map(prev);
-      newGeohashes.forEach((gh) => {
-        const existingOverlays = updated.get(gh) || [];
-        const newOverlays = [
-          ...new Set([...existingOverlays, ...selectedOverlays]),
-        ];
-        updated.set(gh, newOverlays);
-      });
-      requestedGeohashes$.next(updated);
-
-      // Fetch data for the new geohashes
-      await fetchDataForGeohashes(newGeohashes, selectedOverlays);
-    },
-    [requestedGeohashes$, fetchDataForGeohashes]
-  );
-
+  // Main RxJS pipeline
   useEffect(() => {
-    // Subscribe to onUpdateMap$ and handle map updates
-    console.log("Setting up subscription");
-    const fetchSubscription = onUpdateMap$.subscribe(
-      ({ zoom, bounds, selectedOverlays: currentOverlays }) => {
-        console.log(
-          "onUpdateMap$ triggered with overlays:",
-          currentOverlays,
-          zoom,
-          bounds
+    // Stream that combines map state and determines what to fetch
+    const fetchPipeline$ = mapState$.pipe(
+      distinctUntilChanged((prev, curr) => {
+        const boundsEqual =
+          (!prev.bounds && !curr.bounds) ||
+          (prev.bounds && curr.bounds
+            ? prev.bounds.equals(curr.bounds)
+            : false);
+
+        return (
+          prev.zoom === curr.zoom &&
+          boundsEqual &&
+          isEqual(sortBy(prev.selectedOverlays), sortBy(curr.selectedOverlays))
         );
-        if (bounds) {
-          console.log("fetchDataIfNeeded", zoom, bounds, currentOverlays);
-          fetchDataIfNeeded({
-            bounds,
-            zoom,
-            selectedOverlays: currentOverlays,
-          });
+      }),
+      debounceTime(DEBOUNCE_TIME),
+      map(({ zoom, bounds, selectedOverlays }) => {
+        // Don't fetch if zoom is too low or no bounds
+        if (zoom < ZOOM_THRESHOLD || !bounds || selectedOverlays.length === 0) {
+          return null;
         }
-      }
+
+        const geohashes = getBoundingBoxGeohashes(bounds);
+        const requested = requestedGeohashes$.value;
+
+        // Find geohashes that need fetching for each overlay
+        const toFetch = geohashes.filter((gh) => {
+          const requestedOverlays = requested.get(gh) || [];
+          return !selectedOverlays.every((overlay) =>
+            requestedOverlays.includes(overlay)
+          );
+        });
+
+        return toFetch.length > 0
+          ? { geohashes: toFetch, overlays: selectedOverlays }
+          : null;
+      }),
+      switchMap(async (fetchData) => {
+        if (!fetchData) return;
+
+        const { geohashes, overlays } = fetchData;
+
+        // Update requested geohashes tracking
+        const updated = new Map(requestedGeohashes$.value);
+        geohashes.forEach((gh) => {
+          const existing = updated.get(gh) || [];
+          updated.set(gh, [...new Set([...existing, ...overlays])]);
+        });
+        requestedGeohashes$.next(updated);
+
+        // Fetch all entity types in parallel
+        const cache = entitiesCache$.value;
+        const fetchPromises: Promise<void>[] = [];
+
+        (Object.keys(ENTITY_CONFIG) as EntityType[]).forEach((entityType) => {
+          const config = ENTITY_CONFIG[entityType];
+
+          if (overlays.includes(config.overlayKey)) {
+            const uncachedGeohashes = geohashes.filter(
+              (gh) => !cache[entityType][gh]
+            );
+
+            if (uncachedGeohashes.length > 0) {
+              fetchPromises.push(
+                fetchEntityType(entityType, uncachedGeohashes).catch((error) =>
+                  console.error(`Error fetching ${entityType}:`, error)
+                )
+              );
+            }
+          }
+        });
+
+        await Promise.all(fetchPromises);
+      })
     );
 
-    const updateVisibleSubscription = onVisibleEntities$.subscribe(
-      ({ stations, toilets, bicycleParkings, playgrounds }) => {
-        console.log(
-          "onVisibleEntities$ triggered",
-          stations,
-          toilets,
-          bicycleParkings,
-          playgrounds
-        );
-        setStations(stations);
-        setToilets(toilets);
-        setBicycleParkings(bicycleParkings);
-        setPlaygrounds(playgrounds);
-      }
+    // Stream that filters cached entities based on selected overlays
+    const visibleEntities$ = combineLatest([
+      entitiesCache$,
+      mapState$.pipe(
+        map((state) => state.selectedOverlays),
+        distinctUntilChanged((prev, curr) =>
+          isEqual(sortBy(prev), sortBy(curr))
+        )
+      ),
+    ]).pipe(
+      debounceTime(DEBOUNCE_TIME),
+      map(([cache, selectedOverlays]) => ({
+        stations: selectedOverlays.includes("stations")
+          ? Object.values(cache.stations).flat()
+          : [],
+        toilets: selectedOverlays.includes("toilets")
+          ? Object.values(cache.toilets).flat()
+          : [],
+        bicycleParkings: selectedOverlays.includes("bicycleParkings")
+          ? Object.values(cache.bicycleParkings).flat()
+          : [],
+        playgrounds: selectedOverlays.includes("playgrounds")
+          ? Object.values(cache.playgrounds).flat()
+          : [],
+      })),
+      distinctUntilChanged(
+        (prev, curr) =>
+          prev.stations.length === curr.stations.length &&
+          prev.toilets.length === curr.toilets.length &&
+          prev.bicycleParkings.length === curr.bicycleParkings.length &&
+          prev.playgrounds.length === curr.playgrounds.length
+      )
     );
+
+    const fetchSubscription = fetchPipeline$.subscribe();
+    const entitiesSubscription = visibleEntities$.subscribe(setEntities);
 
     return () => {
-      console.log("Cleaning up subscription");
       fetchSubscription.unsubscribe();
-      updateVisibleSubscription.unsubscribe();
+      entitiesSubscription.unsubscribe();
     };
-  }, [fetchDataIfNeeded, onUpdateMap$, onVisibleEntities$]);
+  }, [mapState$, entitiesCache$, requestedGeohashes$, fetchEntityType]);
 
-  // Update selectedOverlays$ whenever selectedOverlays changes
+  // Update mapState when selectedOverlays changes
   useEffect(() => {
-    console.log("selectedOverlays changed:", selectedOverlays);
-    selectedOverlays$.next(selectedOverlays);
-  }, [selectedOverlays, selectedOverlays$]);
+    mapState$.next({
+      ...mapState$.value,
+      selectedOverlays,
+    });
+  }, [selectedOverlays, mapState$]);
 
+  // Handle map events
   const mapInstance = useMapEvents({
     moveend: () => {
-      console.log("moveend", mapInstance.getBounds());
-      bounds$.next(mapInstance.getBounds());
-      zoom$.next(mapInstance.getZoom());
+      mapState$.next({
+        ...mapState$.value,
+        bounds: mapInstance.getBounds(),
+        zoom: mapInstance.getZoom(),
+      });
     },
     zoomend: () => {
-      console.log("zoomend", mapInstance.getBounds());
-      bounds$.next(mapInstance.getBounds());
-      zoom$.next(mapInstance.getZoom());
+      mapState$.next({
+        ...mapState$.value,
+        bounds: mapInstance.getBounds(),
+        zoom: mapInstance.getZoom(),
+      });
     },
     load: () => {
-      console.log("map loaded", mapInstance.getBounds());
-      bounds$.next(mapInstance.getBounds());
-      zoom$.next(mapInstance.getZoom());
+      mapState$.next({
+        ...mapState$.value,
+        bounds: mapInstance.getBounds(),
+        zoom: mapInstance.getZoom(),
+      });
     },
   });
 
-  if (bounds$.value === null || zoom$.value === 0) {
+  // Initialize map state when ready
+  if (!mapState$.value.bounds && mapInstance) {
     mapInstance.whenReady(() => {
-      console.log("map ready", mapInstance.getBounds());
-      bounds$.next(mapInstance.getBounds());
-      zoom$.next(mapInstance.getZoom());
+      mapState$.next({
+        ...mapState$.value,
+        bounds: mapInstance.getBounds(),
+        zoom: mapInstance.getZoom(),
+      });
     });
   }
 
-  return {
-    stations,
-    toilets,
-    bicycleParkings,
-    playgrounds,
-  };
+  return entities;
 }
