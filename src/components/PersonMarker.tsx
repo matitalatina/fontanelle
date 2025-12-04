@@ -1,11 +1,11 @@
 "use client";
 
 import { Marker } from "react-leaflet";
-import { ExtraMarkers } from "leaflet";
+import L from "leaflet";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-const redMarker = ExtraMarkers.icon({
+const redMarker = L.ExtraMarkers.icon({
   innerHTML: createMarkerIconHTML(faUser),
   markerColor: "red",
   shape: "square",

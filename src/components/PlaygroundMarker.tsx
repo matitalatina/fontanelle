@@ -1,5 +1,5 @@
 import { Playground } from "@/lib/playgrounds";
-import { ExtraMarkers } from "leaflet";
+import L from "leaflet";
 import { Marker, Popup } from "react-leaflet";
 import FeatureIcon from "./FeatureIcon";
 import GoToButton from "./GoToButton";
@@ -7,7 +7,7 @@ import SharePositionButton from "./SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faFutbol } from "@fortawesome/free-solid-svg-icons";
 
-const playgroundMarker = ExtraMarkers.icon({
+const playgroundMarker = L.ExtraMarkers.icon({
   innerHTML: createMarkerIconHTML(faFutbol, "text-gray-800"),
   markerColor: "yellow",
   shape: "circle",

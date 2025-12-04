@@ -1,19 +1,20 @@
 "use client";
+
 import { Station } from "@/lib/stations";
 import { Marker, Popup } from "react-leaflet";
-import { ExtraMarkers } from "leaflet";
+import L from "leaflet";
 import GoToButton from "./GoToButton";
 import SharePositionButton from "./SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faFaucetDrip } from "@fortawesome/free-solid-svg-icons";
 
-const fountainMarker = ExtraMarkers.icon({
+const fountainMarker = L.ExtraMarkers.icon({
   innerHTML: createMarkerIconHTML(faFaucetDrip),
   markerColor: "green",
   shape: "square",
 });
 
-const houseMarker = ExtraMarkers.icon({
+const houseMarker = L.ExtraMarkers.icon({
   innerHTML: createMarkerIconHTML(faFaucetDrip),
   markerColor: "blue",
   shape: "square",
