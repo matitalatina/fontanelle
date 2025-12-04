@@ -31,9 +31,9 @@ export default function OverlaySelector({
       <input
         type="checkbox"
         id="overlay-selector"
-        className="peer absolute top-0 h-14"
+        className="peer absolute top-0 h-14 w-14"
       />
-      <div className="collapse-title p-0 mx-auto w-4 min-h-14 top-5">
+      <div className="collapse-title p-0 min-h-14 w-14 flex items-center justify-center">
         <FontAwesomeIcon icon={faLayerGroup} size="lg" />
       </div>
       <div className="collapse-content px-2 mt-0.5 peer-checked:pb-2">
