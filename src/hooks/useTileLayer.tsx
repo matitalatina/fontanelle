@@ -27,16 +27,15 @@ const STORAGE_KEY = "fontanelle-tile-layer";
 const DEFAULT_TILE_LAYER: TileLayerType = "osm";
 
 export default function useTileLayer() {
-  const [selectedTileLayer, setSelectedTileLayer] =
-    useState<TileLayerType>(DEFAULT_TILE_LAYER);
-
-  // Load from localStorage on initial render
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && (stored === "cyclosm" || stored === "osm")) {
-      setSelectedTileLayer(stored);
+  const [selectedTileLayer, setSelectedTileLayer] = useState<TileLayerType>(
+    () => {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === "cyclosm" || stored === "osm") {
+        return stored;
+      }
+      return DEFAULT_TILE_LAYER;
     }
-  }, []);
+  );
 
   // Save to localStorage whenever selection changes
   const selectTileLayer = (layer: TileLayerType) => {

@@ -85,7 +85,7 @@ export default async function Home() {
 
       <div className="min-h-screen bg-base-100">
         {/* Hero Section */}
-        <div className="hero min-h-screen relative overflow-hidden flex flex-col bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10">
+        <div className="hero min-h-screen relative overflow-hidden flex flex-col bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10">
           <AnimatedHeroBackground />
           <div className="hero-content text-center relative z-10 flex-1 flex items-center justify-center pb-20 sm:pb-16">
             <div className="max-w-4xl">
