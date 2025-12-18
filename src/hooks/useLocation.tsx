@@ -24,9 +24,19 @@ type LocationLoading = {
 export type LocationState = LocationSuccess | LocationError | LocationLoading;
 
 export default function useLocation() {
-  const [locationState, setLocationState] = useState<LocationState>({
-    status: "loading",
+  const [locationState, setLocationState] = useState<LocationState>(() => {
+    if (!navigator.geolocation) {
+      console.log("Geolocation is not supported by the browser");
+      return {
+        status: "error",
+        code: GeolocationPositionError.POSITION_UNAVAILABLE,
+      };
+    }
+    return {
+      status: "loading",
+    };
   });
+
   const onSuccess = (position: GeolocationPosition) => {
     setLocationState({
       location: {
@@ -37,32 +47,28 @@ export default function useLocation() {
     });
   };
   const onError = (error: GeolocationPositionError) => {
-    console.error(error);
+    console.error(JSON.stringify(error));
     setLocationState({
       status: "error",
       code: error.code,
     });
   };
 
-  const getCurrentLocation = useCallback(() => {
-    setLocationState({ status: "loading" });
+  const startGetLocation = useCallback(() => {
     navigator.geolocation.getCurrentPosition(onSuccess, onError, {
       enableHighAccuracy: true,
       timeout: 10000,
     });
   }, []);
 
-  useEffect(() => {
-    if (!navigator.geolocation) {
-      console.log("Geolocation is not supported by your browser");
-      return;
-    }
-    getCurrentLocation();
-    // const id = navigator.geolocation.watchPosition(onSuccess, onError, {
-    //   enableHighAccuracy: true,
-    // });
+  const getCurrentLocation = useCallback(() => {
+    setLocationState({ status: "loading" });
+    startGetLocation();
+  }, [startGetLocation]);
 
-    // return () => navigator.geolocation.clearWatch(id);
-  }, [getCurrentLocation]);
+  useEffect(() => {
+    startGetLocation();
+  }, [startGetLocation]);
+
   return { locationState, getCurrentLocation };
 }

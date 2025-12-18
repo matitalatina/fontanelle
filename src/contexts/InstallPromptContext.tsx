@@ -84,6 +84,7 @@ export function InstallPromptProvider({
   useEffect(() => {
     // Check if already in standalone mode
     if (isInStandaloneMode()) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsInstallable(false);
       return;
     }
