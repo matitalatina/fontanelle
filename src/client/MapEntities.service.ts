@@ -26,6 +26,10 @@ const ZOOM_THRESHOLD = 14;
 const DEBOUNCE_TIME = 100;
 const GEOHASH_PRECISION = 5;
 
+export function isSearchEnabled(zoom: number): boolean {
+  return zoom >= ZOOM_THRESHOLD;
+}
+
 // Entity types that can be fetched
 const ENTITY_TYPES: EntityType[] = [
   "stations",
@@ -162,7 +166,7 @@ export class MapEntitiesService implements IMapEntitiesService {
         const { zoom, bounds, selectedOverlays } = mapState;
 
         // Don't fetch if zoom is too low or no bounds
-        if (zoom >= ZOOM_THRESHOLD && bounds && selectedOverlays.length > 0) {
+        if (isSearchEnabled(zoom) && bounds && selectedOverlays.length > 0) {
           const geohashes = getBoundingBoxGeohashes(bounds);
 
           // Find geohashes that need fetching for each overlay

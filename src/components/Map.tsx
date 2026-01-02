@@ -16,6 +16,7 @@ import MapCenter from "./MapCenter";
 import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
 import PersonMarker from "./PersonMarker";
 import { TILE_LAYERS, TileLayerType } from "@/hooks/useTileLayer";
+import DisableSearchAlert from "./DisableSearchAlert";
 
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -82,6 +83,7 @@ export default function Map({
           locationState={locationState}
         />
         <ScaleControl position="bottomright" imperial={false} />
+        <DisableSearchAlert />
       </MapContainer>
     </>
   );
