@@ -76,24 +76,24 @@ export function getOverpassQueries(): OverpassQuery[] {
     {
       name: "Toilets (Italy)",
       query: `[out:csv(::"id", amenity, name, fee, opening_hours, changing_table, ::lat, ::lon; true;"|")];
-area[name="Italia"]->.italy;
-(node
-  [amenity=toilets]
-  (area.italy);
-)->.result;
-.result
-out;`,
+    area[name="Italia"]->.italy;
+    (node
+      [amenity=toilets]
+      (area.italy);
+    )->.result;
+    .result
+    out;`,
       outputFile: `db/toilets/italy_${today}.csv`,
     },
     {
       name: "Playgrounds (Italy)",
       query: `[out:csv(::"id", leisure, name, opening_hours, indoor, fee, supervised, ::lat, ::lon; true;"|")];
-area[name="Italia"]->.italy;
-(
-  node[leisure=playground](area.italy);
-  way[leisure=playground](area.italy);
-);
-out center;`,
+    area[name="Italia"]->.italy;
+    (
+      node[leisure=playground](area.italy);
+      way[leisure=playground](area.italy);
+    );
+    out center;`,
       outputFile: `db/playgrounds/italy_${today}.csv`,
     },
     {
