@@ -8,6 +8,7 @@ import {
 } from "@/lib/overpass-downloader";
 import * as fs from "fs";
 import path from "path";
+import { execSync } from "child_process";
 import geohash from "ngeohash";
 import { serverContainer, SERVER_TYPES } from "@/server/container";
 import { IStationRepository } from "@/server/repositories/StationRepository";
@@ -24,14 +25,16 @@ interface Repositories {
   playgroundRepo: IPlaygroundRepository;
 }
 
-// Create tables using repositories
-function createTables(repositories: Repositories) {
-  repositories.stationRepo.createTable();
-  repositories.toiletRepo.createTable();
-  repositories.bicycleParkingRepo.createTable();
-  repositories.playgroundRepo.createTable();
-
-  console.log("Tables created successfully");
+// Create tables using Prisma
+function createSchema() {
+  console.log("🏗️  Creating database schema via Prisma...");
+  try {
+    // Run prisma db push to create tables
+    execSync("npx prisma db push", { stdio: "inherit" });
+  } catch (error) {
+    console.error("❌ Error running prisma db push:", error);
+    throw error;
+  }
 }
 
 // Function to generate geohash with precision 5
@@ -138,10 +141,10 @@ async function main() {
     ),
   };
 
-  // Create database and tables using repositories
-  console.log("🏗️  Creating database and tables...");
+  // Create database and tables
+  console.log("🏗️  Setting up database...");
   try {
-    createTables(repositories);
+    createSchema();
     console.log("📊 Populating database with downloaded data...");
     await populateTables(repositories);
   } catch (error) {

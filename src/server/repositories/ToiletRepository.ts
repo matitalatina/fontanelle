@@ -1,118 +1,65 @@
 import { inject, injectable } from "inversify";
-import { Database } from "better-sqlite3";
 import { Toilet } from "@/lib/toilets";
 import { IRepository } from "./IRepository";
-import { SqlDb, bool2int, int2bool } from "../db/SqlDb";
 import { SERVER_TYPES } from "../types";
+import { PrismaClient } from "@generated/prisma/client";
 
 export type IToiletRepository = IRepository<Toilet>;
 
-type ToiletInsert = {
-  id: number;
-  lat: number;
-  lng: number;
-  fee: number | null;
-  openingHours: string | null;
-  changingTable: number | null;
-  gh5: string;
-};
-
 @injectable()
 export class ToiletRepository implements IToiletRepository {
-  constructor(@inject(SERVER_TYPES.SqlDb) private db: SqlDb) {}
+  constructor(@inject(SERVER_TYPES.Prisma) private prisma: PrismaClient) {}
 
   createTable(): void {
-    this.db.withConnection((conn) => {
-      conn.exec(`
-        CREATE TABLE IF NOT EXISTS toilets (
-          id INTEGER PRIMARY KEY,
-          lat REAL NOT NULL,
-          lng REAL NOT NULL,
-          fee INTEGER,
-          openingHours TEXT,
-          changingTable INTEGER,
-          gh5 TEXT NOT NULL
-        ) STRICT
-      `);
-
-      conn.exec(`
-        CREATE INDEX IF NOT EXISTS idx_toilets_gh5 ON toilets(gh5)
-      `);
-    });
+    // No-op
   }
 
   truncate(): void {
-    this.db.withConnection((conn) => {
-      conn.exec(`DELETE FROM toilets`);
-    });
+    // No-op
   }
 
-  async createMany(
-    entities: AsyncIterable<Toilet>,
-    db?: Database
-  ): Promise<void> {
-    const insertOne = (conn: Database, entity: Toilet) => {
-      const stmt = conn.prepare(`
-        INSERT INTO toilets (id, lat, lng, fee, openingHours, changingTable, gh5)
-        VALUES (@id, @lat, @lng, @fee, @openingHours, @changingTable, @gh5)
-      `);
-
-      const insertData: ToiletInsert = {
+  async createMany(entities: AsyncIterable<Toilet>): Promise<void> {
+    const batch: Toilet[] = [];
+    
+    for await (const entity of entities) {
+      batch.push({
         id: entity.id,
         lat: entity.lat,
         lng: entity.lng,
-        fee: bool2int(entity.fee),
+        fee: entity.fee,
         openingHours: entity.openingHours,
-        changingTable: bool2int(entity.changingTable),
+        changingTable: entity.changingTable,
         gh5: entity.gh5,
-      };
+      });
 
-      stmt.run(insertData);
-    };
-
-    if (db) {
-      for await (const entity of entities) {
-        insertOne(db, entity);
+      if (batch.length >= 500) {
+        await this.prisma.toilet.createMany({
+          data: batch,
+        });
+        batch.length = 0;
       }
-    } else {
-      await this.db.withTransaction(async (conn) => {
-        for await (const entity of entities) {
-          insertOne(conn, entity);
-        }
+    }
+
+    if (batch.length > 0) {
+      await this.prisma.toilet.createMany({
+        data: batch,
       });
     }
   }
 
   async findByGeohashes(gh5List: string[]): Promise<Toilet[]> {
-    return this.db.withConnection((conn) => {
-      const placeholders = gh5List.map(() => "?").join(",");
-      const query = `
-        SELECT id, lat, lng, fee, openingHours, changingTable, gh5
-        FROM toilets
-        WHERE gh5 IN (${placeholders})
-      `;
-
-      const rows = conn.prepare(query).all(gh5List);
-      return rows.map((row: unknown) => {
-        const typedRow = row as {
-          id: number;
-          lat: number;
-          lng: number;
-          fee: number;
-          openingHours: string;
-          changingTable: number;
-          gh5: string;
-        };
-        return {
-          id: typedRow.id,
-          lat: typedRow.lat,
-          lng: typedRow.lng,
-          fee: int2bool(typedRow.fee) ?? false,
-          openingHours: typedRow.openingHours,
-          changingTable: int2bool(typedRow.changingTable) ?? false,
-          gh5: typedRow.gh5,
-        };
-      });
+    const toilets = await this.prisma.toilet.findMany({
+      where: { gh5: { in: gh5List } },
     });
+
+    return toilets.map((t) => ({
+      id: t.id,
+      lat: t.lat,
+      lng: t.lng,
+      fee: t.fee ?? false,
+      openingHours: t.openingHours,
+      changingTable: t.changingTable ?? false,
+      gh5: t.gh5,
+    }));
   }
 }

@@ -24,6 +24,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@generated/*": [
+        "./generated/*"
       ]
     },
     "target": "ES2017",

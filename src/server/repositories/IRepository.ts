@@ -1,5 +1,3 @@
-import { Database } from "better-sqlite3";
-
 /**
  * Base repository interface for entities that can be queried by geohash
  */
@@ -14,12 +12,12 @@ export interface IRepository<T> {
   /**
    * Create multiple entities using a shared connection (for batch inserts)
    * @param entities The entities to create
-   * @param db Optional database connection to reuse
    */
-  createMany(entities: AsyncIterable<T>, db?: Database): Promise<void>;
+  createMany(entities: AsyncIterable<T>): Promise<void>;
 
   /**
    * Create database tables and indexes
+   * @deprecated Prisma handles this via migrations/push
    */
   createTable(): void;
 

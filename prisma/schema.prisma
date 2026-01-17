@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model BicycleParking {
+  id             Int      @id
+  lat            Float
+  lng            Float
+  covered        Boolean?
+  indoor         Boolean?
+  access         String?
+  fee            Boolean?
+  bicycleParking String?
+  surveillance   Boolean?
+  capacity       Int?
+  gh5            String
+
+  @@index([gh5])
+  @@map("bicycle_parkings")
+}
+
+model Toilet {
+  id            Int      @id
+  lat           Float
+  lng           Float
+  fee           Boolean?
+  openingHours  String?
+  changingTable Boolean?
+  gh5           String
+
+  @@index([gh5])
+  @@map("toilets")
+}
+
+enum StationType {
+  fountain
+  house
+}
+
+model Station {
+  id   Int         @id
+  cap  Int?
+  lat  Float
+  lng  Float
+  name String?
+  type StationType
+  gh5  String
+
+  @@index([gh5])
+  @@map("stations")
+}
+
+model Playground {
+  id           Int      @id
+  lat          Float
+  lng          Float
+  name         String?
+  openingHours String?
+  indoor       Boolean?
+  fee          Boolean?
+  supervised   Boolean?
+  gh5          String
+
+  @@index([gh5])
+  @@map("playgrounds")
+}

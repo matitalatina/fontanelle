@@ -1,16 +1,9 @@
+import { Toilet } from "@generated/prisma/client";
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import { getLatestDataFile } from "./utils/file-utils";
 
-export type Toilet = {
-  id: number;
-  lat: number;
-  lng: number;
-  fee: boolean | null;
-  openingHours: string | null;
-  changingTable: boolean | null;
-  gh5: string;
-};
+export type { Toilet };
 
 /*
 [out:csv(::"id", amenity, name, fee, opening_hours, changing_table, ::lat, ::lon; true;"|")];

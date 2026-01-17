@@ -22,23 +22,12 @@ area[name="Italia"]->.italy;
 out;
 */
 
+import { BicycleParking } from "@generated/prisma/client";
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import { getLatestDataFile } from "./utils/file-utils";
 
-export type BicycleParking = {
-  id: number;
-  lat: number;
-  lng: number;
-  covered: boolean | null;
-  indoor: boolean | null;
-  access: string | null;
-  fee: boolean | null;
-  bicycleParking: string | null;
-  surveillance: boolean | null;
-  capacity: number | null;
-  gh5: string;
-};
+export type { BicycleParking };
 
 export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParking> {
   const latestFile = getLatestDataFile("bicycleParking");

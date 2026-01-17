@@ -1,18 +1,9 @@
+import { Station, StationType } from "@generated/prisma/client";
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import { getLatestDataFile } from "./utils/file-utils";
 
-type StationType = "fountain" | "house";
-
-export type Station = {
-  id: number;
-  cap: number | null;
-  lat: number;
-  lng: number;
-  name: string | null;
-  type: StationType;
-  gh5: string;
-};
+export type { Station };
 
 export type StationsResponse = {
   stations: Station[];
@@ -87,7 +78,7 @@ async function* processCSVFile(filePath: string): AsyncGenerator<Station> {
       lat: parseFloat(lat),
       lng: parseFloat(lng),
       name: null,
-      type: name === "Casa dell'Acqua" ? "house" : "fountain",
+      type: name === "Casa dell'Acqua" ? StationType.house : StationType.fountain,
       gh5: "",
     };
   }

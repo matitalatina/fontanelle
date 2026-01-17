@@ -13,22 +13,13 @@
 // );
 // out center;
 
+import { Playground } from "@generated/prisma/client";
 import { parse } from "csv-parse";
 import { createReadStream } from "fs";
 import geohash from "ngeohash";
 import { getLatestDataFile } from "./utils/file-utils";
 
-export type Playground = {
-  id: number;
-  name: string | null;
-  openingHours: string | null;
-  indoor: boolean | null;
-  fee: boolean | null;
-  supervised: boolean | null;
-  lat: number;
-  lng: number;
-  gh5: string;
-};
+export type { Playground };
 
 export async function* getPlaygroundsFromOSM(): AsyncGenerator<Playground> {
   const latestFile = getLatestDataFile("playgrounds");

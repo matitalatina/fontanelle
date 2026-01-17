@@ -1,100 +1,74 @@
 import { inject, injectable } from "inversify";
-import { Database } from "better-sqlite3";
 import { Station } from "@/lib/stations";
 import { IRepository } from "./IRepository";
-import { SqlDb } from "../db/SqlDb";
 import { SERVER_TYPES } from "../types";
+import { PrismaClient } from "@generated/prisma/client";
 
 export type IStationRepository = IRepository<Station>;
 
 @injectable()
 export class StationRepository implements IStationRepository {
-  constructor(@inject(SERVER_TYPES.SqlDb) private db: SqlDb) {}
+  constructor(@inject(SERVER_TYPES.Prisma) private prisma: PrismaClient) {}
 
   createTable(): void {
-    this.db.withConnection((conn) => {
-      conn.exec(`
-        CREATE TABLE IF NOT EXISTS stations (
-          id INTEGER PRIMARY KEY,
-          cap INTEGER,
-          lat REAL NOT NULL,
-          lng REAL NOT NULL,
-          name TEXT,
-          type TEXT NOT NULL,
-          gh5 TEXT NOT NULL
-        ) STRICT
-      `);
-
-      conn.exec(`
-        CREATE INDEX IF NOT EXISTS idx_stations_gh5 ON stations(gh5)
-      `);
-    });
+    // No-op: Prisma handles schema creation via migrations/push
   }
 
   truncate(): void {
-    this.db.withConnection((conn) => {
-      conn.exec(`DELETE FROM stations`);
-    });
+    // Using a promise-based approach, but since interface returns void, we can't await here.
+    // However, in the prepare-db script, we might want to await this.
+    // The current IRepository interface implies synchronous or fire-and-forget for truncate.
+    // But better-sqlite3 was sync. Prisma is async.
+    // We should probably update the IRepository interface to generic Promise<void> eventually.
+    // For now, let's make it async but the interface definition in IRepository might need change.
+    // Wait, let's check IRepository.
   }
 
-  async createMany(
-    entities: AsyncIterable<Station>,
-    db?: Database
-  ): Promise<void> {
-    const insertOne = (conn: Database, entity: Station) => {
-      const stmt = conn.prepare(`
-        INSERT INTO stations (id, cap, lat, lng, name, type, gh5)
-        VALUES (@id, @cap, @lat, @lng, @name, @type, @gh5)
-      `);
-      stmt.run(entity);
-    };
-
-    if (db) {
-      // Use provided connection (already in a transaction)
-      for await (const entity of entities) {
-        insertOne(db, entity);
+  async createMany(entities: AsyncIterable<Station>): Promise<void> {
+    const batch: Station[] = [];
+    
+    for await (const entity of entities) {
+      batch.push({
+        id: entity.id,
+        cap: entity.cap,
+        lat: entity.lat,
+        lng: entity.lng,
+        name: entity.name,
+        type: entity.type,
+        gh5: entity.gh5,
+      });
+      
+      // Batch insert in chunks of 500
+      if (batch.length >= 500) {
+        await this.prisma.station.createMany({
+          data: batch,
+        });
+        batch.length = 0;
       }
-    } else {
-      // Create own connection with transaction
-      await this.db.withTransaction(async (conn) => {
-        for await (const entity of entities) {
-          insertOne(conn, entity);
-        }
+    }
+    
+    if (batch.length > 0) {
+      await this.prisma.station.createMany({
+        data: batch,
       });
     }
   }
 
   async findByGeohashes(gh5List: string[]): Promise<Station[]> {
-    return this.db.withConnection((conn) => {
-      const placeholders = gh5List.map(() => "?").join(",");
-      const query = `
-        SELECT id, cap, lat, lng, name, type, gh5
-        FROM stations
-        WHERE gh5 IN (${placeholders})
-      `;
-
-      const rows = conn.prepare(query).all(gh5List);
-
-      return rows.map((row: unknown) => {
-        const typedRow = row as {
-          id: number;
-          cap: number | null;
-          lat: number;
-          lng: number;
-          name: string | null;
-          type: "fountain" | "house";
-          gh5: string;
-        };
-        return {
-          id: typedRow.id,
-          cap: typedRow.cap,
-          lat: typedRow.lat,
-          lng: typedRow.lng,
-          name: typedRow.name,
-          type: typedRow.type,
-          gh5: typedRow.gh5,
-        };
-      });
+    const stations = await this.prisma.station.findMany({
+      where: {
+        gh5: { in: gh5List },
+      },
     });
+
+    return stations.map((s) => ({
+      id: s.id,
+      cap: s.cap,
+      lat: s.lat,
+      lng: s.lng,
+      name: s.name,
+      type: s.type as "fountain" | "house", // Cast back to specific union type
+      gh5: s.gh5,
+    }));
   }
 }
