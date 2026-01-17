@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const playgroundRepository = serverContainer.get<IPlaygroundRepository>(
-      SERVER_TYPES.PlaygroundRepository
+      SERVER_TYPES.PlaygroundRepository,
     );
     const data = await playgroundRepository.findByGeohashes(gh5List);
     return Response.json(data);
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching playgrounds:", error);
     return Response.json(
       { error: "Failed to fetch playgrounds" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

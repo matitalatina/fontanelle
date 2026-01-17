@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const toiletRepository = serverContainer.get<IToiletRepository>(
-      SERVER_TYPES.ToiletRepository
+      SERVER_TYPES.ToiletRepository,
     );
     const data = await toiletRepository.findByGeohashes(gh5List);
     return Response.json(data);

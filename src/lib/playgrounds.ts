@@ -29,7 +29,7 @@ export async function* getPlaygroundsFromOSM(): AsyncGenerator<Playground> {
     parse({
       delimiter: "|",
       from: 2,
-    })
+    }),
   );
 
   for await (const [

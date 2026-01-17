@@ -8,7 +8,7 @@ export default function GoToButton({ latLng }: { latLng: LatLng }) {
       className="btn btn-primary"
       onClick={() =>
         window.open(
-          `https://www.google.com/maps/dir/?api=1&destination=${latLng.lat},${latLng.lng}&travelmode=bicycling`
+          `https://www.google.com/maps/dir/?api=1&destination=${latLng.lat},${latLng.lng}&travelmode=bicycling`,
         )
       }
     >

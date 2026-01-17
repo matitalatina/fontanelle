@@ -34,19 +34,18 @@ const serverContainer = new Container();
 // Initialize the database connection
 // Extract path from DATABASE_URL or use default relative path
 // PrismaBetterSqlite3 expects a config object, not a Database instance
-const dbPath = process.env.DATABASE_URL || path.join(process.cwd(), "db", "db.db");
+const dbPath =
+  process.env.DATABASE_URL || path.join(process.cwd(), "db", "db.db");
 const adapter = new PrismaBetterSqlite3({
   url: dbPath,
 });
 
 // Bind database service
-serverContainer
-  .bind<PrismaClient>(SERVER_TYPES.Prisma)
-  .toConstantValue(
-    new PrismaClient({
-      adapter,
-    })
-  );
+serverContainer.bind<PrismaClient>(SERVER_TYPES.Prisma).toConstantValue(
+  new PrismaClient({
+    adapter,
+  }),
+);
 
 // Bind repositories
 serverContainer

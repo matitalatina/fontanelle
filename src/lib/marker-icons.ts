@@ -9,7 +9,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
  */
 export function renderIconAsSVG(
   iconDefinition: IconDefinition,
-  className?: string
+  className?: string,
 ): string {
   const rendered = icon(iconDefinition, {
     classes: className ? className.split(" ") : undefined,
@@ -24,7 +24,7 @@ export function renderIconAsSVG(
  */
 export function createMarkerIconHTML(
   iconDefinition: IconDefinition,
-  className?: string
+  className?: string,
 ): string {
   const svgContent = renderIconAsSVG(iconDefinition, className);
 

@@ -55,14 +55,14 @@ interface MapState {
 // Generate geohashes for a bounding box
 function getBoundingBoxGeohashes(
   bounds: LatLngBounds,
-  precision = GEOHASH_PRECISION
+  precision = GEOHASH_PRECISION,
 ): string[] {
   const ghs = geohash.bboxes(
     bounds.getSouthWest().lat,
     bounds.getSouthWest().lng,
     bounds.getNorthEast().lat,
     bounds.getNorthEast().lng,
-    precision
+    precision,
   );
   return Array.from(new Set(ghs));
 }
@@ -92,7 +92,7 @@ export class MapEntitiesService implements IMapEntitiesService {
 
   constructor(
     @inject(TYPES.EntityClient)
-    private readonly entityClient: IEntityClient
+    private readonly entityClient: IEntityClient,
   ) {
     // Initialize state
     this.mapState$ = new BehaviorSubject<MapState>({
@@ -173,7 +173,7 @@ export class MapEntitiesService implements IMapEntitiesService {
           const toFetch = geohashes.filter((gh) => {
             const requestedOverlays = this.requestedGeohashes.get(gh) || [];
             return !selectedOverlays.every((overlay) =>
-              requestedOverlays.includes(overlay)
+              requestedOverlays.includes(overlay),
             );
           });
 
@@ -192,15 +192,15 @@ export class MapEntitiesService implements IMapEntitiesService {
             ENTITY_TYPES.forEach((entityType) => {
               if (selectedOverlays.includes(entityType)) {
                 const uncachedGeohashes = toFetch.filter(
-                  (gh) => !this.entitiesCache[entityType][gh]
+                  (gh) => !this.entitiesCache[entityType][gh],
                 );
 
                 if (uncachedGeohashes.length > 0) {
                   fetchPromises.push(
                     this.fetchEntityType(entityType, uncachedGeohashes).catch(
                       (error) =>
-                        console.error(`Error fetching ${entityType}:`, error)
-                    )
+                        console.error(`Error fetching ${entityType}:`, error),
+                    ),
                   );
                 }
               }
@@ -211,7 +211,7 @@ export class MapEntitiesService implements IMapEntitiesService {
         }
 
         return mapState;
-      })
+      }),
     );
 
     // Map the state (with fetch side effect) to visible entities
@@ -235,16 +235,16 @@ export class MapEntitiesService implements IMapEntitiesService {
           prev.stations.length === curr.stations.length &&
           prev.toilets.length === curr.toilets.length &&
           prev.bicycleParkings.length === curr.bicycleParkings.length &&
-          prev.playgrounds.length === curr.playgrounds.length
+          prev.playgrounds.length === curr.playgrounds.length,
       ),
       // Share the subscription and only run when there are active subscribers
-      shareReplay({ bufferSize: 1, refCount: true })
+      shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
 
   private async fetchEntityType(
     entityType: EntityType,
-    geohashes: string[]
+    geohashes: string[],
   ): Promise<void> {
     const data = await this.entityClient.fetchEntities(entityType, geohashes);
 

@@ -68,7 +68,7 @@ async function* processCSVFile(filePath: string): AsyncGenerator<Station> {
     parse({
       delimiter: "|",
       from: 2,
-    })
+    }),
   );
 
   for await (const [id, , name, lat, lng] of parser) {
@@ -78,7 +78,8 @@ async function* processCSVFile(filePath: string): AsyncGenerator<Station> {
       lat: parseFloat(lat),
       lng: parseFloat(lng),
       name: null,
-      type: name === "Casa dell'Acqua" ? StationType.house : StationType.fountain,
+      type:
+        name === "Casa dell'Acqua" ? StationType.house : StationType.fountain,
       gh5: "",
     };
   }

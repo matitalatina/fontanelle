@@ -44,7 +44,7 @@ function generateGeohash(lat: number, lng: number): string {
 
 // Async generator wrapper that adds geohashes
 async function* addGeohashes<
-  T extends { lat: number; lng: number; gh5: string }
+  T extends { lat: number; lng: number; gh5: string },
 >(entities: AsyncIterable<T>): AsyncGenerator<T> {
   for await (const entity of entities) {
     yield {
@@ -59,7 +59,7 @@ async function populateTables(repositories: Repositories) {
   // Items are still processed one by one from generators (no bulk loading in memory)
 
   await repositories.bicycleParkingRepo.createMany(
-    addGeohashes(getBicycleParkingsFromOSM())
+    addGeohashes(getBicycleParkingsFromOSM()),
   );
 
   await repositories.toiletRepo.createMany(addGeohashes(getToiletsFromOSM()));
@@ -79,14 +79,14 @@ function hasRecentData(): boolean {
   ];
 
   return dataFiles.every((file) =>
-    fs.existsSync(path.join(__dirname, "..", file))
+    fs.existsSync(path.join(__dirname, "..", file)),
   );
 }
 
 async function downloadLatestData(force = false) {
   if (!force && hasRecentData()) {
     console.log(
-      "📊 Recent data files found, skipping download. Use --force to download anyway."
+      "📊 Recent data files found, skipping download. Use --force to download anyway.",
     );
     return;
   }
@@ -128,16 +128,16 @@ async function main() {
   // Get repositories from container once
   const repositories: Repositories = {
     stationRepo: serverContainer.get<IStationRepository>(
-      SERVER_TYPES.StationRepository
+      SERVER_TYPES.StationRepository,
     ),
     toiletRepo: serverContainer.get<IToiletRepository>(
-      SERVER_TYPES.ToiletRepository
+      SERVER_TYPES.ToiletRepository,
     ),
     bicycleParkingRepo: serverContainer.get<IBicycleParkingRepository>(
-      SERVER_TYPES.BicycleParkingRepository
+      SERVER_TYPES.BicycleParkingRepository,
     ),
     playgroundRepo: serverContainer.get<IPlaygroundRepository>(
-      SERVER_TYPES.PlaygroundRepository
+      SERVER_TYPES.PlaygroundRepository,
     ),
   };
 

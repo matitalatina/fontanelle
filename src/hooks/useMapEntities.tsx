@@ -23,7 +23,7 @@ export default function useMapEntities({
     () =>
       mapEntitiesService ||
       container.get<IMapEntitiesService>(TYPES.MapEntitiesService),
-    [mapEntitiesService]
+    [mapEntitiesService],
   );
 
   // State for entities

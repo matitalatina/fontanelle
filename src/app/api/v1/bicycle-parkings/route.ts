@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   try {
     const bicycleParkingRepository =
       serverContainer.get<IBicycleParkingRepository>(
-        SERVER_TYPES.BicycleParkingRepository
+        SERVER_TYPES.BicycleParkingRepository,
       );
     const data = await bicycleParkingRepository.findByGeohashes(gh5List);
     return Response.json(data);
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching bicycle parkings:", error);
     return Response.json(
       { error: "Failed to fetch bicycle parkings" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

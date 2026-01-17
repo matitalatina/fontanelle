@@ -10,7 +10,7 @@ async function main() {
   const queries = getOverpassQueries();
 
   console.log(
-    "🚀 Starting automated download of Italy POI data from Overpass API..."
+    "🚀 Starting automated download of Italy POI data from Overpass API...",
   );
   console.log(`📊 Will download ${queries.length} datasets:`);
 

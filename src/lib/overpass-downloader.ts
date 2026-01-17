@@ -36,7 +36,7 @@ export class OverpassDownloader {
 
       fs.writeFileSync(query.outputFile, data, "utf8");
       console.log(
-        `Successfully downloaded ${query.name} to ${query.outputFile}`
+        `Successfully downloaded ${query.name} to ${query.outputFile}`,
       );
     } catch (error) {
       console.error(`Error downloading ${query.name}:`, error);

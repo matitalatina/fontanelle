@@ -10,17 +10,9 @@ export type IBicycleParkingRepository = IRepository<BicycleParking>;
 export class BicycleParkingRepository implements IBicycleParkingRepository {
   constructor(@inject(SERVER_TYPES.Prisma) private prisma: PrismaClient) {}
 
-  createTable(): void {
-    // No-op
-  }
-
-  truncate(): void {
-    // No-op
-  }
-
   async createMany(entities: AsyncIterable<BicycleParking>): Promise<void> {
     const batch: BicycleParking[] = [];
-    
+
     for await (const entity of entities) {
       batch.push({
         id: entity.id,
@@ -52,22 +44,8 @@ export class BicycleParkingRepository implements IBicycleParkingRepository {
   }
 
   async findByGeohashes(gh5List: string[]): Promise<BicycleParking[]> {
-    const parkings = await this.prisma.bicycleParking.findMany({
+    return this.prisma.bicycleParking.findMany({
       where: { gh5: { in: gh5List } },
     });
-
-    return parkings.map((p) => ({
-      id: p.id,
-      lat: p.lat,
-      lng: p.lng,
-      covered: p.covered ?? null,
-      indoor: p.indoor ?? null,
-      access: p.access,
-      fee: p.fee ?? null,
-      bicycleParking: p.bicycleParking,
-      surveillance: p.surveillance ?? null,
-      capacity: p.capacity,
-      gh5: p.gh5,
-    }));
   }
 }

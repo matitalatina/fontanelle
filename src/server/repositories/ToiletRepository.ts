@@ -10,17 +10,9 @@ export type IToiletRepository = IRepository<Toilet>;
 export class ToiletRepository implements IToiletRepository {
   constructor(@inject(SERVER_TYPES.Prisma) private prisma: PrismaClient) {}
 
-  createTable(): void {
-    // No-op
-  }
-
-  truncate(): void {
-    // No-op
-  }
-
   async createMany(entities: AsyncIterable<Toilet>): Promise<void> {
     const batch: Toilet[] = [];
-    
+
     for await (const entity of entities) {
       batch.push({
         id: entity.id,
@@ -48,18 +40,8 @@ export class ToiletRepository implements IToiletRepository {
   }
 
   async findByGeohashes(gh5List: string[]): Promise<Toilet[]> {
-    const toilets = await this.prisma.toilet.findMany({
+    return this.prisma.toilet.findMany({
       where: { gh5: { in: gh5List } },
     });
-
-    return toilets.map((t) => ({
-      id: t.id,
-      lat: t.lat,
-      lng: t.lng,
-      fee: t.fee ?? false,
-      openingHours: t.openingHours,
-      changingTable: t.changingTable ?? false,
-      gh5: t.gh5,
-    }));
   }
 }

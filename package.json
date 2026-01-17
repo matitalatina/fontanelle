@@ -6,9 +6,12 @@
     "dev": "next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint . && prettier --check .",
+    "lint:fix": "eslint . --fix && prettier --check . --write",
     "download-data": "tsx scripts/download-overpass-data.ts",
-    "prepare-db": "tsx --env-file=.env scripts/prepare-db.ts"
+    "prepare-db": "tsx --env-file=.env scripts/prepare-db.ts",
+    "prisma:generate": "prisma generate",
+    "postinstall": "npm run prisma:generate"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
@@ -51,7 +54,9 @@
     "daisyui": "^5.5.14",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.1",
+    "eslint-config-prettier": "^10.1.8",
     "postcss": "^8",
+    "prettier": "^3.8.0",
     "prisma": "^7.2.0",
     "tailwindcss": "^4.1.18",
     "tsx": "^4.21.0",

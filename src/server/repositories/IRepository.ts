@@ -14,15 +14,4 @@ export interface IRepository<T> {
    * @param entities The entities to create
    */
   createMany(entities: AsyncIterable<T>): Promise<void>;
-
-  /**
-   * Create database tables and indexes
-   * @deprecated Prisma handles this via migrations/push
-   */
-  createTable(): void;
-
-  /**
-   * Clear all data from the table
-   */
-  truncate(): void;
 }

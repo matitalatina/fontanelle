@@ -10,7 +10,7 @@ import useMapEntities from "@/hooks/useMapEntities";
 
 const getSelectedOverlays = (selectedOverlays: SelectedOverlays) =>
   Object.keys(selectedOverlays).filter(
-    (key) => selectedOverlays[key as AvailableOverlay]
+    (key) => selectedOverlays[key as AvailableOverlay],
   ) as AvailableOverlay[];
 
 function ClusterMarkers({

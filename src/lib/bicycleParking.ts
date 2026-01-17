@@ -38,7 +38,7 @@ export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParkin
       delimiter: "|",
       from: 2,
       skip_empty_lines: true,
-    })
+    }),
   );
   for await (const [
     id,
@@ -58,13 +58,12 @@ export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParkin
       id: parseInt(id),
       lat: parseFloat(lat),
       lng: parseFloat(lng),
-      covered: covered === "yes" ? true : covered === "no" ? false : null,
-      indoor: indoor === "yes" ? true : indoor === "no" ? false : null,
+      covered: covered === "yes" ? true : false,
+      indoor: indoor === "yes" ? true : false,
       access: access || null,
-      fee: fee === "yes" ? true : fee === "no" ? false : null,
+      fee: fee === "yes" ? true : false,
       bicycleParking: bicycleParking || null,
-      surveillance:
-        surveillance === "yes" ? true : surveillance === "no" ? false : null,
+      surveillance: surveillance === "yes" ? true : false,
       capacity: capacity ? parseInt(capacity) : null,
       gh5: "",
     };

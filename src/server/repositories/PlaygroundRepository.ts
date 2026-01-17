@@ -10,17 +10,9 @@ export type IPlaygroundRepository = IRepository<Playground>;
 export class PlaygroundRepository implements IPlaygroundRepository {
   constructor(@inject(SERVER_TYPES.Prisma) private prisma: PrismaClient) {}
 
-  createTable(): void {
-    // No-op
-  }
-
-  truncate(): void {
-    // No-op
-  }
-
   async createMany(entities: AsyncIterable<Playground>): Promise<void> {
     const batch: Playground[] = [];
-    
+
     for await (const entity of entities) {
       batch.push({
         id: entity.id,
@@ -50,20 +42,8 @@ export class PlaygroundRepository implements IPlaygroundRepository {
   }
 
   async findByGeohashes(gh5List: string[]): Promise<Playground[]> {
-    const playgrounds = await this.prisma.playground.findMany({
+    return this.prisma.playground.findMany({
       where: { gh5: { in: gh5List } },
     });
-
-    return playgrounds.map((p) => ({
-      id: p.id,
-      lat: p.lat,
-      lng: p.lng,
-      name: p.name,
-      openingHours: p.openingHours,
-      indoor: p.indoor ?? null,
-      fee: p.fee ?? null,
-      supervised: p.supervised ?? null,
-      gh5: p.gh5,
-    }));
   }
 }

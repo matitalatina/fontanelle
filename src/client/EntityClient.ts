@@ -26,7 +26,7 @@ export const ENTITY_CONFIG: Record<EntityType, EntityConfig> = {
 export interface IEntityClient {
   fetchEntities(
     entityType: EntityType,
-    geohashes: string[]
+    geohashes: string[],
   ): Promise<EntityData[]>;
 }
 
@@ -34,11 +34,11 @@ export interface IEntityClient {
 export class EntityClient implements IEntityClient {
   async fetchEntities(
     entityType: EntityType,
-    geohashes: string[]
+    geohashes: string[],
   ): Promise<EntityData[]> {
     const config = ENTITY_CONFIG[entityType];
     const response = await fetch(
-      `${config.apiPath}?gh5=${geohashes.join(",")}`
+      `${config.apiPath}?gh5=${geohashes.join(",")}`,
     );
 
     if (!response.ok) {

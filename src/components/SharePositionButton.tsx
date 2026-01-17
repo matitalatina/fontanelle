@@ -22,7 +22,7 @@ function canBrowserShareData(data: ShareData): boolean {
 function sharePosition(
   latLng: LatLng,
   markerType: string,
-  showTooltip: () => void
+  showTooltip: () => void,
 ) {
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latLng.lat}%2C${latLng.lng}`;
   const message = `Ecco qui ${markerType}: ${googleMapsUrl}

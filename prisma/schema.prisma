@@ -8,15 +8,15 @@ datasource db {
 }
 
 model BicycleParking {
-  id             Int      @id
+  id             Int     @id
   lat            Float
   lng            Float
-  covered        Boolean?
-  indoor         Boolean?
+  covered        Boolean @default(false)
+  indoor         Boolean @default(false)
   access         String?
-  fee            Boolean?
+  fee            Boolean @default(false)
   bicycleParking String?
-  surveillance   Boolean?
+  surveillance   Boolean @default(false)
   capacity       Int?
   gh5            String
 
@@ -25,12 +25,12 @@ model BicycleParking {
 }
 
 model Toilet {
-  id            Int      @id
+  id            Int     @id
   lat           Float
   lng           Float
-  fee           Boolean?
+  fee           Boolean @default(false)
   openingHours  String?
-  changingTable Boolean?
+  changingTable Boolean @default(false)
   gh5           String
 
   @@index([gh5])
@@ -56,14 +56,14 @@ model Station {
 }
 
 model Playground {
-  id           Int      @id
+  id           Int     @id
   lat          Float
   lng          Float
   name         String?
   openingHours String?
-  indoor       Boolean?
-  fee          Boolean?
-  supervised   Boolean?
+  indoor       Boolean @default(false)
+  fee          Boolean @default(false)
+  supervised   Boolean @default(false)
   gh5          String
 
   @@index([gh5])

@@ -63,7 +63,7 @@ export function useInstallPrompt() {
   const context = useContext(InstallPromptContext);
   if (context === undefined) {
     throw new Error(
-      "useInstallPrompt must be used within an InstallPromptProvider"
+      "useInstallPrompt must be used within an InstallPromptProvider",
     );
   }
   return context;
@@ -121,7 +121,7 @@ export function InstallPromptProvider({
     return () => {
       window.removeEventListener(
         "beforeinstallprompt",
-        handleBeforeInstallPrompt
+        handleBeforeInstallPrompt,
       );
     };
   }, []);

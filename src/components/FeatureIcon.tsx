@@ -40,7 +40,7 @@ export default function FeatureIcon({
   if (!iconDefinition) {
     // Fallback to old behavior if icon not found in map
     console.warn(
-      `Icon "${icon}" not found in iconMap, falling back to <i> tag`
+      `Icon "${icon}" not found in iconMap, falling back to <i> tag`,
     );
     if (isPresent) {
       return <i className={`${icon}`}></i>;

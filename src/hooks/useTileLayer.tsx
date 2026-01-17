@@ -34,7 +34,7 @@ export default function useTileLayer() {
         return stored;
       }
       return DEFAULT_TILE_LAYER;
-    }
+    },
   );
 
   // Save to localStorage whenever selection changes

@@ -37,7 +37,7 @@ export async function* getToiletsFromOSM(): AsyncGenerator<Toilet> {
       delimiter: "|",
       from: 2,
       skip_empty_lines: true,
-    })
+    }),
   );
   for await (const [
     id,
@@ -53,10 +53,9 @@ export async function* getToiletsFromOSM(): AsyncGenerator<Toilet> {
       id: parseInt(id),
       lat: parseFloat(lat),
       lng: parseFloat(lng),
-      fee: fee === "yes" ? true : fee === "no" ? false : null,
+      fee: fee === "yes" ? true : false,
       openingHours: openingHours || null,
-      changingTable:
-        changingTable === "yes" ? true : changingTable === "no" ? false : null,
+      changingTable: changingTable === "yes" ? true : false,
       gh5: "",
     };
   }
