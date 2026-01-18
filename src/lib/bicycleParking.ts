@@ -58,12 +58,13 @@ export async function* getBicycleParkingsFromOSM(): AsyncGenerator<BicycleParkin
       id: parseInt(id),
       lat: parseFloat(lat),
       lng: parseFloat(lng),
-      covered: covered === "yes" ? true : false,
-      indoor: indoor === "yes" ? true : false,
+      covered: covered === "yes" ? true : covered === "no" ? false : null,
+      indoor: indoor === "yes" ? true : indoor === "no" ? false : null,
       access: access || null,
-      fee: fee === "yes" ? true : false,
+      fee: fee === "yes" ? true : fee === "no" ? false : null,
       bicycleParking: bicycleParking || null,
-      surveillance: surveillance === "yes" ? true : false,
+      surveillance:
+        surveillance === "yes" ? true : surveillance === "no" ? false : null,
       capacity: capacity ? parseInt(capacity) : null,
       gh5: "",
     };

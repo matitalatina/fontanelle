@@ -53,9 +53,10 @@ export async function* getToiletsFromOSM(): AsyncGenerator<Toilet> {
       id: parseInt(id),
       lat: parseFloat(lat),
       lng: parseFloat(lng),
-      fee: fee === "yes" ? true : false,
+      fee: fee === "yes" ? true : fee === "no" ? false : null,
       openingHours: openingHours || null,
-      changingTable: changingTable === "yes" ? true : false,
+      changingTable:
+        changingTable === "yes" ? true : changingTable === "no" ? false : null,
       gh5: "",
     };
   }
