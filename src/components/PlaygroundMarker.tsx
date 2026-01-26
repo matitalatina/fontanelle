@@ -20,7 +20,7 @@ export default function PlaygroundMarker({
 }) {
   return (
     <Marker position={[playground.lat, playground.lng]} icon={playgroundMarker}>
-      <Popup className="station-popup" closeButton={false}>
+      <Popup className="station-popup popup-playground" closeButton={false}>
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
             <div className="text-lg">Parco Giochi</div>

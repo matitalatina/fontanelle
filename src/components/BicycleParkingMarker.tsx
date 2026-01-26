@@ -26,7 +26,7 @@ export default function BicycleParkingMarker({
       position={[bicycleParking.lat, bicycleParking.lng]}
       icon={bicycleParkingMarker}
     >
-      <Popup className="station-popup" closeButton={false}>
+      <Popup className="station-popup popup-bicycle" closeButton={false}>
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
             <div className="text-lg">Parcheggio Bici</div>

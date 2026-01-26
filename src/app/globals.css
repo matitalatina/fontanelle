@@ -9,55 +9,135 @@
 
 @theme {
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
-  --background-image-gradient-conic: conic-gradient(
-    from 180deg at 50% 50%,
-    var(--tw-gradient-stops)
-  );
+  --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%,
+      var(--tw-gradient-stops));
+
+  /* Semantic entity colors */
+  --color-bicycle: blue;
+  --color-playground: yellow;
+  --color-fountain: green;
+  --color-water-house: blue;
+  --color-toilet: purple;
+  --color-custom: purple;
+  --popup-bg-mix-factor: 15%;
+  --popup-text-mix-factor: 10%;
+}
+
+.station-popup {
+  &.popup-bicycle {
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: color-mix(in oklab,
+          var(--color-bicycle) var(--popup-bg-mix-factor),
+          var(--color-base-100));
+    }
+
+    .leaflet-popup-content {
+      color: color-mix(in oklab, var(--color-bicycle) var(--popup-text-mix-factor), var(--color-base-content));
+    }
+  }
+
+  &.popup-playground {
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: color-mix(in oklab,
+          var(--color-playground) var(--popup-bg-mix-factor),
+          var(--color-base-100));
+    }
+
+    .leaflet-popup-content {
+      color: color-mix(in oklab, var(--color-playground) var(--popup-text-mix-factor), var(--color-base-content));
+    }
+  }
+
+  &.popup-fountain {
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: color-mix(in oklab,
+          var(--color-fountain) var(--popup-bg-mix-factor),
+          var(--color-base-100));
+    }
+
+    .leaflet-popup-content {
+      color: color-mix(in oklab, var(--color-fountain) var(--popup-text-mix-factor), var(--color-base-content));
+    }
+  }
+
+  &.popup-water-house {
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: color-mix(in oklab,
+          var(--color-water-house) var(--popup-bg-mix-factor),
+          var(--color-base-100));
+    }
+
+    .leaflet-popup-content {
+      color: color-mix(in oklab, var(--color-water-house) var(--popup-text-mix-factor), var(--color-base-content));
+    }
+  }
+
+  &.popup-toilet {
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: color-mix(in oklab,
+          var(--color-toilet) var(--popup-bg-mix-factor),
+          var(--color-base-100));
+    }
+
+    .leaflet-popup-content {
+      color: color-mix(in oklab, var(--color-toilet) var(--popup-text-mix-factor), var(--color-base-content));
+    }
+  }
+
+  &.popup-custom {
+
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+      background: color-mix(in oklab,
+          var(--color-custom) var(--popup-bg-mix-factor),
+          var(--color-base-100));
+    }
+
+    .leaflet-popup-content {
+      color: color-mix(in oklab, var(--color-custom) var(--popup-text-mix-factor), var(--color-base-content));
+    }
+  }
 }
 
 @utility text-balance {
   text-wrap: balance;
 }
 
-.station-popup .leaflet-popup-tip,
-.station-popup .leaflet-popup-content-wrapper {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
-}
-
-.station-popup .leaflet-popup-content {
-  margin: 1rem;
-}
-
-/* Dark mode styles for leaflet popup */
-@media (prefers-color-scheme: dark) {
-  .station-popup .leaflet-popup-tip,
-  .station-popup .leaflet-popup-content-wrapper {
-    background: color-mix(in srgb, var(--color-base-100) 90%, transparent);
+.station-popup {
+  .leaflet-popup-content-wrapper {
+    background: color-mix(in oklab, var(--color-base-100) 90%, transparent);
     color: var(--color-base-content);
   }
 
-  .station-popup .leaflet-popup-content {
+  .leaflet-popup-tip {
+    background: color-mix(in oklab, var(--color-base-100) 85%, transparent);
+  }
+
+  .leaflet-popup-tip-container {
+    margin-top: 0;
+  }
+
+  .leaflet-popup-content {
+    margin: 1rem;
     color: var(--color-base-content);
   }
-}
-
-[data-theme="dark"] .station-popup .leaflet-popup-tip,
-[data-theme="dark"] .station-popup .leaflet-popup-content-wrapper {
-  background: color-mix(in srgb, var(--color-base-100) 90%, transparent);
-  color: var(--color-base-content);
-}
-
-[data-theme="dark"] .station-popup .leaflet-popup-content {
-  color: var(--color-base-content);
 }
 
 .map-fontanelle .leaflet-marker-icon.marker-cluster {
   color: black;
 }
 
-.leaflet-fade-anim
-  .leaflet-popup.station-popup.custom-marker-popup:not(:has(button)) {
+.leaflet-fade-anim .leaflet-popup.station-popup.custom-marker-popup:not(:has(button)) {
   transition: none;
 }
 
@@ -80,10 +160,12 @@
 /* Hero Background Animations - Simplified */
 
 @keyframes gradient-shift {
+
   0%,
   100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -93,12 +175,14 @@
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100vw);
   }
 }
 
 @keyframes bounce-down {
+
   0%,
   20%,
   50%,
@@ -106,19 +190,23 @@
   100% {
     transform: translateY(0);
   }
+
   40% {
     transform: translateY(8px);
   }
+
   60% {
     transform: translateY(4px);
   }
 }
 
 @keyframes fade-pulse {
+
   0%,
   100% {
     opacity: 0.6;
   }
+
   50% {
     opacity: 1;
   }
@@ -128,6 +216,7 @@
   0% {
     background-position: 200% 0%;
   }
+
   100% {
     background-position: -200% 0%;
   }
@@ -159,12 +248,9 @@
   background-clip: text !important;
   -webkit-background-clip: text !important;
   background:
-    radial-gradient(
-        circle at center,
-        color-mix(in srgb, var(--color-primary) 85%, transparent),
-        transparent
-      ) -200%
-      50% / 200% 100% no-repeat,
+    radial-gradient(circle at center,
+      color-mix(in srgb, var(--color-primary) 85%, transparent),
+      transparent) -200% 50% / 200% 100% no-repeat,
     var(--color-primary-content);
 }
 
@@ -183,11 +269,13 @@
 }
 
 @keyframes highlight-pulse {
+
   0%,
   100% {
     opacity: 0.6;
     transform: translateX(-50%) scale(1);
   }
+
   50% {
     opacity: 0.9;
     transform: translateX(-50%) scale(1.1);
@@ -239,12 +327,15 @@
     transform: translateY(-10vh) translateX(0);
     opacity: 0;
   }
+
   10% {
     opacity: 0.4;
   }
+
   90% {
     opacity: 0.2;
   }
+
   100% {
     transform: translateY(110vh) translateX(10px);
     opacity: 0;
@@ -265,6 +356,7 @@
 
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
+
   .animate-shimmer,
   .animate-bounce-down,
   .animate-shine,

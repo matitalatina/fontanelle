@@ -59,7 +59,10 @@ export default function CustomMarker() {
       ref={markerRef}
       eventHandlers={eventHandlers}
     >
-      <Popup className="station-popup custom-marker-popup" closeButton={false}>
+      <Popup
+        className="station-popup custom-marker-popup popup-custom"
+        closeButton={false}
+      >
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
             <div className="text-lg">Punto personalizzato</div>
