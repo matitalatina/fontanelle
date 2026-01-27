@@ -123,10 +123,6 @@
     background: color-mix(in oklab, var(--color-base-100) 85%, transparent);
   }
 
-  .leaflet-popup-tip-container {
-    margin-top: 0;
-  }
-
   .leaflet-popup-content {
     margin: 1rem;
     color: var(--color-base-content);
