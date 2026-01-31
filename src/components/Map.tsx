@@ -9,12 +9,12 @@ import { useState } from "react";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
 import { ScaleControl } from "react-leaflet";
-import ClusterMarkers from "./ClusterMarkers";
-import CustomMarker from "./CustomMarker";
+import ClusterMarkers from "./markers/ClusterMarkers";
+import CustomMarker from "./markers/CustomMarker";
 import LocateButton from "./LocateButton";
 import MapCenter from "./MapCenter";
 import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
-import PersonMarker from "./PersonMarker";
+import PersonMarker from "./markers/PersonMarker";
 import { TILE_LAYERS, TileLayerType } from "@/hooks/useTileLayer";
 import DisableSearchAlert from "./DisableSearchAlert";
 

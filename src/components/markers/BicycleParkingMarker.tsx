@@ -3,9 +3,9 @@
 import { BicycleParking } from "@/lib/bicycleParking";
 import L from "leaflet";
 import { Marker, Popup } from "react-leaflet";
-import FeatureIcon from "./FeatureIcon";
-import GoToButton from "./GoToButton";
-import SharePositionButton from "./SharePositionButton";
+import FeatureIcon from "../FeatureIcon";
+import GoToButton from "../GoToButton";
+import SharePositionButton from "../SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faParking, faBicycle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

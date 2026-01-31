@@ -59,7 +59,7 @@ export default function LegendaPage() {
           </h2>
 
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-auto text-left">
+            <table className="table w-auto text-left">
               <thead>
                 <tr>
                   <th className="text-right">Icona</th>
@@ -69,7 +69,7 @@ export default function LegendaPage() {
               <tbody>
                 <tr>
                   <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-green-600 rounded-md">
+                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-fountain rounded-md">
                       <FontAwesomeIcon
                         icon={faFaucetDrip}
                         className="text-white text-xl"
@@ -101,7 +101,7 @@ export default function LegendaPage() {
                 </tr>
                 <tr>
                   <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-purple-600 rounded-md">
+                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-toilet rounded-md">
                       <FontAwesomeIcon
                         icon={faRestroom}
                         className="text-white text-xl"
@@ -115,7 +115,7 @@ export default function LegendaPage() {
                 </tr>
                 <tr>
                   <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-blue-600 rounded-md">
+                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-bicycle rounded-md">
                       <FontAwesomeIcon
                         icon={faParking}
                         className="text-white text-xl"
@@ -131,10 +131,10 @@ export default function LegendaPage() {
                 </tr>
                 <tr>
                   <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-yellow-400 rounded-full">
+                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-playground rounded-full">
                       <FontAwesomeIcon
                         icon={faFutbol}
-                        className="text-gray-800 text-xl"
+                        className="text-white text-xl"
                       />
                     </div>
                   </td>
@@ -153,13 +153,13 @@ export default function LegendaPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <div className="w-8 h-8 flex items-center justify-center bg-green-600 rounded-md mr-2">
+            <div className="w-8 h-8 flex items-center justify-center bg-fountain rounded-md mr-2">
               <FontAwesomeIcon icon={faFaucetDrip} className="text-white" />
             </div>
             Attributi Fontanelle
           </h2>
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-auto text-left">
+            <table className="table w-auto text-left">
               <thead>
                 <tr>
                   <th className="text-right">Icona</th>
@@ -169,7 +169,7 @@ export default function LegendaPage() {
               <tbody>
                 <tr>
                   <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-green-600 rounded-md">
+                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-fountain rounded-md">
                       <FontAwesomeIcon
                         icon={faFaucetDrip}
                         className="text-white text-xl"
@@ -203,13 +203,13 @@ export default function LegendaPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <div className="w-8 h-8 flex items-center justify-center bg-purple-600 rounded-md mr-2">
+            <div className="w-8 h-8 flex items-center justify-center bg-toilet rounded-md mr-2">
               <FontAwesomeIcon icon={faRestroom} className="text-white" />
             </div>
             Attributi Bagni Pubblici
           </h2>
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-auto text-left">
+            <table className="table w-auto text-left">
               <thead>
                 <tr>
                   <th className="text-right">Icona</th>
@@ -275,7 +275,7 @@ export default function LegendaPage() {
             Attributi Parcheggi Bici
           </h2>
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-auto text-left">
+            <table className="table w-auto text-left">
               <thead>
                 <tr>
                   <th className="text-right">Icona</th>
@@ -394,7 +394,7 @@ export default function LegendaPage() {
             Attributi Parchi Giochi
           </h2>
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-auto text-left">
+            <table className="table w-auto text-left">
               <thead>
                 <tr>
                   <th className="text-right">Icona</th>
@@ -485,7 +485,7 @@ export default function LegendaPage() {
             Informazioni Aggiuntive
           </h2>
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-auto text-left">
+            <table className="table w-auto text-left">
               <thead>
                 <tr>
                   <th className="text-right">Icona</th>

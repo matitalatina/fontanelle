@@ -138,44 +138,44 @@ export default async function Home() {
             <div className="flex justify-center">
               <div className="stats stats-vertical lg:stats-horizontal shadow-lg bg-base-100 rounded-2xl">
                 <div className="stat">
-                  <div className="stat-figure text-primary">
+                  <div className="stat-figure text-fountain">
                     <FontAwesomeIcon icon={faFaucetDrip} className="text-3xl" />
                   </div>
                   <div className="stat-title">Fontanelle</div>
-                  <div className="stat-value text-primary">
+                  <div className="stat-value text-fountain">
                     {counts.fountains.toLocaleString("it-IT")}
                   </div>
                   <div className="stat-desc">Acqua potabile gratuita</div>
                 </div>
 
                 <div className="stat">
-                  <div className="stat-figure text-info">
+                  <div className="stat-figure text-bicycle">
                     <FontAwesomeIcon icon={faParking} className="text-3xl" />
                   </div>
                   <div className="stat-title">Parcheggi bici</div>
-                  <div className="stat-value text-info">
+                  <div className="stat-value text-bicycle">
                     {counts.bicycleParkings.toLocaleString("it-IT")}
                   </div>
                   <div className="stat-desc">Posti sicuri per biciclette</div>
                 </div>
 
                 <div className="stat">
-                  <div className="stat-figure text-secondary">
+                  <div className="stat-figure text-toilet">
                     <FontAwesomeIcon icon={faRestroom} className="text-3xl" />
                   </div>
                   <div className="stat-title">Bagni pubblici</div>
-                  <div className="stat-value text-secondary">
+                  <div className="stat-value text-toilet">
                     {counts.toilets.toLocaleString("it-IT")}
                   </div>
                   <div className="stat-desc">Servizi igienici</div>
                 </div>
 
                 <div className="stat">
-                  <div className="stat-figure text-warning">
+                  <div className="stat-figure text-playground">
                     <FontAwesomeIcon icon={faFutbol} className="text-3xl" />
                   </div>
                   <div className="stat-title">Parchi giochi</div>
-                  <div className="stat-value text-warning">
+                  <div className="stat-value text-playground">
                     {counts.playgrounds.toLocaleString("it-IT")}
                   </div>
                   <div className="stat-desc">Aree per bambini</div>

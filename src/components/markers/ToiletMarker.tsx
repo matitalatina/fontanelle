@@ -1,9 +1,9 @@
 import { Toilet } from "@/lib/toilets";
 import L from "leaflet";
 import { Marker, Popup } from "react-leaflet";
-import GoToButton from "./GoToButton";
-import FeatureIcon from "./FeatureIcon";
-import SharePositionButton from "./SharePositionButton";
+import GoToButton from "../GoToButton";
+import FeatureIcon from "../FeatureIcon";
+import SharePositionButton from "../SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faRestroom } from "@fortawesome/free-solid-svg-icons";
 

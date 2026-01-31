@@ -3,8 +3,8 @@
 import { Station } from "@/lib/stations";
 import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-import GoToButton from "./GoToButton";
-import SharePositionButton from "./SharePositionButton";
+import GoToButton from "../GoToButton";
+import SharePositionButton from "../SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faFaucetDrip } from "@fortawesome/free-solid-svg-icons";
 

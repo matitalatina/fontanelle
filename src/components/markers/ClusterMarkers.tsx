@@ -1,12 +1,12 @@
 "use client";
 import BicycleParkingMarker from "./BicycleParkingMarker";
-import MarkerClusterGroup from "./MarkerCluster";
+import MarkerClusterGroup from "../MarkerCluster";
 import StationMarker from "./StationMarker";
 import ToiletMarker from "./ToiletMarker";
-import PlaygroundMarker from "./PlaygroundMarker";
 import { memo } from "react";
-import { AvailableOverlay, SelectedOverlays } from "./OverlaySelector";
+import { AvailableOverlay, SelectedOverlays } from "../OverlaySelector";
 import useMapEntities from "@/hooks/useMapEntities";
+import PlaygroundMarker from "./PlaygroundMarker";
 
 const getSelectedOverlays = (selectedOverlays: SelectedOverlays) =>
   Object.keys(selectedOverlays).filter(
