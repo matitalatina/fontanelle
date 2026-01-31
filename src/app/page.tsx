@@ -423,21 +423,6 @@ export default async function Home() {
               <div className="collapse collapse-plus bg-base-200">
                 <input type="radio" name="faq-accordion" />
                 <div className="collapse-title text-xl font-medium">
-                  <h3>L&apos;app funziona anche offline?</h3>
-                </div>
-                <div className="collapse-content">
-                  <p>
-                    L&apos;app è progettata come una Progressive Web App (PWA) e
-                    può funzionare con connettività limitata. Una volta caricata
-                    la mappa, potrai continuare a consultare le informazioni
-                    anche senza connessione internet.
-                  </p>
-                </div>
-              </div>
-
-              <div className="collapse collapse-plus bg-base-200">
-                <input type="radio" name="faq-accordion" />
-                <div className="collapse-title text-xl font-medium">
                   <h3>Posso segnalare una nuova fontanella?</h3>
                 </div>
                 <div className="collapse-content">

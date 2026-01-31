@@ -36,7 +36,7 @@ export default function App() {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu menu-xl bg-base-200 text-base-content min-h-full w-80">
+        <ul className="menu menu-xl bg-base-200/85 backdrop-blur-sm text-base-content min-h-full w-80">
           <TileLayerSelector
             selectedTileLayer={selectedTileLayer}
             onChange={selectTileLayer}

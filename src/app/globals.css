@@ -116,6 +116,7 @@
     oklch(0.6 0.1601 var(--color-hue-custom))
   );
   --popup-text-mix-factor: 10%;
+  --popup-alpha: 0.85;
 }
 
 .station-popup {
@@ -123,7 +124,7 @@
     .leaflet-popup-content-wrapper,
     .leaflet-popup-tip {
       background: oklch(
-        from var(--color-base-100) l c var(--color-hue-bicycle)
+        from var(--color-base-100) l c var(--color-hue-bicycle) / var(--popup-alpha)
       );
     }
 
@@ -140,7 +141,7 @@
     .leaflet-popup-content-wrapper,
     .leaflet-popup-tip {
       background: oklch(
-        from var(--color-base-100) l c var(--color-hue-playground)
+        from var(--color-base-100) l c var(--color-hue-playground) / var(--popup-alpha)
       );
     }
 
@@ -157,7 +158,7 @@
     .leaflet-popup-content-wrapper,
     .leaflet-popup-tip {
       background: oklch(
-        from var(--color-base-100) l c var(--color-hue-fountain)
+        from var(--color-base-100) l c var(--color-hue-fountain) / var(--popup-alpha)
       );
     }
 
@@ -174,7 +175,7 @@
     .leaflet-popup-content-wrapper,
     .leaflet-popup-tip {
       background: oklch(
-        from var(--color-base-100) l c var(--color-hue-water-house)
+        from var(--color-base-100) l c var(--color-hue-water-house) / var(--popup-alpha)
       );
     }
 
@@ -190,7 +191,9 @@
   &.popup-toilet {
     .leaflet-popup-content-wrapper,
     .leaflet-popup-tip {
-      background: oklch(from var(--color-base-100) l c var(--color-hue-toilet));
+      background: oklch(
+        from var(--color-base-100) l c var(--color-hue-toilet) / var(--popup-alpha)
+      );
     }
 
     .leaflet-popup-content {
@@ -205,7 +208,9 @@
   &.popup-custom {
     .leaflet-popup-content-wrapper,
     .leaflet-popup-tip {
-      background: oklch(from var(--color-base-100) l c var(--color-hue-custom));
+      background: oklch(
+        from var(--color-base-100) l c var(--color-hue-custom) / var(--popup-alpha)
+      );
     }
 
     .leaflet-popup-content {
@@ -224,12 +229,13 @@
 
 .station-popup {
   .leaflet-popup-content-wrapper {
-    background: color-mix(in oklab, var(--color-base-100) 90%, transparent);
+    background: color-mix(in oklab, var(--color-base-100) var(--popup-alpha), transparent);
     color: var(--color-base-content);
+    backdrop-filter: blur(3px);
   }
 
   .leaflet-popup-tip {
-    background: color-mix(in oklab, var(--color-base-100) 85%, transparent);
+    background: color-mix(in oklab, var(--color-base-100) calc(var(--popup-alpha) /2), transparent);
   }
 
   .leaflet-popup-content {
