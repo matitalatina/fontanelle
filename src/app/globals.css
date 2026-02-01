@@ -120,128 +120,64 @@
 }
 
 .station-popup {
-  &.popup-bicycle {
-    .leaflet-popup-content-wrapper,
-    .leaflet-popup-tip {
-      background: oklch(
-        from var(--color-base-100) l c var(--color-hue-bicycle) / var(--popup-alpha)
-      );
-    }
+  --_color-hue: var(--color-hue-bicycle);
+  --_color: var(--color-bicycle);
 
-    .leaflet-popup-content {
-      color: color-mix(
-        in oklab,
-        var(--color-bicycle) var(--popup-text-mix-factor),
-        var(--color-base-content)
-      );
-    }
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    backdrop-filter: blur(3px);
+    background: oklch(
+      from var(--color-base-100) l c var(--_color-hue) / var(--popup-alpha)
+    );
+  }
+  .leaflet-popup-tip {
+    background: oklch(
+      from var(--color-base-100) l c var(--_color-hue) / calc(var(--popup-alpha) * 0.85)
+    );
+  }
+
+  .leaflet-popup-content {
+    color: color-mix(
+      in oklab,
+      var(--_color) var(--popup-text-mix-factor),
+      var(--color-base-content)
+    );
+    margin: 1rem;
+  }
+
+  &.popup-bicycle {
+    --_color-hue: var(--color-hue-bicycle);
+    --_color: var(--color-bicycle);
   }
 
   &.popup-playground {
-    .leaflet-popup-content-wrapper,
-    .leaflet-popup-tip {
-      background: oklch(
-        from var(--color-base-100) l c var(--color-hue-playground) / var(--popup-alpha)
-      );
-    }
-
-    .leaflet-popup-content {
-      color: color-mix(
-        in oklab,
-        var(--color-playground) var(--popup-text-mix-factor),
-        var(--color-base-content)
-      );
-    }
+    --_color-hue: var(--color-hue-playground);
+    --_color: var(--color-playground);
   }
 
   &.popup-fountain {
-    .leaflet-popup-content-wrapper,
-    .leaflet-popup-tip {
-      background: oklch(
-        from var(--color-base-100) l c var(--color-hue-fountain) / var(--popup-alpha)
-      );
-    }
-
-    .leaflet-popup-content {
-      color: color-mix(
-        in oklab,
-        var(--color-fountain) var(--popup-text-mix-factor),
-        var(--color-base-content)
-      );
-    }
+    --_color-hue: var(--color-hue-fountain);
+    --_color: var(--color-fountain);
   }
 
   &.popup-water-house {
-    .leaflet-popup-content-wrapper,
-    .leaflet-popup-tip {
-      background: oklch(
-        from var(--color-base-100) l c var(--color-hue-water-house) / var(--popup-alpha)
-      );
-    }
-
-    .leaflet-popup-content {
-      color: color-mix(
-        in oklab,
-        var(--color-water-house) var(--popup-text-mix-factor),
-        var(--color-base-content)
-      );
-    }
+    --_color-hue: var(--color-hue-water-house);
+    --_color: var(--color-water-house);
   }
 
   &.popup-toilet {
-    .leaflet-popup-content-wrapper,
-    .leaflet-popup-tip {
-      background: oklch(
-        from var(--color-base-100) l c var(--color-hue-toilet) / var(--popup-alpha)
-      );
-    }
-
-    .leaflet-popup-content {
-      color: color-mix(
-        in oklab,
-        var(--color-toilet) var(--popup-text-mix-factor),
-        var(--color-base-content)
-      );
-    }
+    --_color-hue: var(--color-hue-toilet);
+    --_color: var(--color-toilet);
   }
 
   &.popup-custom {
-    .leaflet-popup-content-wrapper,
-    .leaflet-popup-tip {
-      background: oklch(
-        from var(--color-base-100) l c var(--color-hue-custom) / var(--popup-alpha)
-      );
-    }
-
-    .leaflet-popup-content {
-      color: color-mix(
-        in oklab,
-        var(--color-custom) var(--popup-text-mix-factor),
-        var(--color-base-content)
-      );
-    }
+    --_color-hue: var(--color-hue-custom);
+    --_color: var(--color-custom);
   }
 }
 
 @utility text-balance {
   text-wrap: balance;
-}
-
-.station-popup {
-  .leaflet-popup-content-wrapper {
-    background: color-mix(in oklab, var(--color-base-100) var(--popup-alpha), transparent);
-    color: var(--color-base-content);
-    backdrop-filter: blur(3px);
-  }
-
-  .leaflet-popup-tip {
-    background: color-mix(in oklab, var(--color-base-100) calc(var(--popup-alpha) /2), transparent);
-  }
-
-  .leaflet-popup-content {
-    margin: 1rem;
-    color: var(--color-base-content);
-  }
 }
 
 .map-fontanelle .leaflet-marker-icon.marker-cluster {
