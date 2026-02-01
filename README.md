@@ -25,7 +25,7 @@ A web application that helps cyclists and pedestrians find drinking fountains, w
 ### Prerequisites
 
 - Node.js (v18 or higher)
-- npm or yarn
+- npm
 
 ### Installation
 
@@ -40,16 +40,12 @@ A web application that helps cyclists and pedestrians find drinking fountains, w
 
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 3. Run the development server:
 
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
