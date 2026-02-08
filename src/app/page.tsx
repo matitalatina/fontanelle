@@ -84,9 +84,9 @@ export default async function Home() {
         }}
       />
 
-      <div className="min-h-dvh bg-base-100">
+      <div className="min-h-screen bg-base-100">
         {/* Hero Section */}
-        <div className="hero min-h-dvh relative overflow-hidden flex flex-col bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10">
+        <div className="hero min-h-screen relative overflow-hidden flex flex-col bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10">
           <AnimatedHeroBackground />
           <div className="hero-content text-center relative z-10 flex-1 flex items-center justify-center pb-20 sm:pb-16">
             <div className="max-w-4xl">
@@ -219,7 +219,7 @@ export default async function Home() {
                   </div>
                   <h3 className="card-title justify-center">Cerca luoghi</h3>
                   <p>
-                    Trova istantaneamente fontanelle in qualsiasi città o via
+                    Trova istantaneamente fontanelle in qualsiasi città
                     grazie al nuovo potente motore di ricerca
                   </p>
                 </div>
@@ -452,7 +452,7 @@ export default async function Home() {
                 </div>
               </div>
 
-              <div className="collapse collapse-plus bg-base-200 border border-primary/10">
+              <div className="collapse collapse-plus bg-base-200">
                 <input type="radio" name="faq-accordion" />
                 <div className="collapse-title text-xl font-medium">
                   <h3>Come posso cercare una città specifica?</h3>
