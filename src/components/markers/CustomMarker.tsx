@@ -67,7 +67,7 @@ export default function CustomMarker() {
           <div className="flex flex-col flex-1 space-y-2">
             <div className="text-lg">Punto personalizzato</div>
           </div>
-          <div className="flex justify-between flex-row">
+          <div className="flex justify-between flex-row gap-2">
             <button
               type="button"
               className="btn btn-error btn-outline"

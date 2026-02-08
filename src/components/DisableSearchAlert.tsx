@@ -12,7 +12,7 @@ export default function DisableSearchAlert() {
   return showAlert ? (
     <div
       role="alert"
-      className="gap-2 backdrop-blur-xs alert alert-warning alert-vertical alert-soft absolute z-4000 right-0 left-0 m-auto mb-4 sm:w-fit w-1/2 shadow-lg top-4 bg-[color-mix(in_oklab,color-mix(in_oklab,var(--alert-color,var(--color-base-content))_8%,var(--color-base-100))_90%,transparent)]"
+      className="gap-2 backdrop-blur-xs alert alert-warning alert-vertical alert-soft m-auto mb-4 w-full max-w-[calc(100vw-(var(--spacing)*14+2rem)*2)] sm:max-w-md shadow-lg bg-[color-mix(in_oklab,color-mix(in_oklab,var(--alert-color,var(--color-base-content))_8%,var(--color-base-100))_90%,transparent)]"
     >
       <h3 className="font-bold flex items-center gap-2">
         <svg

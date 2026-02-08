@@ -17,6 +17,11 @@ import OverlaySelector, { SelectedOverlays } from "./OverlaySelector";
 import PersonMarker from "./markers/PersonMarker";
 import { TILE_LAYERS, TileLayerType } from "@/hooks/useTileLayer";
 import DisableSearchAlert from "./DisableSearchAlert";
+import SearchBar from "./SearchBar";
+import useSearch from "@/hooks/useSearch";
+import SearchResultMarker from "./markers/SearchResultMarker";
+
+export const ZOOM_DEFAULT = 16;
 
 /*<TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -33,12 +38,6 @@ export default function Map({
   children?: React.ReactNode;
 }) {
   const { locationState, getCurrentLocation } = useLocation();
-  const center =
-    locationState.status == "success"
-      ? locationState.location
-      : { lat: 45.464664, lng: 9.18854 };
-  const centerNeedsUpdate = locationState.status === "success";
-
   const [selectedOverlays, setSelectedOverlays] = useState<SelectedOverlays>({
     stations: true,
     toilets: false,
@@ -46,13 +45,36 @@ export default function Map({
     playgrounds: false,
   });
 
+  const {
+    searchText,
+    setSearchText,
+    searchResult,
+    setSearchResult,
+    loading,
+    error,
+    handleSearch,
+    clearSearch,
+  } = useSearch();
+
+  const activeCenter = searchResult
+    ? { lat: searchResult.lat, lng: searchResult.lng }
+    : locationState.status === "success"
+      ? locationState.location
+      : { lat: 45.464664, lng: 9.18854 };
+  const centerNeedsUpdate = !!searchResult || locationState.status === "success";
+
+  const handleLocate = () => {
+    clearSearch();
+    getCurrentLocation();
+  };
+
   const tileLayerConfig = TILE_LAYERS[tileLayer];
 
   return (
     <>
       <MapContainer
-        center={[center.lat, center.lng]}
-        zoom={16}
+        center={[activeCenter.lat, activeCenter.lng]}
+        zoom={ZOOM_DEFAULT}
         scrollWheelZoom={true}
         wheelDebounceTime={100}
         zoomAnimation={true}
@@ -61,7 +83,7 @@ export default function Map({
         zoomControl={false}
       >
         {children}
-        {centerNeedsUpdate && <MapCenter position={center} />}
+        {centerNeedsUpdate && <MapCenter position={activeCenter} />}
         <TileLayer
           attribution={tileLayerConfig.attribution}
           url={tileLayerConfig.url}
@@ -79,11 +101,27 @@ export default function Map({
           onChange={(a) => setSelectedOverlays(a)}
         />
         <LocateButton
-          onClick={getCurrentLocation}
+          onClick={handleLocate}
           locationState={locationState}
         />
         <ScaleControl position="bottomright" imperial={false} />
-        <DisableSearchAlert />
+        <div className="absolute top-4 left-0 right-0 z-4000 flex flex-col items-center gap-2 pointer-events-none px-4">
+          <SearchBar
+            value={searchText}
+            onChange={setSearchText}
+            onSearch={handleSearch}
+            loading={loading}
+            error={error}
+          />
+          <DisableSearchAlert />
+        </div>
+        {searchResult && (
+          <SearchResultMarker
+            position={{ lat: searchResult.lat, lng: searchResult.lng }}
+            displayName={searchResult.displayName}
+            onClear={() => setSearchResult(null)}
+          />
+        )}
       </MapContainer>
     </>
   );

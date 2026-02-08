@@ -21,6 +21,7 @@ import {
   faLayerGroup,
   faShareNodes,
   faUserShield,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 
 export const metadata: Metadata = {
@@ -533,6 +534,19 @@ export default function LegendaPage() {
                   </td>
                   <td>
                     <p>Selettore di strati sulla mappa</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="text-right">
+                    <div className="flex items-center justify-end">
+                      <FontAwesomeIcon
+                        icon={faSearch}
+                        className="text-xl"
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <p>Motore di ricerca (trova città, vie o piazze)</p>
                   </td>
                 </tr>
                 <tr>

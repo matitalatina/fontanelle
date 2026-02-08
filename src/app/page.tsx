@@ -24,6 +24,7 @@ import {
   faMap,
   faInfoCircle,
   faBookOpen,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faGithub,
@@ -207,7 +208,22 @@ export default async function Home() {
             <h2 className="text-4xl font-bold text-center mb-12">
               Perché usare la nostra mappa delle fontanelle?
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+              <div className="card bg-base-200 shadow-lg border-2 border-primary/20">
+                <div className="card-body text-center">
+                  <div className="flex justify-center mb-4 text-primary">
+                    <div className="indicator">
+                      <span className="indicator-item badge badge-secondary">Nuovo</span>
+                      <FontAwesomeIcon icon={faSearch} className="text-4xl" />
+                    </div>
+                  </div>
+                  <h3 className="card-title justify-center">Cerca luoghi</h3>
+                  <p>
+                    Trova istantaneamente fontanelle in qualsiasi città o via
+                    grazie al nuovo potente motore di ricerca
+                  </p>
+                </div>
+              </div>
               <div className="card bg-base-200 shadow-lg">
                 <div className="card-body text-center">
                   <div className="flex justify-center mb-4">
@@ -432,6 +448,21 @@ export default async function Home() {
                     dati su OpenStreetMap per aggiungere nuove fontanelle o
                     aggiornare informazioni esistenti. Le modifiche saranno
                     visibili anche sulla nostra mappa.
+                  </p>
+                </div>
+              </div>
+
+              <div className="collapse collapse-plus bg-base-200 border border-primary/10">
+                <input type="radio" name="faq-accordion" />
+                <div className="collapse-title text-xl font-medium">
+                  <h3>Come posso cercare una città specifica?</h3>
+                </div>
+                <div className="collapse-content">
+                  <p>
+                    È semplicissimo! Sulla mappa troverai una barra di ricerca in alto.
+                    Scrivi il nome della città, di un comune o di una via specifica e la
+                    mappa si centrerà automaticamente mostrandoti tutti i punti di
+                    interesse in quella zona.
                   </p>
                 </div>
               </div>
