@@ -26,6 +26,7 @@ export default function useSearch() {
   const handleSearch = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!searchText.trim()) return;
+    umami.track("search");
 
     setLoading(true);
     setError(null);

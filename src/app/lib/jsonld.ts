@@ -25,7 +25,7 @@ export function generateAppJsonLd() {
     },
     potentialAction: {
       "@type": "ViewAction",
-      target: BASE_URL,
+      target: `${BASE_URL}/app`,
     },
   };
 }
@@ -57,6 +57,14 @@ export function generateFAQJsonLd() {
         acceptedAnswer: {
           "@type": "Answer",
           text: "I dati provengono da OpenStreetMap, un progetto collaborativo. Puoi contribuire direttamente modificando i dati su OpenStreetMap per aggiungere nuove fontanelle o aggiornare informazioni esistenti. Le modifiche saranno visibili anche sulla nostra mappa.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Come posso cercare una città specifica?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "È semplicissimo! Sulla mappa troverai una barra di ricerca in alto. Scrivi il nome della città, di un comune o di una via specifica e la mappa si centrerà automaticamente mostrandoti tutti i punti di interesse in quella zona.",
         },
       },
       {

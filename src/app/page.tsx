@@ -33,11 +33,11 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 // Landing page specific metadata constants
-const LANDING_PAGE_TITLE = "Fontanelle in Italia";
+const LANDING_PAGE_TITLE = "Mappa Fontanelle in Italia";
 const LANDING_PAGE_DESCRIPTION =
-  "Trova fontanelle d'acqua potabile in Italia. Scopri la mappa delle fontanelle gratuite a Roma, Milano e in tutte le principali città. Bere acqua gratis ovunque!";
+  "Trova fontanelle d'acqua potabile in Italia con la mappa interattiva più completa. Scopri fontanelle gratuite, bagni pubblici, parcheggi bici e parchi giochi a Roma, Milano e in tutte le città.";
 const LANDING_PAGE_DESCRIPTION_SHORT =
-  "Trova fontanelle d'acqua potabile in Italia. Scopri la mappa delle fontanelle gratuite a Roma, Milano e in tutte le principali città.";
+  "Mappa fontanelle in Italia: fontanelle gratuite, bagni pubblici e parcheggi bici nelle principali città.";
 const LANDING_PAGE_KEYWORDS = [
   "fontanelle acqua potabile",
   "mappa fontanelle",
@@ -84,38 +84,37 @@ export default async function Home() {
         }}
       />
 
-      <div className="min-h-screen bg-base-100">
+      <main className="min-h-screen bg-base-100">
         {/* Hero Section */}
-        <div className="hero min-h-screen relative overflow-hidden flex flex-col bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10">
+        <section className="hero min-h-svh relative overflow-hidden flex flex-col bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10">
           <AnimatedHeroBackground />
           <div className="hero-content text-center relative z-10 flex-1 flex items-center justify-center pb-20 sm:pb-16">
             <div className="max-w-4xl">
+              <p className="text-sm sm:text-base uppercase tracking-wide text-primary/80 font-semibold mb-3">
+                Mappa fontanelle d&apos;acqua potabile in Italia
+              </p>
               <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-balance">
-                Trova fontanelle d&apos;acqua potabile in Italia
+                Trova fontanelle gratuite vicino a te
               </h1>
               <p className="text-lg sm:text-xl mb-4 text-balance max-w-3xl mx-auto leading-relaxed">
-                Scopri dove bere <strong>acqua potabile gratuita</strong> in
-                tutta Italia! La nostra mappa interattiva ti aiuta a trovare
-                <strong>
-                  {" "}
-                  oltre {counts.total.toLocaleString("it-IT")} punti di
-                  interesse
-                </strong>{" "}
-                tra fontanelle, parcheggi per biciclette, bagni pubblici e
-                parchi giochi nelle principali città italiane.
+                La mappa interattiva per trovare <strong>acqua potabile gratuita</strong> in tutta
+                Italia: <strong>{counts.total.toLocaleString("it-IT")} punti</strong> tra
+                fontanelle, bagni pubblici, parcheggi bici e parchi giochi.
               </p>
               <p className="text-base sm:text-lg mb-8 text-balance max-w-2xl mx-auto opacity-90">
-                Perfetto per ciclisti, turisti e famiglie che vogliono ridurre
-                l&apos;uso della plastica e contribuire alla sostenibilità
-                ambientale.
+                Ideale per ciclisti, turisti e famiglie che vogliono muoversi
+                leggeri e sostenibili.
               </p>
-              <Link
-                href="/app"
-                className="btn btn-primary btn-lg text-base sm:text-lg px-6 sm:px-8"
-              >
-                <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
-                Apri la mappa
-              </Link>
+              <div className="flex justify-center">
+                <Link
+                  href="/app"
+                  className="btn btn-primary btn-lg text-base sm:text-lg px-6 sm:px-8"
+                  aria-label="Apri la mappa interattiva"
+                >
+                  <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
+                  Apri la mappa
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -123,10 +122,10 @@ export default async function Home() {
           <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20">
             <ScrollDownArrow className="scale-90 sm:scale-100" />
           </div>
-        </div>
+        </section>
 
         {/* Statistics Section */}
-        <div className="py-16 px-4 bg-base-200">
+        <section id="dati" className="py-16 px-4 bg-base-200">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-4xl font-bold text-center mb-4">
               La mappa più completa d&apos;Italia
@@ -199,11 +198,13 @@ export default async function Home() {
                 </div>
               </div>
             </div>
+
+            
           </div>
-        </div>
+        </section>
 
         {/* Benefits Section */}
-        <div className="py-16 px-4">
+        <section id="come-funziona" className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-4xl font-bold text-center mb-12">
               Perché usare la nostra mappa delle fontanelle?
@@ -292,10 +293,60 @@ export default async function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* How it works */}
+        <section className="py-16 px-4 bg-base-200">
+          <div className="container mx-auto max-w-5xl">
+            <h2 className="text-4xl font-bold text-center mb-6">
+              Come funziona la mappa delle fontanelle
+            </h2>
+            <p className="text-lg text-center mb-10 opacity-80">
+              In tre passaggi trovi acqua potabile gratuita ovunque in Italia.
+            </p>
+            <ol className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <li className="card bg-base-100 shadow-lg border border-primary/10">
+                <div className="card-body text-center">
+                  <div className="text-2xl font-bold text-primary mb-2">1</div>
+                  <h3 className="card-title justify-center">Apri la mappa</h3>
+                  <p>
+                    Accedi alla mappa interattiva e visualizza subito tutte le
+                    fontanelle, i bagni pubblici e i parcheggi bici.
+                  </p>
+                </div>
+              </li>
+              <li className="card bg-base-100 shadow-lg border border-primary/10">
+                <div className="card-body text-center">
+                  <div className="text-2xl font-bold text-primary mb-2">2</div>
+                  <h3 className="card-title justify-center">Cerca la tua zona</h3>
+                  <p>
+                    Usa la ricerca per città, comune o via e centra la mappa
+                    esattamente dove ti serve.
+                  </p>
+                </div>
+              </li>
+              <li className="card bg-base-100 shadow-lg border border-primary/10">
+                <div className="card-body text-center">
+                  <div className="text-2xl font-bold text-primary mb-2">3</div>
+                  <h3 className="card-title justify-center">Filtra i servizi</h3>
+                  <p>
+                    Seleziona solo ciò che ti interessa: fontanelle, bagni,
+                    parcheggi bici o parchi giochi.
+                  </p>
+                </div>
+              </li>
+            </ol>
+            <div className="text-center mt-10">
+              <Link href="/app" className="btn btn-secondary btn-lg text-base sm:text-lg px-8">
+                <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
+                Vai alla mappa
+              </Link>
+            </div>
+          </div>
+        </section>
 
         {/* Cities Section */}
-        <div className="py-16 px-4">
+        <section id="citta" className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-4xl font-bold text-center mb-4">
               Fontanelle nelle principali città italiane
@@ -409,11 +460,18 @@ export default async function Home() {
                 </div>
               </div>
             </div>
+
+            <div className="text-center mt-10">
+              <Link href="/app" className="btn btn-primary btn-lg text-base sm:text-lg px-8">
+                <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
+                Apri la mappa delle fontanelle
+              </Link>
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* FAQ Section */}
-        <div className="py-16 px-4 bg-base-200">
+        <section id="faq" className="py-16 px-4 bg-base-200">
           <div className="container mx-auto max-w-4xl">
             <h2 className="text-4xl font-bold text-center mb-12">
               Domande frequenti
@@ -482,12 +540,27 @@ export default async function Home() {
                   </p>
                 </div>
               </div>
+
+              <div className="collapse collapse-plus bg-base-200">
+                <input type="radio" name="faq-accordion" />
+                <div className="collapse-title text-xl font-medium">
+                  <h3>L&apos;app funziona anche offline?</h3>
+                </div>
+                <div className="collapse-content">
+                  <p>
+                    L&apos;app è progettata come Progressive Web App (PWA) e può
+                    funzionare con connettività limitata. Una volta caricata la
+                    mappa, potrai consultare le informazioni anche senza
+                    connessione internet.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Final CTA */}
-        <div className="py-16 px-4 bg-primary text-primary-content">
+        <section className="py-16 px-4 bg-primary text-primary-content">
           <div className="container mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold mb-6">
               Inizia subito a trovare fontanelle vicino a te!
@@ -502,7 +575,7 @@ export default async function Home() {
               Apri la mappa
             </Link>
           </div>
-        </div>
+        </section>
 
         {/* Footer */}
         <footer className="footer footer-center p-10 bg-base-200 text-base-content flex flex-col sm:flex-row justify-between">
@@ -558,7 +631,7 @@ export default async function Home() {
             </p>
           </aside>
         </footer>
-      </div>
+      </main>
     </>
   );
 }
