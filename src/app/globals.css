@@ -117,6 +117,9 @@
   );
   --popup-text-mix-factor: 10%;
   --popup-alpha: 0.85;
+
+  /* Map filters */
+  --map-filter-dark: invert(100%) hue-rotate(220deg) brightness(100%) contrast(70%);
 }
 
 .station-popup {
@@ -203,6 +206,22 @@
 
 .map-fontanelle .leaflet-right .leaflet-control-scale {
   margin-right: 5rem;
+}
+
+.map-fontanelle {
+  .leaflet-layer,
+  .leaflet-control-zoom-in,
+  .leaflet-control-zoom-out {
+    @media (prefers-color-scheme: dark) {
+      filter: var(--map-filter-dark);
+    }
+
+    /* Support for manual theme selection */
+    :root[data-theme="dark"] &,
+    :root[data-theme="aqua-dark"] & {
+      filter: var(--map-filter-dark);
+    }
+  }
 }
 
 /* Hero Background Animations - Simplified */
