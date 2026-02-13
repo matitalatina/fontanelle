@@ -122,6 +122,11 @@
   --map-filter-dark: invert(100%) hue-rotate(220deg) brightness(100%) contrast(70%);
 }
 
+::view-transition-group(app) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 #app-transition-wrapper {
   view-transition-name: app;
 }
@@ -439,12 +444,4 @@
   .animate-fade-pulse {
     animation: fade-pulse 6s ease-in-out infinite;
   }
-}
-
-::view-transition-old(root),
-::view-transition-new(root),
-::view-transition-old(app),
-::view-transition-new(app) {
-  animation: none;
-  mix-blend-mode: normal;
 }

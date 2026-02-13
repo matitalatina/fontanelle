@@ -2,6 +2,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { flushSync } from "react-dom";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
@@ -74,17 +77,21 @@ export default function ThemeToggle() {
 
   return (
     <li>
-      <label
+      <a
+        onClick={toggleTheme}
         onPointerDown={handlePointerDown}
-        className="flex items-center justify-between p-4 cursor-pointer hover:bg-base-300/30 active:bg-base-300/50 transition-colors"
+        className="flex items-center justify-between cursor-pointer"
       >
-        <span className="text-base font-semibold ml-1">Tema</span>
+        <div className="flex items-center gap-2">
+          <FontAwesomeIcon icon={isDark ? faMoon : faSun} className="mr-2" />
+          <span>Tema</span>
+        </div>
         <div className="toggle text-base-content">
           <input
             ref={ref}
             type="checkbox"
             checked={!isDark}
-            onChange={toggleTheme}
+            readOnly
           />
           {/* Moon icon (left, toggle-off) */}
           <svg
@@ -121,7 +128,7 @@ export default function ThemeToggle() {
             <line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
           </svg>
         </div>
-      </label>
+      </a>
     </li>
   );
 }

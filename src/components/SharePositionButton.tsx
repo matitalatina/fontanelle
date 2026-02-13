@@ -5,6 +5,7 @@ import { LatLng } from "@/hooks/useLocation";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
+import { trackEvent } from "@/lib/analytics";
 
 type ShareData = {
   title: string;
@@ -38,7 +39,7 @@ L'ho trovato grazie a questa app: ${BASE_URL}`;
 
   if (canBrowserShareData(shareData)) {
     navigator.share(shareData);
-    umami.track("share_position", {
+    trackEvent("share_position", {
       markerType,
     });
   } else if (navigator.clipboard) {

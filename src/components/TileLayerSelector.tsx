@@ -19,7 +19,7 @@ export default function TileLayerSelector({
     <li>
       <details>
         <summary>
-          <FontAwesomeIcon icon={faMap} size="sm" className="mr-2" />
+          <FontAwesomeIcon icon={faMap} className="mr-2" />
           Stile mappa
         </summary>
         <ul>

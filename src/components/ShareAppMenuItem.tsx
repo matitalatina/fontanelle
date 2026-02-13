@@ -4,6 +4,7 @@ import { BASE_URL } from "@/app/seo-config";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { trackEvent } from "@/lib/analytics";
 
 type ShareData = {
   title: string;
@@ -28,7 +29,7 @@ export function shareApp(showTooltip: () => void) {
 
   if (canBrowserShareData(shareData)) {
     navigator.share(shareData);
-    umami.track("share_app");
+    trackEvent("share_app");
   } else if (navigator.clipboard) {
     navigator.clipboard.writeText(shareData.url);
     showTooltip();

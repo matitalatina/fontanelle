@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 export interface SearchResult {
   lat: number;
@@ -26,7 +27,7 @@ export default function useSearch() {
   const handleSearch = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!searchText.trim()) return;
-    umami.track("search");
+    trackEvent("search");
 
     setLoading(true);
     setError(null);
