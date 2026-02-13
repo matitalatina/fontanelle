@@ -5,6 +5,7 @@ import AddToHome from "./AddToHome";
 import TileLayerSelector from "./TileLayerSelector";
 import useTileLayer from "@/hooks/useTileLayer";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -37,6 +38,7 @@ export default function App() {
           className="drawer-overlay"
         ></label>
         <ul className="menu menu-xl bg-base-200/85 backdrop-blur-sm text-base-content min-h-full w-80">
+          <ThemeToggle />
           <TileLayerSelector
             selectedTileLayer={selectedTileLayer}
             onChange={selectTileLayer}

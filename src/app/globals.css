@@ -122,6 +122,10 @@
   --map-filter-dark: invert(100%) hue-rotate(220deg) brightness(100%) contrast(70%);
 }
 
+#app-transition-wrapper {
+  view-transition-name: app;
+}
+
 .station-popup {
   --_color-hue: var(--color-hue-bicycle);
   --_color: var(--color-bicycle);
@@ -212,13 +216,15 @@
   .leaflet-layer,
   .leaflet-control-zoom-in,
   .leaflet-control-zoom-out {
-    @media (prefers-color-scheme: dark) {
-      filter: var(--map-filter-dark);
-    }
-
     /* Support for manual theme selection */
     :root[data-theme="dark"] &,
     :root[data-theme="aqua-dark"] & {
+      filter: var(--map-filter-dark);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) & {
       filter: var(--map-filter-dark);
     }
   }
@@ -433,4 +439,12 @@
   .animate-fade-pulse {
     animation: fade-pulse 6s ease-in-out infinite;
   }
+}
+
+::view-transition-old(root),
+::view-transition-new(root),
+::view-transition-old(app),
+::view-transition-new(app) {
+  animation: none;
+  mix-blend-mode: normal;
 }
