@@ -1,5 +1,5 @@
 import { Toilet } from "@/lib/toilets";
-import L from "leaflet";
+import { Icon, PinStarPanel } from "leaflet-extra-markers";
 import { Marker, Popup } from "react-leaflet";
 import GoToButton from "../GoToButton";
 import FeatureIcon from "../FeatureIcon";
@@ -7,10 +7,10 @@ import SharePositionButton from "../SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faRestroom } from "@fortawesome/free-solid-svg-icons";
 
-const toiletMarker = L.ExtraMarkers.icon({
-  innerHTML: createMarkerIconHTML(faRestroom),
-  markerColor: "purple",
-  shape: "star",
+const toiletMarker = new Icon({
+  contentHtml: createMarkerIconHTML(faRestroom),
+  color: "#440444",
+  svg: PinStarPanel,
 });
 
 export default function ToiletMarker({ toilet }: { toilet: Toilet }) {

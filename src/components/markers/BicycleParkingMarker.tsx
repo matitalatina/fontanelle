@@ -1,7 +1,7 @@
 "use client";
 
 import { BicycleParking } from "@/lib/bicycleParking";
-import L from "leaflet";
+import { Icon, PinSquarePanel } from "leaflet-extra-markers";
 import { Marker, Popup } from "react-leaflet";
 import FeatureIcon from "../FeatureIcon";
 import GoToButton from "../GoToButton";
@@ -10,10 +10,10 @@ import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faParking, faBicycle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const bicycleParkingMarker = L.ExtraMarkers.icon({
-  innerHTML: createMarkerIconHTML(faParking),
-  markerColor: "blue",
-  shape: "square",
+const bicycleParkingMarker = new Icon({
+  contentHtml: createMarkerIconHTML(faParking),
+  color: "#1b75bb",
+  svg: PinSquarePanel,
 });
 
 export default function BicycleParkingMarker({

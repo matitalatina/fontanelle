@@ -2,8 +2,6 @@
 
 import useLocation from "@/hooks/useLocation";
 import "leaflet";
-import "leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css";
-import "leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js";
 import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import { MapContainer } from "react-leaflet/MapContainer";

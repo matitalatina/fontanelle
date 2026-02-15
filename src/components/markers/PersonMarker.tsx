@@ -1,14 +1,14 @@
 "use client";
 
 import { Marker } from "react-leaflet";
-import L from "leaflet";
+import { Icon, PinSquarePanel } from "leaflet-extra-markers";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-const redMarker = L.ExtraMarkers.icon({
-  innerHTML: createMarkerIconHTML(faUser),
-  markerColor: "red",
-  shape: "square",
+const redMarker = new Icon({
+  contentHtml: createMarkerIconHTML(faUser),
+  color: "#a23337",
+  svg: PinSquarePanel,
 });
 
 export default function PersonMarker({

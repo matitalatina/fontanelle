@@ -2,22 +2,22 @@
 
 import { Station } from "@/lib/stations";
 import { Marker, Popup } from "react-leaflet";
-import L from "leaflet";
+import { Icon, PinSquarePanel } from "leaflet-extra-markers";
 import GoToButton from "../GoToButton";
 import SharePositionButton from "../SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faFaucetDrip } from "@fortawesome/free-solid-svg-icons";
 
-const fountainMarker = L.ExtraMarkers.icon({
-  innerHTML: createMarkerIconHTML(faFaucetDrip),
-  markerColor: "green",
-  shape: "square",
+const fountainMarker = new Icon({
+  contentHtml: createMarkerIconHTML(faFaucetDrip),
+  color: "#009549",
+  svg: PinSquarePanel,
 });
 
-const houseMarker = L.ExtraMarkers.icon({
-  innerHTML: createMarkerIconHTML(faFaucetDrip),
-  markerColor: "blue",
-  shape: "square",
+const houseMarker = new Icon({
+  contentHtml: createMarkerIconHTML(faFaucetDrip),
+  color: "#1b75bb",
+  svg: PinSquarePanel,
 });
 
 export default function StationMarker({ station }: { station: Station }) {

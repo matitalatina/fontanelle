@@ -1,16 +1,16 @@
 "use client";
-import L from "leaflet";
+import { Icon, PinCirclePanel } from "leaflet-extra-markers";
 import { Marker, Popup } from "react-leaflet";
 import GoToButton from "../GoToButton";
 import SharePositionButton from "../SharePositionButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt, faLocationDot, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 
-const searchMarkerIcon = L.ExtraMarkers.icon({
-  innerHTML: createMarkerIconHTML(faSearch),
-  markerColor: "cyan",
-  shape: "circle",
+const searchMarkerIcon = new Icon({
+  contentHtml: createMarkerIconHTML(faSearch),
+  color: "#32a9dd",
+  svg: PinCirclePanel,
 });
 
 interface SearchResultMarkerProps {

@@ -1,6 +1,7 @@
 "use client";
 import { LatLng } from "@/hooks/useLocation";
-import L, { Marker as LMarker } from "leaflet";
+import { Marker as LMarker } from "leaflet";
+import { Icon, PinCirclePanel } from "leaflet-extra-markers";
 import { useRef, useState } from "react";
 import { Marker, Popup, useMapEvents } from "react-leaflet";
 import GoToButton from "../GoToButton";
@@ -9,10 +10,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 
-const houseMarker = L.ExtraMarkers.icon({
-  innerHTML: createMarkerIconHTML(faMapPin),
-  markerColor: "purple",
-  shape: "circle",
+const houseMarker = new Icon({
+  contentHtml: createMarkerIconHTML(faMapPin),
+  color: "#440444",
+  svg: PinCirclePanel,
 });
 
 export default function CustomMarker() {
