@@ -9,7 +9,9 @@ import { faRestroom } from "@fortawesome/free-solid-svg-icons";
 
 const toiletMarker = new Icon({
   contentHtml: createMarkerIconHTML(faRestroom),
-  color: "#440444",
+  color: "var(--color-toilet-content)",
+  contentColor: "var(--color-toilet)",
+  accentColor: "var(--color-toilet)",
   svg: PinStarPanel,
 });
 

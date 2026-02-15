@@ -10,13 +10,17 @@ import { faFaucetDrip } from "@fortawesome/free-solid-svg-icons";
 
 const fountainMarker = new Icon({
   contentHtml: createMarkerIconHTML(faFaucetDrip),
-  color: "#009549",
+  color: "var(--color-fountain-content)",
+  contentColor: "var(--color-fountain)",
+  accentColor: "var(--color-fountain)",
   svg: PinSquarePanel,
 });
 
 const houseMarker = new Icon({
   contentHtml: createMarkerIconHTML(faFaucetDrip),
-  color: "#1b75bb",
+  color: "var(--color-water-house-content)",
+  contentColor: "var(--color-water-house)",
+  accentColor: "var(--color-water-house)",
   svg: PinSquarePanel,
 });
 

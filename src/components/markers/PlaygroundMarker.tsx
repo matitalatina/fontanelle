@@ -1,5 +1,5 @@
 import { Playground } from "@/lib/playgrounds";
-import { Icon, PinCirclePanel } from "leaflet-extra-markers";
+import { Icon, PinTrianglePanel } from "leaflet-extra-markers";
 import { Marker, Popup } from "react-leaflet";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faFutbol } from "@fortawesome/free-solid-svg-icons";
@@ -8,9 +8,11 @@ import SharePositionButton from "../SharePositionButton";
 import GoToButton from "../GoToButton";
 
 const playgroundMarker = new Icon({
-  contentHtml: createMarkerIconHTML(faFutbol, "text-gray-800"),
-  color: "#f5bb39",
-  svg: PinCirclePanel,
+  contentHtml: createMarkerIconHTML(faFutbol),
+  color: "var(--color-playground-content)",
+  contentColor: "var(--color-playground)",
+  accentColor: "var(--color-playground)",
+  svg: PinTrianglePanel,
 });
 
 export default function PlaygroundMarker({

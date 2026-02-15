@@ -7,7 +7,9 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const redMarker = new Icon({
   contentHtml: createMarkerIconHTML(faUser),
-  color: "#a23337",
+  color: "var(--color-person-content)",
+  contentColor: "var(--color-person)",
+  accentColor: "var(--color-person)",
   svg: PinSquarePanel,
 });
 

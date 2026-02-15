@@ -12,7 +12,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const bicycleParkingMarker = new Icon({
   contentHtml: createMarkerIconHTML(faParking),
-  color: "#1b75bb",
+  color: "var(--color-bicycle-content)",
+  contentColor: "var(--color-bicycle)",
+  accentColor: "var(--color-bicycle)",
   svg: PinSquarePanel,
 });
 

@@ -91,29 +91,71 @@
   --color-hue-water-house: 253.91;
   --color-hue-toilet: 329.49;
   --color-hue-custom: 329.49;
+  --color-hue-person: 98;
+  --color-hue-search: 253.91;
   --color-bicycle: light-dark(
-    oklch(0.5 0.1359 var(--color-hue-bicycle)),
-    oklch(0.6 0.1359 var(--color-hue-bicycle))
+    oklch(0.3 0.1359 var(--color-hue-bicycle)),
+    oklch(0.8 0.1359 var(--color-hue-bicycle))
+  );
+  --color-bicycle-content: light-dark(
+    oklch(0.95 0.1359 var(--color-hue-bicycle)),
+    oklch(0.05 0.1359 var(--color-hue-bicycle))
   );
   --color-playground: light-dark(
-    oklch(0.7 0.1463 var(--color-hue-playground)),
-    oklch(0.6 0.1463 var(--color-hue-playground))
+    oklch(0.3 0.1463 var(--color-hue-playground)),
+    oklch(0.8 0.1463 var(--color-hue-playground))
+  );
+  --color-playground-content: light-dark(
+    oklch(0.95 0.1463 var(--color-hue-playground)),
+    oklch(0.05 0.1463 var(--color-hue-playground))
   );
   --color-fountain: light-dark(
-    oklch(0.5 0.1403 var(--color-hue-fountain)),
-    oklch(0.6 0.1403 var(--color-hue-fountain))
+    oklch(0.3 0.1403 var(--color-hue-fountain)),
+    oklch(0.8 0.1403 var(--color-hue-fountain))
+  );
+  --color-fountain-content: light-dark(
+    oklch(0.95 0.1403 var(--color-hue-fountain)),
+    oklch(0.05 0.1403 var(--color-hue-fountain))
   );
   --color-water-house: light-dark(
-    oklch(0.5 0.1359 var(--color-hue-water-house)),
-    oklch(0.6 0.1359 var(--color-hue-water-house))
+    oklch(0.3 0.1359 var(--color-hue-water-house)),
+    oklch(0.8 0.1359 var(--color-hue-water-house))
+  );
+  --color-water-house-content: light-dark(
+    oklch(0.95 0.1359 var(--color-hue-water-house)),
+    oklch(0.05 0.1359 var(--color-hue-water-house))
   );
   --color-toilet: light-dark(
-    oklch(0.5 0.1601 var(--color-hue-toilet)),
-    oklch(0.6 0.1601 var(--color-hue-toilet))
+    oklch(0.3 0.1601 var(--color-hue-toilet)),
+    oklch(0.8 0.1601 var(--color-hue-toilet))
+  );
+  --color-toilet-content: light-dark(
+    oklch(0.95 0.1601 var(--color-hue-toilet)),
+    oklch(0.05 0.1601 var(--color-hue-toilet))
   );
   --color-custom: light-dark(
-    oklch(0.5 0.1601 var(--color-hue-custom)),
-    oklch(0.6 0.1601 var(--color-hue-custom))
+    oklch(0.3 0.1601 var(--color-hue-custom)),
+    oklch(0.8 0.1601 var(--color-hue-custom))
+  );
+  --color-custom-content: light-dark(
+    oklch(0.95 0.1601 var(--color-hue-custom)),
+    oklch(0.05 0.1601 var(--color-hue-custom))
+  );
+  --color-person: light-dark(
+    oklch(0.3 0.1601 var(--color-hue-person)),
+    oklch(0.8 0.1601 var(--color-hue-person))
+  );
+  --color-person-content: light-dark(
+    oklch(0.95 0.1601 var(--color-hue-person)),
+    oklch(0.05 0.1601 var(--color-hue-person))
+  );
+  --color-search: light-dark(
+    oklch(0.3 0.1601 var(--color-hue-search)),
+    oklch(0.8 0.1601 var(--color-hue-search))
+  );
+  --color-search-content: light-dark(
+    oklch(0.95 0.1601 var(--color-hue-search)),
+    oklch(0.05 0.1601 var(--color-hue-search))
   );
   --popup-text-mix-factor: 10%;
   --popup-alpha: 0.85;
@@ -185,6 +227,16 @@
   &.popup-custom {
     --_color-hue: var(--color-hue-custom);
     --_color: var(--color-custom);
+  }
+
+  &.popup-person {
+    --_color-hue: var(--color-hue-person);
+    --_color: var(--color-person);
+  }
+
+  &.popup-search {
+    --_color-hue: var(--color-hue-search);
+    --_color: var(--color-search);
   }
 }
 

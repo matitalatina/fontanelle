@@ -12,7 +12,9 @@ import { createMarkerIconHTML } from "@/lib/marker-icons";
 
 const houseMarker = new Icon({
   contentHtml: createMarkerIconHTML(faMapPin),
-  color: "#440444",
+  color: "var(--color-custom-content)",
+  contentColor: "var(--color-custom)",
+  accentColor: "var(--color-custom)",
   svg: PinCirclePanel,
 });
 

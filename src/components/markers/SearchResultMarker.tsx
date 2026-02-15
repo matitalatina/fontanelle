@@ -9,7 +9,9 @@ import { createMarkerIconHTML } from "@/lib/marker-icons";
 
 const searchMarkerIcon = new Icon({
   contentHtml: createMarkerIconHTML(faSearch),
-  color: "#32a9dd",
+  color: "var(--color-search-content)",
+  contentColor: "var(--color-search)",
+  accentColor: "var(--color-search)",
   svg: PinCirclePanel,
 });
 
@@ -26,7 +28,7 @@ export default function SearchResultMarker({ position, displayName, onClear }: S
       icon={searchMarkerIcon}
     >
       <Popup
-        className="station-popup custom-marker-popup popup-custom"
+        className="station-popup custom-marker-popup popup-search"
         closeButton={false}
       >
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
