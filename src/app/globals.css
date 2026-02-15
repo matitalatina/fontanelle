@@ -161,7 +161,7 @@
   --popup-alpha: 0.85;
 
   /* Map filters */
-  --map-filter-dark: invert(100%) hue-rotate(220deg) brightness(100%) contrast(70%);
+  --map-filter-dark: invert(100%) hue-rotate(220deg) brightness(100%) contrast(85%);
 }
 
 ::view-transition-group(app) {

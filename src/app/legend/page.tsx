@@ -73,7 +73,7 @@ export default function LegendaPage() {
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-fountain rounded-md">
                       <FontAwesomeIcon
                         icon={faFaucetDrip}
-                        className="text-white text-xl"
+                        className="text-fountain-content text-xl"
                       />
                     </div>
                   </td>
@@ -89,7 +89,7 @@ export default function LegendaPage() {
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-blue-600 rounded-md">
                       <FontAwesomeIcon
                         icon={faFaucetDrip}
-                        className="text-white text-xl"
+                        className="text-water-house-content text-xl"
                       />
                     </div>
                   </td>
@@ -105,7 +105,7 @@ export default function LegendaPage() {
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-toilet rounded-md">
                       <FontAwesomeIcon
                         icon={faRestroom}
-                        className="text-white text-xl"
+                        className="text-toilet-content text-xl"
                       />
                     </div>
                   </td>
@@ -119,7 +119,7 @@ export default function LegendaPage() {
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-bicycle rounded-md">
                       <FontAwesomeIcon
                         icon={faParking}
-                        className="text-white text-xl"
+                        className="text-bicycle-content text-xl"
                       />
                     </div>
                   </td>
@@ -135,7 +135,7 @@ export default function LegendaPage() {
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-playground rounded-full">
                       <FontAwesomeIcon
                         icon={faFutbol}
-                        className="text-white text-xl"
+                        className="text-playground-content text-xl"
                       />
                     </div>
                   </td>
@@ -155,7 +155,7 @@ export default function LegendaPage() {
         <div className="card-body">
           <h2 className="card-title">
             <div className="w-8 h-8 flex items-center justify-center bg-fountain rounded-md mr-2">
-              <FontAwesomeIcon icon={faFaucetDrip} className="text-white" />
+              <FontAwesomeIcon icon={faFaucetDrip} className="text-fountain-content" />
             </div>
             Attributi Fontanelle
           </h2>
@@ -173,7 +173,7 @@ export default function LegendaPage() {
                     <div className="w-12 h-12 ml-auto flex items-center justify-center bg-fountain rounded-md">
                       <FontAwesomeIcon
                         icon={faFaucetDrip}
-                        className="text-white text-xl"
+                        className="text-fountain-content text-xl"
                       />
                     </div>
                   </td>
@@ -183,10 +183,10 @@ export default function LegendaPage() {
                 </tr>
                 <tr>
                   <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-blue-600 rounded-md">
+                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-water-house rounded-md">
                       <FontAwesomeIcon
                         icon={faFaucetDrip}
-                        className="text-white text-xl"
+                        className="text-water-house-content text-xl"
                       />
                     </div>
                   </td>
@@ -205,7 +205,7 @@ export default function LegendaPage() {
         <div className="card-body">
           <h2 className="card-title">
             <div className="w-8 h-8 flex items-center justify-center bg-toilet rounded-md mr-2">
-              <FontAwesomeIcon icon={faRestroom} className="text-white" />
+              <FontAwesomeIcon icon={faRestroom} className="text-toilet-content" />
             </div>
             Attributi Bagni Pubblici
           </h2>
@@ -270,8 +270,8 @@ export default function LegendaPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <div className="w-8 h-8 flex items-center justify-center bg-blue-600 rounded-md mr-2">
-              <FontAwesomeIcon icon={faParking} className="text-white" />
+            <div className="w-8 h-8 flex items-center justify-center bg-bicycle rounded-md mr-2">
+              <FontAwesomeIcon icon={faParking} className="text-bicycle-content" />
             </div>
             Attributi Parcheggi Bici
           </h2>
@@ -389,8 +389,8 @@ export default function LegendaPage() {
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
-            <div className="w-8 h-8 flex items-center justify-center bg-yellow-400 rounded-full mr-2">
-              <FontAwesomeIcon icon={faFutbol} className="text-gray-800" />
+            <div className="w-8 h-8 flex items-center justify-center bg-playground rounded-full mr-2">
+              <FontAwesomeIcon icon={faFutbol} className="text-playground-content" />
             </div>
             Attributi Parchi Giochi
           </h2>
