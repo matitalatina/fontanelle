@@ -6,6 +6,7 @@ import { faFutbol } from "@fortawesome/free-solid-svg-icons";
 import FeatureIcon from "../FeatureIcon";
 import SharePositionButton from "../SharePositionButton";
 import GoToButton from "../GoToButton";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const playgroundMarker = new Icon({
   contentHtml: createMarkerIconHTML(faFutbol),
@@ -20,12 +21,14 @@ export default function PlaygroundMarker({
 }: {
   playground: Playground;
 }) {
+  const t = useI18n();
+
   return (
     <Marker position={[playground.lat, playground.lng]} icon={playgroundMarker}>
       <Popup className="station-popup popup-playground" closeButton={false}>
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
-            <div className="text-lg">Parco Giochi</div>
+            <div className="text-lg">{t.app.markerLabels.playground}</div>
             <div className="flex flex-row space-x-2 items-center min-h-4 text-base">
               <FeatureIcon icon="fas fa-euro-sign" isPresent={playground.fee} />
               <FeatureIcon icon="fas fa-home" isPresent={playground.indoor} />
@@ -44,7 +47,7 @@ export default function PlaygroundMarker({
           <div className="flex flex-row justify-between">
             <SharePositionButton
               latLng={{ lat: playground.lat, lng: playground.lng }}
-              markerType="un parco giochi"
+              markerType={t.app.markerTypes.playground}
             />
             <GoToButton latLng={{ lat: playground.lat, lng: playground.lng }} />
           </div>

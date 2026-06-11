@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { trackEvent } from "@/lib/analytics";
+import { useI18n, useLocale } from "@/i18n/I18nProvider";
 
 export interface SearchResult {
   lat: number;
@@ -23,6 +24,8 @@ export default function useSearch() {
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useI18n();
+  const locale = useLocale();
 
   const handleSearch = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -34,15 +37,18 @@ export default function useSearch() {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(
-          searchText
+          searchText,
         )}&limit=2&countrycodes=it&featureType=city,settlement`,
         {
           headers: {
             "User-Agent":
               "fontanelle/0.1.0 (https://github.com/matitalatina/fontanelle)",
-            "Accept-Language": "it-IT,it;q=0.9,en;q=0.8",
+            "Accept-Language":
+              locale === "it"
+                ? "it-IT,it;q=0.9,en;q=0.8"
+                : "en-US,en;q=0.9,it;q=0.8",
           },
-        }
+        },
       );
       const json: NominatimResult[] = await response.json();
       const data = json.filter((i) => i.addresstype !== "county");
@@ -56,12 +62,12 @@ export default function useSearch() {
         setError(null);
       } else {
         setSearchResult(null);
-        setError("Nessun risultato trovato");
+        setError(t.search.noResults);
       }
     } catch (error) {
       console.error("Search error:", error);
       setSearchResult(null);
-      setError("Errore durante la ricerca");
+      setError(t.search.error);
     } finally {
       setLoading(false);
     }

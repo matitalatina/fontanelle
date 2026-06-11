@@ -6,6 +6,7 @@ import SharePositionButton from "../SharePositionButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const searchMarkerIcon = new Icon({
   contentHtml: createMarkerIconHTML(faSearch),
@@ -16,24 +17,27 @@ const searchMarkerIcon = new Icon({
 });
 
 interface SearchResultMarkerProps {
-    position: { lat: number; lng: number };
-    displayName: string;
-    onClear: () => void;
+  position: { lat: number; lng: number };
+  displayName: string;
+  onClear: () => void;
 }
 
-export default function SearchResultMarker({ position, displayName, onClear }: SearchResultMarkerProps) {
+export default function SearchResultMarker({
+  position,
+  displayName,
+  onClear,
+}: SearchResultMarkerProps) {
+  const t = useI18n();
+
   return (
-    <Marker
-      position={[position.lat, position.lng]}
-      icon={searchMarkerIcon}
-    >
+    <Marker position={[position.lat, position.lng]} icon={searchMarkerIcon}>
       <Popup
         className="station-popup custom-marker-popup popup-search"
         closeButton={false}
       >
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
-            <div className="text-lg font-bold">Risultato ricerca</div>
+            <div className="text-lg font-bold">{t.search.resultTitle}</div>
             <div className="text-sm">{displayName}</div>
           </div>
           <div className="flex justify-between flex-row gap-2">
@@ -46,7 +50,7 @@ export default function SearchResultMarker({ position, displayName, onClear }: S
             </button>
             <SharePositionButton
               latLng={position}
-              markerType="un risultato della ricerca"
+              markerType={t.app.markerTypes.searchResult}
             />
             <GoToButton latLng={position} />
           </div>

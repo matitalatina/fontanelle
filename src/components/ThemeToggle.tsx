@@ -4,8 +4,10 @@ import { flushSync } from "react-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import { useI18n } from "@/i18n/I18nProvider";
 
 export default function ThemeToggle() {
+  const t = useI18n();
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("isDark");
@@ -29,7 +31,7 @@ export default function ThemeToggle() {
 
   const toggleTheme = async () => {
     const nextIsDark = !isDark;
-    
+
     if (
       !document.startViewTransition ||
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -70,7 +72,7 @@ export default function ThemeToggle() {
         duration: 500,
         easing: "ease-in-out",
         pseudoElement: "::view-transition-new(app)",
-      }
+      },
     );
     clickPos.current = null;
   };
@@ -84,15 +86,10 @@ export default function ThemeToggle() {
       >
         <div className="flex items-center gap-2">
           <FontAwesomeIcon icon={isDark ? faMoon : faSun} className="mr-2" />
-          <span>Tema</span>
+          <span>{t.app.themeLabel}</span>
         </div>
         <div className="toggle text-base-content">
-          <input
-            ref={ref}
-            type="checkbox"
-            checked={!isDark}
-            readOnly
-          />
+          <input ref={ref} type="checkbox" checked={!isDark} readOnly />
           {/* Moon icon (left, toggle-off) */}
           <svg
             className="toggle-off shrink-0 size-4"

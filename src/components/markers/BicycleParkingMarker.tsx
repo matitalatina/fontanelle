@@ -9,6 +9,7 @@ import SharePositionButton from "../SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faParking, faBicycle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const bicycleParkingMarker = new Icon({
   contentHtml: createMarkerIconHTML(faParking),
@@ -23,6 +24,8 @@ export default function BicycleParkingMarker({
 }: {
   bicycleParking: BicycleParking;
 }) {
+  const t = useI18n();
+
   return (
     <Marker
       position={[bicycleParking.lat, bicycleParking.lng]}
@@ -31,7 +34,7 @@ export default function BicycleParkingMarker({
       <Popup className="station-popup popup-bicycle" closeButton={false}>
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
-            <div className="text-lg">Parcheggio Bici</div>
+            <div className="text-lg">{t.app.markerLabels.bicycleParking}</div>
             <div className="flex flex-row space-x-2 items-center min-h-4 text-base">
               <FeatureIcon
                 icon="fas fa-euro-sign"
@@ -54,14 +57,16 @@ export default function BicycleParkingMarker({
               <div className="items-center text-base">
                 <FontAwesomeIcon icon={faBicycle} className="mr-1" />
                 {bicycleParking.capacity}{" "}
-                {bicycleParking.capacity === 1 ? "posto" : "posti"}
+                {bicycleParking.capacity === 1
+                  ? t.app.capacitySingular
+                  : t.app.capacityPlural}
               </div>
             )}
           </div>
           <div className="flex flex-row justify-between">
             <SharePositionButton
               latLng={{ lat: bicycleParking.lat, lng: bicycleParking.lng }}
-              markerType="un parcheggio bici"
+              markerType={t.app.markerTypes.bicycleParking}
             />
             <GoToButton
               latLng={{ lat: bicycleParking.lat, lng: bicycleParking.lng }}

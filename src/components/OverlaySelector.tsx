@@ -6,6 +6,7 @@ import {
   faParking,
   faFutbol,
 } from "@fortawesome/free-solid-svg-icons";
+import { useI18n } from "@/i18n/I18nProvider";
 
 export type AvailableOverlay =
   | "stations"
@@ -23,6 +24,8 @@ export default function OverlaySelector({
   selectedOverlays,
   onChange,
 }: OverlaySelectorProps) {
+  const t = useI18n();
+
   return (
     <div
       className="collapse absolute top-4 right-4 w-auto bg-base-100 rounded-box shadow-xl"
@@ -37,11 +40,13 @@ export default function OverlaySelector({
         <FontAwesomeIcon icon={faLayerGroup} size="lg" />
       </div>
       <div className="collapse-content px-2 mt-0.5 peer-checked:pb-2">
+        <div className="sr-only">{t.app.overlayLabel}</div>
         <div className="join join-vertical">
           <button
             className={`btn join-item px-2 ${
               selectedOverlays.stations ? "btn-neutral dark:btn-primary" : ""
             }`}
+            aria-label={t.app.overlays.stations}
             onClick={() =>
               onChange({
                 ...selectedOverlays,
@@ -55,6 +60,7 @@ export default function OverlaySelector({
             className={`btn join-item px-2 ${
               selectedOverlays.toilets ? "btn-neutral dark:btn-primary" : ""
             }`}
+            aria-label={t.app.overlays.toilets}
             onClick={() =>
               onChange({
                 ...selectedOverlays,
@@ -70,6 +76,7 @@ export default function OverlaySelector({
                 ? "btn-neutral dark:btn-primary"
                 : ""
             }`}
+            aria-label={t.app.overlays.bicycleParkings}
             onClick={() =>
               onChange({
                 ...selectedOverlays,
@@ -83,6 +90,7 @@ export default function OverlaySelector({
             className={`btn join-item px-2 ${
               selectedOverlays.playgrounds ? "btn-neutral dark:btn-primary" : ""
             }`}
+            aria-label={t.app.overlays.playgrounds}
             onClick={() =>
               onChange({
                 ...selectedOverlays,

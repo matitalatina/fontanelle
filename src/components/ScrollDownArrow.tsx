@@ -3,6 +3,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { useI18n } from "@/i18n/I18nProvider";
 
 interface ScrollDownArrowProps {
   onClick?: () => void;
@@ -13,6 +14,7 @@ const ScrollDownArrow: React.FC<ScrollDownArrowProps> = ({
   onClick,
   className = "",
 }) => {
+  const t = useI18n();
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -31,7 +33,7 @@ const ScrollDownArrow: React.FC<ScrollDownArrowProps> = ({
       onClick={handleClick}
       role="button"
       tabIndex={0}
-      aria-label="Scorri verso il basso per vedere di più"
+      aria-label={t.landing.scrollDownAria}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -42,7 +44,7 @@ const ScrollDownArrow: React.FC<ScrollDownArrowProps> = ({
       <div className="flex flex-col items-center space-y-1 sm:space-y-2">
         {/* Text hint - hidden on very small screens */}
         <span className="hidden xs:block text-xs sm:text-sm font-medium opacity-70 animate-fade-pulse group-hover:opacity-100 transition-opacity duration-300">
-          Scorri per saperne di più
+          {t.landing.scrollDownHint}
         </span>
 
         {/* Arrow container with background */}

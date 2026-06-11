@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { Metadata, Viewport } from "next";
-import { createViewport } from "../seo-config";
+import { createMetadata, createViewport } from "@/app/seo-config";
+import { getDictionary } from "@/i18n/dictionaries";
+import { isLocale } from "@/i18n/locales";
+import { notFound } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookOpen,
@@ -17,35 +20,55 @@ import {
   faHouse,
   faVideo,
   faBicycle,
-  faInfoCircle,
-  faLayerGroup,
-  faShareNodes,
-  faUserShield,
-  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import { localizedPath } from "@/i18n/navigation";
 
-export const metadata: Metadata = {
-  title: "Legenda",
-  description:
-    "Legenda dei simboli della mappa delle fontanelle d'acqua potabile, case dell'acqua, bagni pubblici, parcheggi per biciclette e parchi giochi in Italia.",
-  alternates: {
-    canonical: "/legend",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+
+  if (!isLocale(lang)) {
+    notFound();
+  }
+
+  const t = getDictionary(lang);
+
+  return createMetadata({
+    locale: lang,
+    title: t.legend.title,
+    description: t.legend.description,
+    path: "/legend",
+  });
+}
 
 export const viewport: Viewport = createViewport();
 
-export default function LegendaPage() {
+export default async function LegendPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+
+  if (!isLocale(lang)) {
+    notFound();
+  }
+
+  const t = getDictionary(lang);
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6 ml-6">
         <h1 className="text-2xl font-bold">
           <FontAwesomeIcon icon={faBookOpen} className="mr-2" />
-          Legenda
+          {t.legend.title}
         </h1>
-        <Link href="/app" className="btn btn-primary">
+        <Link href={localizedPath(lang, "/app")} className="btn btn-primary">
           <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
-          Torna alla mappa
+          {t.legend.backToMap}
         </Link>
       </div>
 
@@ -56,15 +79,15 @@ export default function LegendaPage() {
               icon={faMapMarkerAlt}
               className="text-primary mr-2"
             />
-            Icone sulla mappa
+            {t.legend.iconTableTitle}
           </h2>
 
           <div className="overflow-x-auto">
-            <table className="table w-auto text-left">
+            <table className="table w-full text-left">
               <thead>
                 <tr>
-                  <th className="text-right">Icona</th>
-                  <th>Descrizione</th>
+                  <th className="text-right">{t.legend.iconHeader}</th>
+                  <th>{t.legend.descriptionHeader}</th>
                 </tr>
               </thead>
               <tbody>
@@ -78,9 +101,9 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p className="font-bold">Fontanella</p>
+                    <p className="font-bold">{t.legend.rows.fountain.title}</p>
                     <p className="text-sm">
-                      Punto acqua potabile pubblico gratuito
+                      {t.legend.rows.fountain.description}
                     </p>
                   </td>
                 </tr>
@@ -94,9 +117,11 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p className="font-bold">Casa dell&apos;acqua</p>
+                    <p className="font-bold">
+                      {t.legend.rows.waterHouse.title}
+                    </p>
                     <p className="text-sm">
-                      Distributore automatico di acqua potabile
+                      {t.legend.rows.waterHouse.description}
                     </p>
                   </td>
                 </tr>
@@ -110,8 +135,10 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p className="font-bold">Bagno pubblico</p>
-                    <p className="text-sm">Servizi igienici pubblici</p>
+                    <p className="font-bold">{t.legend.rows.toilet.title}</p>
+                    <p className="text-sm">
+                      {t.legend.rows.toilet.description}
+                    </p>
                   </td>
                 </tr>
                 <tr>
@@ -124,9 +151,11 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p className="font-bold">Parcheggio bici</p>
+                    <p className="font-bold">
+                      {t.legend.rows.bicycleParking.title}
+                    </p>
                     <p className="text-sm">
-                      Area dedicata al parcheggio delle biciclette
+                      {t.legend.rows.bicycleParking.description}
                     </p>
                   </td>
                 </tr>
@@ -140,8 +169,12 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p className="font-bold">Parco giochi</p>
-                    <p className="text-sm">Area giochi per bambini</p>
+                    <p className="font-bold">
+                      {t.legend.rows.playground.title}
+                    </p>
+                    <p className="text-sm">
+                      {t.legend.rows.playground.description}
+                    </p>
                   </td>
                 </tr>
               </tbody>
@@ -150,71 +183,23 @@ export default function LegendaPage() {
         </div>
       </div>
 
-      {/* Attributi per Fontanelle */}
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
             <div className="w-8 h-8 flex items-center justify-center bg-fountain rounded-md mr-2">
-              <FontAwesomeIcon icon={faFaucetDrip} className="text-fountain-content" />
+              <FontAwesomeIcon
+                icon={faFaucetDrip}
+                className="text-fountain-content"
+              />
             </div>
-            Attributi Fontanelle
+            {t.legend.attributesTitle} {t.legend.rows.fountain.title}
           </h2>
           <div className="overflow-x-auto">
             <table className="table w-auto text-left">
               <thead>
                 <tr>
-                  <th className="text-right">Icona</th>
-                  <th>Descrizione</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-fountain rounded-md">
-                      <FontAwesomeIcon
-                        icon={faFaucetDrip}
-                        className="text-fountain-content text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p>Pubblico gratuito</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-water-house rounded-md">
-                      <FontAwesomeIcon
-                        icon={faFaucetDrip}
-                        className="text-water-house-content text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p>Casa dell&apos;acqua (distributore automatico)</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Attributi per Bagni Pubblici */}
-      <div className="card bg-base-200 shadow-xl mb-8">
-        <div className="card-body">
-          <h2 className="card-title">
-            <div className="w-8 h-8 flex items-center justify-center bg-toilet rounded-md mr-2">
-              <FontAwesomeIcon icon={faRestroom} className="text-toilet-content" />
-            </div>
-            Attributi Bagni Pubblici
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="table w-auto text-left">
-              <thead>
-                <tr>
-                  <th className="text-right">Icona</th>
-                  <th>Descrizione</th>
+                  <th className="text-right">{t.legend.iconHeader}</th>
+                  <th>{t.legend.descriptionHeader}</th>
                 </tr>
               </thead>
               <tbody>
@@ -236,7 +221,54 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p>A pagamento / Gratuito</p>
+                    <p>{t.legend.attributeRows.paidOrFree}</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div className="card bg-base-200 shadow-xl mb-8">
+        <div className="card-body">
+          <h2 className="card-title">
+            <div className="w-8 h-8 flex items-center justify-center bg-toilet rounded-md mr-2">
+              <FontAwesomeIcon
+                icon={faRestroom}
+                className="text-toilet-content"
+              />
+            </div>
+            {t.legend.attributesTitle} {t.legend.rows.toilet.title}
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="table w-auto text-left">
+              <thead>
+                <tr>
+                  <th className="text-right">{t.legend.iconHeader}</th>
+                  <th>{t.legend.descriptionHeader}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="text-right">
+                    <div className="flex items-center justify-end">
+                      <FontAwesomeIcon icon={faEuroSign} className="text-xl" />
+                      <span className="mx-2">/</span>
+                      <span className="fa-stack">
+                        <FontAwesomeIcon
+                          icon={faEuroSign}
+                          className="fa-stack-1x"
+                        />
+                        <FontAwesomeIcon
+                          icon={faBan}
+                          className="fa-stack-2x text-red-900"
+                        />
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <p>{t.legend.attributeRows.paidOrFree}</p>
                   </td>
                 </tr>
                 <tr>
@@ -257,7 +289,7 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p>Con / Senza fasciatoio per neonati</p>
+                    <p>{t.legend.attributeRows.changingTable}</p>
                   </td>
                 </tr>
               </tbody>
@@ -266,21 +298,23 @@ export default function LegendaPage() {
         </div>
       </div>
 
-      {/* Attributi per Parcheggi Bici */}
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
           <h2 className="card-title">
             <div className="w-8 h-8 flex items-center justify-center bg-bicycle rounded-md mr-2">
-              <FontAwesomeIcon icon={faParking} className="text-bicycle-content" />
+              <FontAwesomeIcon
+                icon={faParking}
+                className="text-bicycle-content"
+              />
             </div>
-            Attributi Parcheggi Bici
+            {t.legend.attributesTitle} {t.legend.rows.bicycleParking.title}
           </h2>
           <div className="overflow-x-auto">
             <table className="table w-auto text-left">
               <thead>
                 <tr>
-                  <th className="text-right">Icona</th>
-                  <th>Descrizione</th>
+                  <th className="text-right">{t.legend.iconHeader}</th>
+                  <th>{t.legend.descriptionHeader}</th>
                 </tr>
               </thead>
               <tbody>
@@ -302,7 +336,7 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p>A pagamento / Gratuito</p>
+                    <p>{t.legend.attributeRows.paidOrFree}</p>
                   </td>
                 </tr>
                 <tr>
@@ -323,7 +357,7 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p>Coperto / Non coperto</p>
+                    <p>{t.legend.attributeRows.coveredOrOpen}</p>
                   </td>
                 </tr>
                 <tr>
@@ -344,7 +378,7 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p>Al chiuso / All&apos;aperto</p>
+                    <p>{t.legend.attributeRows.indoorOrOutdoor}</p>
                   </td>
                 </tr>
                 <tr>
@@ -365,7 +399,7 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p>Con / Senza videosorveglianza</p>
+                    <p>{t.legend.attributeRows.surveillance}</p>
                   </td>
                 </tr>
                 <tr>
@@ -376,190 +410,7 @@ export default function LegendaPage() {
                     </div>
                   </td>
                   <td>
-                    <p>Capacità (numero di posti disponibili)</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Attributi per Parchi Giochi */}
-      <div className="card bg-base-200 shadow-xl mb-8">
-        <div className="card-body">
-          <h2 className="card-title">
-            <div className="w-8 h-8 flex items-center justify-center bg-playground rounded-full mr-2">
-              <FontAwesomeIcon icon={faFutbol} className="text-playground-content" />
-            </div>
-            Attributi Parchi Giochi
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="table w-auto text-left">
-              <thead>
-                <tr>
-                  <th className="text-right">Icona</th>
-                  <th>Descrizione</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end">
-                      <FontAwesomeIcon icon={faEuroSign} className="text-xl" />
-                      <span className="mx-2">/</span>
-                      <span className="fa-stack">
-                        <FontAwesomeIcon
-                          icon={faEuroSign}
-                          className="fa-stack-1x"
-                        />
-                        <FontAwesomeIcon
-                          icon={faBan}
-                          className="fa-stack-2x text-red-900"
-                        />
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <p>A pagamento / Gratuito</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end">
-                      <FontAwesomeIcon icon={faHouse} className="text-xl" />
-                      <span className="mx-2">/</span>
-                      <span className="fa-stack">
-                        <FontAwesomeIcon
-                          icon={faHouse}
-                          className="fa-stack-1x"
-                        />
-                        <FontAwesomeIcon
-                          icon={faBan}
-                          className="fa-stack-2x text-red-900"
-                        />
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <p>Al chiuso / All&apos;aperto</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end">
-                      <FontAwesomeIcon
-                        icon={faUserShield}
-                        className="text-xl"
-                      />
-                      <span className="mx-2">/</span>
-                      <span className="fa-stack">
-                        <FontAwesomeIcon
-                          icon={faUserShield}
-                          className="fa-stack-1x"
-                        />
-                        <FontAwesomeIcon
-                          icon={faBan}
-                          className="fa-stack-2x text-red-900"
-                        />
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <p>Con / Senza supervisione</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Informazioni Aggiuntive */}
-      <div className="card bg-base-200 shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title">
-            <FontAwesomeIcon
-              icon={faInfoCircle}
-              className="text-primary mr-2"
-            />
-            Informazioni Aggiuntive
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="table w-auto text-left">
-              <thead>
-                <tr>
-                  <th className="text-right">Icona</th>
-                  <th>Descrizione</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end">
-                      <FontAwesomeIcon
-                        icon={faMapMarkerAlt}
-                        size="sm"
-                        className="text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p>OpenStreetMap (stile mappa standard)</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end">
-                      <FontAwesomeIcon
-                        icon={faBicycle}
-                        size="sm"
-                        className="text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p>CyclOSM (stile mappa per ciclisti)</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end">
-                      <FontAwesomeIcon
-                        icon={faLayerGroup}
-                        size="lg"
-                        className="text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p>Selettore di strati sulla mappa</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end">
-                      <FontAwesomeIcon
-                        icon={faSearch}
-                        className="text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p>Motore di ricerca (trova città, vie o piazze)</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="flex items-center justify-end">
-                      <FontAwesomeIcon
-                        icon={faShareNodes}
-                        className="text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p>Condividi l&apos;applicazione</p>
+                    <p>{t.legend.attributeRows.capacity}</p>
                   </td>
                 </tr>
               </tbody>

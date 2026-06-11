@@ -8,6 +8,7 @@ import {
   faPlusSquare,
   faMobileScreen,
 } from "@fortawesome/free-solid-svg-icons";
+import { useI18n } from "@/i18n/I18nProvider";
 
 // Safari Share Icon Component
 function SafariShareIcon() {
@@ -33,6 +34,7 @@ function SafariShareIcon() {
 export default function AddToHome() {
   const { isInstallable, isIOSDevice, handleInstallClick } = useInstallPrompt();
   const modalRef = useRef<HTMLDialogElement>(null);
+  const t = useI18n();
 
   const handleClick = async () => {
     // For iOS devices, show the modal with instructions
@@ -54,7 +56,8 @@ export default function AddToHome() {
     <>
       <li>
         <a onClick={handleClick}>
-          <FontAwesomeIcon icon={faDownload} /> Installa App
+          <FontAwesomeIcon icon={faDownload} className="mr-2" />{" "}
+          {t.app.installApp}
         </a>
       </li>
 
@@ -62,10 +65,10 @@ export default function AddToHome() {
       <dialog ref={modalRef} className="modal">
         <div className="modal-box max-w-sm">
           <h3 className="font-bold text-xl text-center mb-2">
-            Installa Fontanelle
+            {t.app.installTitle}
           </h3>
           <p className="text-center text-sm text-base-content/70 mb-6">
-            Aggiungi l&apos;app alla tua schermata Home
+            {t.app.installSubtitle}
           </p>
 
           <div className="space-y-4">
@@ -75,9 +78,9 @@ export default function AddToHome() {
                 <span className="text-primary font-semibold">1</span>
               </div>
               <div className="flex-1 flex items-center gap-2">
-                <span className="text-sm">Tocca</span>
+                <span className="text-sm">{t.app.installStep1}</span>
                 <SafariShareIcon />
-                <span className="text-sm">in basso</span>
+                <span className="text-sm">{t.app.installStep2}</span>
               </div>
             </div>
 
@@ -88,10 +91,12 @@ export default function AddToHome() {
               </div>
               <div className="flex-1">
                 <p className="text-sm leading-relaxed">
-                  Scorri e seleziona
+                  {t.app.installStep2}
                   <br />
                   <span className="inline-flex items-center gap-1 mt-1">
-                    <span className="font-medium">Aggiungi a Home</span>
+                    <span className="font-medium">
+                      {t.app.installMenuAction}
+                    </span>
                     <FontAwesomeIcon
                       icon={faPlusSquare}
                       className="text-base ml-1"
@@ -108,8 +113,8 @@ export default function AddToHome() {
               </div>
               <div className="flex-1">
                 <p className="text-sm">
-                  Conferma toccando{" "}
-                  <span className="font-medium">Aggiungi</span>
+                  {t.app.installStep3}{" "}
+                  <span className="font-medium">{t.app.installAction}</span>
                 </p>
               </div>
             </div>
@@ -122,13 +127,15 @@ export default function AddToHome() {
               <FontAwesomeIcon icon={faMobileScreen} className="text-xl" />
             </div>
             <p className="text-xs text-base-content/60">
-              L&apos;app apparirà nella tua schermata Home
+              {t.app.installedHint}
             </p>
           </div>
 
           <div className="modal-action mt-6">
             <form method="dialog" className="w-full">
-              <button className="btn btn-primary btn-block">Ho capito</button>
+              <button className="btn btn-primary btn-block">
+                {t.common.close}
+              </button>
             </form>
           </div>
         </div>

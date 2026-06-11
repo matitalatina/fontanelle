@@ -3,9 +3,11 @@
 import { isSearchEnabled } from "@/client/MapEntities.service";
 import { useState } from "react";
 import { useMapEvent } from "react-leaflet/hooks";
+import { useI18n } from "@/i18n/I18nProvider";
 
 export default function DisableSearchAlert() {
   const [showAlert, setShowAlert] = useState(false);
+  const t = useI18n();
   useMapEvent("zoomend", (evt) => {
     setShowAlert(!isSearchEnabled(evt.target.getZoom()));
   });
@@ -28,12 +30,9 @@ export default function DisableSearchAlert() {
             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
           />
         </svg>
-        <div>Ricerca in pausa</div>
+        <div>{t.app.searchPausedTitle}</div>
       </h3>
-      <div className="text-xs">
-        L&apos;area visualizzata è troppo grande. Aumenta lo zoom riattivare la
-        ricerca.
-      </div>
+      <div className="text-xs">{t.app.searchPausedDescription}</div>
     </div>
   ) : null;
 }

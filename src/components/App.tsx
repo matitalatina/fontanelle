@@ -6,15 +6,20 @@ import TileLayerSelector from "./TileLayerSelector";
 import useTileLayer from "@/hooks/useTileLayer";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import LanguageSwitcher from "./LanguageSwitcher";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faBookOpen,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import { useI18n, useLocale } from "@/i18n/I18nProvider";
+import { localizedPath } from "@/i18n/navigation";
 
 export default function App() {
   const { selectedTileLayer, selectTileLayer } = useTileLayer();
+  const t = useI18n();
+  const locale = useLocale();
 
   return (
     <div className="drawer">
@@ -37,25 +42,31 @@ export default function App() {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu menu-xl bg-base-200/85 backdrop-blur-sm text-base-content min-h-full w-80">
+        <ul
+          className="menu menu-xl bg-base-200/85 backdrop-blur-sm text-base-content min-h-full w-80"
+          aria-label={t.app.appMenuLabel}
+        >
           <ThemeToggle />
           <TileLayerSelector
             selectedTileLayer={selectedTileLayer}
             onChange={selectTileLayer}
           />
           <li>
-            <Link href="/legend">
-              <FontAwesomeIcon icon={faBookOpen} className="mr-2" /> Legenda
+            <Link href={localizedPath(locale, "/legend")}>
+              <FontAwesomeIcon icon={faBookOpen} className="mr-2" />{" "}
+              {t.common.legend}
             </Link>
           </li>
           <li>
-            <Link href="/credits">
-              <FontAwesomeIcon icon={faInfoCircle} className="mr-2" /> Crediti
+            <Link href={localizedPath(locale, "/credits")}>
+              <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />{" "}
+              {t.common.credits}
             </Link>
           </li>
           <div className="flex-1"></div>
           <AddToHome />
           <ShareAppMenuItem />
+          <LanguageSwitcher />
         </ul>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { trackEvent } from "@/lib/analytics";
+import { useI18n } from "@/i18n/I18nProvider";
 
 type ShareData = {
   title: string;
@@ -23,17 +24,23 @@ function canBrowserShareData(data: ShareData): boolean {
 function sharePosition(
   latLng: LatLng,
   markerType: string,
+  strings: {
+    positionTitle: string;
+    positionPrefix: string;
+    positionSuffix: string;
+    unableToSharePosition: string;
+  },
   showTooltip: () => void,
 ) {
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latLng.lat}%2C${latLng.lng}`;
-  const message = `Ecco qui ${markerType}: ${googleMapsUrl}
+  const message = `${strings.positionPrefix} ${markerType}: ${googleMapsUrl}
 
 ---
 
-L'ho trovato grazie a questa app: ${BASE_URL}`;
+${strings.positionSuffix} ${BASE_URL}`;
 
   const shareData: ShareData = {
-    title: "Posizione",
+    title: strings.positionTitle,
     text: message,
   };
 
@@ -46,7 +53,7 @@ L'ho trovato grazie a questa app: ${BASE_URL}`;
     navigator.clipboard.writeText(message);
     showTooltip();
   } else {
-    alert("Non è possibile condividere la posizione");
+    alert(strings.unableToSharePosition);
   }
 }
 
@@ -58,6 +65,7 @@ export default function SharePositionButton({
   markerType: string;
 }) {
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
+  const t = useI18n();
 
   function showTooltip() {
     setTooltipIsOpen(true);
@@ -71,11 +79,24 @@ export default function SharePositionButton({
       className={`${
         tooltipIsOpen ? "tooltip tooltip-open" : ""
       } tooltip-bottom`}
-      data-tip="Elemento condiviso"
+      data-tip={t.share.shared}
     >
       <button
         className="btn btn-outline"
-        onClick={() => sharePosition(latLng, markerType, showTooltip)}
+        aria-label={t.app.sharingLabel}
+        onClick={() =>
+          sharePosition(
+            latLng,
+            markerType,
+            {
+              positionTitle: t.share.positionTitle,
+              positionPrefix: t.share.positionPrefix,
+              positionSuffix: t.share.positionSuffix,
+              unableToSharePosition: t.share.positionUnavailable,
+            },
+            showTooltip,
+          )
+        }
       >
         <FontAwesomeIcon icon={faShareAlt} />
       </button>

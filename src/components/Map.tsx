@@ -59,7 +59,8 @@ export default function Map({
     : locationState.status === "success"
       ? locationState.location
       : { lat: 45.464664, lng: 9.18854 };
-  const centerNeedsUpdate = !!searchResult || locationState.status === "success";
+  const centerNeedsUpdate =
+    !!searchResult || locationState.status === "success";
 
   const handleLocate = () => {
     clearSearch();
@@ -98,10 +99,7 @@ export default function Map({
           selectedOverlays={selectedOverlays}
           onChange={(a) => setSelectedOverlays(a)}
         />
-        <LocateButton
-          onClick={handleLocate}
-          locationState={locationState}
-        />
+        <LocateButton onClick={handleLocate} locationState={locationState} />
         <ScaleControl position="bottomright" imperial={false} />
         <div className="absolute top-4 left-0 right-0 z-4000 flex flex-col items-center gap-2 pointer-events-none px-4">
           <SearchBar

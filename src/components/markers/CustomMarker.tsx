@@ -9,6 +9,7 @@ import SharePositionButton from "../SharePositionButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faMapPin } from "@fortawesome/free-solid-svg-icons";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const houseMarker = new Icon({
   contentHtml: createMarkerIconHTML(faMapPin),
@@ -21,6 +22,7 @@ const houseMarker = new Icon({
 export default function CustomMarker() {
   const [position, setPosition] = useState<LatLng | null>(null);
   const markerRef = useRef<LMarker>(null);
+  const t = useI18n();
 
   const setNewMarker = (latLng: LatLng | null) => {
     setPosition(latLng);
@@ -68,7 +70,7 @@ export default function CustomMarker() {
       >
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
-            <div className="text-lg">Punto personalizzato</div>
+            <div className="text-lg">{t.app.markerLabels.customPoint}</div>
           </div>
           <div className="flex justify-between flex-row gap-2">
             <button
@@ -80,7 +82,7 @@ export default function CustomMarker() {
             </button>
             <SharePositionButton
               latLng={{ lat: position.lat, lng: position.lng }}
-              markerType="un punto personalizzato"
+              markerType={t.app.markerTypes.customPoint}
             />
             <GoToButton latLng={{ lat: position.lat, lng: position.lng }} />
           </div>

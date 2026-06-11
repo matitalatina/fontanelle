@@ -1,10 +1,17 @@
 import { Metadata, Viewport } from "next";
+import {
+  DEFAULT_LOCALE,
+  getOpenGraphLocale,
+  type Locale,
+  SUPPORTED_LOCALES,
+} from "@/i18n/locales";
+import { localizedPath } from "@/i18n/navigation";
 
 // Base metadata that all pages will extend
 export const BASE_URL = "https://fontanelleitalia.com";
 export const APP_NAME = "Fontanelle in Italia";
 export const APP_DESCRIPTION =
-  "Trova velocemente dove bere in Italia quando sei in bicicletta! Mappa interattiva di fontanelle, case dell'acqua, bagni pubblici, parcheggi per biciclette e parchi giochi in tutta Italia.";
+  "Interactive map for drinking fountains, public toilets, bike parking, and playgrounds across Italy.";
 export const APP_KEYWORDS = [
   "fontanelle",
   "Italia",
@@ -25,7 +32,7 @@ export const AUTHOR_NAME = "Mattia Natali";
 export const AUTHOR_TWITTER = "@matitalatina";
 export const THEME_COLOR = "#74c0fc";
 export const DARK_THEME_COLOR = "#1971c2";
-export const LOCALE = "it_IT";
+export const LOCALE = getOpenGraphLocale(DEFAULT_LOCALE);
 
 // Base metadata object that will be used as a starting point
 export const baseMetadata: Metadata = {
@@ -34,7 +41,6 @@ export const baseMetadata: Metadata = {
     template: `%s - ${APP_NAME}`,
     default: APP_NAME,
   },
-  description: APP_DESCRIPTION,
   keywords: APP_KEYWORDS,
   authors: [{ name: AUTHOR_NAME }],
   creator: AUTHOR_NAME,
@@ -44,7 +50,6 @@ export const baseMetadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "it_IT",
     siteName: APP_NAME,
   },
   twitter: {
@@ -108,6 +113,7 @@ export function createViewport({
 
 // Function to create metadata for a specific page
 export function createMetadata({
+  locale = DEFAULT_LOCALE,
   title,
   description = APP_DESCRIPTION,
   socialDescription,
@@ -120,14 +126,22 @@ export function createMetadata({
   socialDescription?: string;
   keywords?: string[];
   path?: string;
+  locale?: Locale;
   overrides?: Partial<Metadata>;
 }): Metadata {
-  const url = `${BASE_URL}${path}`;
+  const url = `${BASE_URL}${localizedPath(locale, path)}`;
   const effectiveSocialDescription = socialDescription || description;
+  const localizedAlternates = Object.fromEntries(
+    SUPPORTED_LOCALES.map((supportedLocale) => [
+      supportedLocale,
+      `${BASE_URL}${localizedPath(supportedLocale, path)}`,
+    ]),
+  ) as Record<Locale, string>;
 
   const pageMetadata: Metadata = {
     alternates: {
-      canonical: path,
+      canonical: `${BASE_URL}${localizedPath(locale, path)}`,
+      languages: localizedAlternates,
     },
   };
 
@@ -158,7 +172,7 @@ export function createMetadata({
       url,
       title: title || APP_NAME,
       description: effectiveSocialDescription,
-      locale: LOCALE,
+      locale: getOpenGraphLocale(locale),
       type: "website",
       siteName: APP_NAME,
     };

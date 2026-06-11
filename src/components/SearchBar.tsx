@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef } from "react";
 import L from "leaflet";
+import { useI18n } from "@/i18n/I18nProvider";
 
 interface SearchBarProps {
   value: string;
@@ -19,6 +20,7 @@ export default function SearchBar({
   error,
 }: SearchBarProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const t = useI18n();
 
   useEffect(() => {
     if (formRef.current) {
@@ -37,7 +39,7 @@ export default function SearchBar({
       <input
         type="text"
         className="input input-bordered join-item w-full bg-base-100"
-        placeholder="Cerca un luogo..."
+        placeholder={t.app.searchPlaceholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

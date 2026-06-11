@@ -161,7 +161,8 @@
   --popup-alpha: 0.85;
 
   /* Map filters */
-  --map-filter-dark: invert(100%) hue-rotate(220deg) brightness(100%) contrast(85%);
+  --map-filter-dark: invert(100%) hue-rotate(220deg) brightness(100%)
+    contrast(85%);
 }
 
 ::view-transition-group(app) {
@@ -186,7 +187,8 @@
   }
   .leaflet-popup-tip {
     background: oklch(
-      from var(--color-base-100) l c var(--_color-hue) / calc(var(--popup-alpha) * 0.85)
+      from var(--color-base-100) l c var(--_color-hue) /
+        calc(var(--popup-alpha) * 0.85)
     );
   }
 

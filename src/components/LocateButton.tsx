@@ -1,6 +1,7 @@
 import { LocationState } from "@/hooks/useLocation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import { useI18n } from "@/i18n/I18nProvider";
 
 export default function LocateButton({
   onClick,
@@ -11,6 +12,7 @@ export default function LocateButton({
 }) {
   const zIndex = 4000;
   const positionStyle = `absolute bottom-8 right-4`;
+  const t = useI18n();
 
   if (locationState.status === "loading") {
     return (
@@ -20,12 +22,13 @@ export default function LocateButton({
       >
         <div className="tooltip-content">
           <div className="shine-text-primary animate-shine">
-            Localizzazione in corso...
+            {t.app.locationLoading}
           </div>
         </div>
         <button
           type="button"
           className="btn btn-circle btn-primary w-14 h-14 shadow-xl pointer-events-none"
+          aria-label={t.app.locationLoading}
         >
           <span className="loading loading-ring"></span>
         </button>
@@ -37,16 +40,16 @@ export default function LocateButton({
 
     switch (locationState.code) {
       case GeolocationPositionError.PERMISSION_DENIED:
-        message = "Permesso negato";
+        message = t.app.locationPermissionDenied;
         break;
       case GeolocationPositionError.POSITION_UNAVAILABLE:
-        message = "Posizione non disponibile";
+        message = t.app.locationUnavailable;
         break;
       case GeolocationPositionError.TIMEOUT:
-        message = "Timeout";
+        message = t.app.locationTimeout;
         break;
       default:
-        message = "Error";
+        message = t.app.locationError;
     }
 
     return (
@@ -59,6 +62,7 @@ export default function LocateButton({
           type="button"
           className="btn btn-circle btn-primary w-14 h-14 shadow-xl"
           onClick={onClick}
+          aria-label={message ?? t.app.locationError}
         >
           <FontAwesomeIcon icon={faLocationCrosshairs} size="lg" />
         </button>
@@ -71,6 +75,7 @@ export default function LocateButton({
       className={`btn btn-circle btn-primary ${positionStyle} w-14 h-14 shadow-xl`}
       style={{ zIndex }}
       onClick={onClick}
+      aria-label={t.app.locateMe}
     >
       <FontAwesomeIcon icon={faLocationCrosshairs} size="lg" />
     </button>
