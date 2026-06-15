@@ -18,6 +18,8 @@ export class OverpassDownloader {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
+          "User-Agent": "Downloader/1.0 (https://fontanelleitalia.com/)",
+          Referer: "https://fontanelleitalia.com/",
         },
         body: `data=${encodeURIComponent(query.query)}`,
       });
