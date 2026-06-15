@@ -132,7 +132,14 @@ export default async function Home({
           __html: JSON.stringify(
             generateAppJsonLd({
               title: t.landing.title,
-              description: t.landing.description,
+              description:
+                t.landing.descriptionParts.prefix +
+                t.landing.descriptionParts.bold1 +
+                t.landing.descriptionParts.middle +
+                counts.total.toLocaleString(lang === "it" ? "it-IT" : "en-US") +
+                " " +
+                t.landing.descriptionParts.pointsLabel +
+                t.landing.descriptionParts.suffix,
               targetPath: localizedPath(lang, "/app"),
             }),
           ),
@@ -157,19 +164,21 @@ export default async function Home({
       <main className="min-h-screen bg-base-100">
         <section className="hero min-h-svh relative overflow-hidden flex flex-col bg-linear-to-br from-primary/10 via-secondary/5 to-accent/10">
           <AnimatedHeroBackground />
-          <div className="absolute top-4 right-4 z-20 flex gap-2">
-            <Link
-              href={localizedPath("it", "/")}
-              className={`btn btn-sm ${lang === "it" ? "btn-primary" : "btn-ghost"}`}
-            >
-              {t.languages.it}
-            </Link>
-            <Link
-              href={localizedPath("en", "/")}
-              className={`btn btn-sm ${lang === "en" ? "btn-primary" : "btn-ghost"}`}
-            >
-              {t.languages.en}
-            </Link>
+          <div className="flex flex-direction-row justify-end w-full">
+            <div className="m-4 z-20 flex gap-2">
+              <Link
+                href={localizedPath("it", "/")}
+                className={`btn btn-sm ${lang === "it" ? "btn-primary" : "btn-ghost"}`}
+              >
+                {t.languages.it}
+              </Link>
+              <Link
+                href={localizedPath("en", "/")}
+                className={`btn btn-sm ${lang === "en" ? "btn-primary" : "btn-ghost"}`}
+              >
+                {t.languages.en}
+              </Link>
+            </div>
           </div>
           <div className="hero-content text-center relative z-10 flex-1 flex items-center justify-center pb-20 sm:pb-16">
             <div className="max-w-4xl">
