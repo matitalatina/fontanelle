@@ -209,7 +209,6 @@ export default async function Home({
                 {t.rich("description", {
                   total: counts.total,
                   bold: (c) => <strong>{c}</strong>,
-                  count: (c) => <>{c}</>,
                 })}
               </p>
               <p className="text-base sm:text-lg mb-8 text-balance max-w-2xl mx-auto opacity-90">

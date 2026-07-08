@@ -79,7 +79,7 @@
   "landing": {
     "eyebrow": "Drinking fountains map in Italy",
     "title": "Find free fountains near you",
-    "description": "The interactive map for finding <bold>free drinking water</bold> across Italy: <count>{total, number}</count> <bold>{total, plural, =1 {point} other {points}}</bold> including fountains, public toilets, bike parking, and playgrounds.",
+    "description": "The interactive map for finding <bold>free drinking water</bold> across Italy: <bold>{total, number} {total, plural, =1 {point} other {points}}</bold> including fountains, public toilets, bike parking, and playgrounds.",
     "descriptionMeta": "The interactive map for finding free drinking water across Italy: {total, number} {total, plural, =1 {point} other {points}} including fountains, public toilets, bike parking, and playgrounds.",
     "descriptionSecondary": "Ideal for cyclists, tourists, and families who want to travel light and sustainably.",
     "cta": "Open the map",

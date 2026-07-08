@@ -79,7 +79,7 @@
   "landing": {
     "eyebrow": "Mappa fontanelle d'acqua potabile in Italia",
     "title": "Trova fontanelle gratuite vicino a te",
-    "description": "La mappa interattiva per trovare <bold>acqua potabile gratuita</bold> in tutta Italia: <count>{total, number}</count> <bold>{total, plural, =1 {punto} other {punti}}</bold> tra fontanelle, bagni pubblici, parcheggi bici e parchi giochi.",
+    "description": "La mappa interattiva per trovare <bold>acqua potabile gratuita</bold> in tutta Italia: <bold>{total, number} {total, plural, =1 {punto} other {punti}}</bold> tra fontanelle, bagni pubblici, parcheggi bici e parchi giochi.",
     "descriptionMeta": "La mappa interattiva per trovare acqua potabile gratuita in tutta Italia: {total, number} {total, plural, =1 {punto} other {punti}} tra fontanelle, bagni pubblici, parcheggi bici e parchi giochi.",
     "descriptionSecondary": "Ideale per ciclisti, turisti e famiglie che vogliono muoversi leggeri e sostenibili.",
     "cta": "Apri la mappa",
