@@ -1,11 +1,18 @@
 import { Metadata, Viewport } from "next";
-import {
-  DEFAULT_LOCALE,
-  getOpenGraphLocale,
-  type Locale,
-  SUPPORTED_LOCALES,
-} from "@/i18n/locales";
-import { localizedPath } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+
+function getOpenGraphLocale(locale: string): string {
+  return locale === "it" ? "it_IT" : "en_US";
+}
+
+function localizedPath(locale: string, path: string): string {
+  if (!path || path === "/") return `/${locale}`;
+  return path.startsWith("/") ? `/${locale}${path}` : `/${locale}/${path}`;
+}
+
+const DEFAULT_LOCALE = routing.defaultLocale;
+const SUPPORTED_LOCALES = routing.locales;
+type Locale = (typeof routing.locales)[number];
 
 // Base metadata that all pages will extend
 export const BASE_URL = "https://fontanelleitalia.com";

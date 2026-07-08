@@ -1,7 +1,7 @@
 import { LocationState } from "@/hooks/useLocation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 export default function LocateButton({
   onClick,
@@ -12,7 +12,7 @@ export default function LocateButton({
 }) {
   const zIndex = 4000;
   const positionStyle = `absolute bottom-8 right-4`;
-  const t = useI18n();
+  const t = useTranslations('app');
 
   if (locationState.status === "loading") {
     return (
@@ -22,13 +22,13 @@ export default function LocateButton({
       >
         <div className="tooltip-content">
           <div className="shine-text-primary animate-shine">
-            {t.app.locationLoading}
+            {t('locationLoading')}
           </div>
         </div>
         <button
           type="button"
           className="btn btn-circle btn-primary w-14 h-14 shadow-xl pointer-events-none"
-          aria-label={t.app.locationLoading}
+          aria-label={t('locationLoading')}
         >
           <span className="loading loading-ring"></span>
         </button>
@@ -40,16 +40,16 @@ export default function LocateButton({
 
     switch (locationState.code) {
       case GeolocationPositionError.PERMISSION_DENIED:
-        message = t.app.locationPermissionDenied;
+        message = t('locationPermissionDenied');
         break;
       case GeolocationPositionError.POSITION_UNAVAILABLE:
-        message = t.app.locationUnavailable;
+        message = t('locationUnavailable');
         break;
       case GeolocationPositionError.TIMEOUT:
-        message = t.app.locationTimeout;
+        message = t('locationTimeout');
         break;
       default:
-        message = t.app.locationError;
+        message = t('locationError');
     }
 
     return (
@@ -62,7 +62,7 @@ export default function LocateButton({
           type="button"
           className="btn btn-circle btn-primary w-14 h-14 shadow-xl"
           onClick={onClick}
-          aria-label={message ?? t.app.locationError}
+          aria-label={message ?? t('locationError')}
         >
           <FontAwesomeIcon icon={faLocationCrosshairs} size="lg" />
         </button>
@@ -75,7 +75,7 @@ export default function LocateButton({
       className={`btn btn-circle btn-primary ${positionStyle} w-14 h-14 shadow-xl`}
       style={{ zIndex }}
       onClick={onClick}
-      aria-label={t.app.locateMe}
+      aria-label={t('locateMe')}
     >
       <FontAwesomeIcon icon={faLocationCrosshairs} size="lg" />
     </button>

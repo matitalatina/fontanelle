@@ -1,6 +1,9 @@
 import Script from "next/script";
-import Link from "next/link";
 import { Metadata, Viewport } from "next";
+import { getTranslations, getFormatter } from "next-intl/server";
+import { hasLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { generateAppJsonLd, generateFAQJsonLd } from "@/app/lib/jsonld";
 import { createViewport, createMetadata } from "@/app/seo-config";
 import { getAmenityCounts } from "@/lib/amenity-counts";
@@ -31,10 +34,7 @@ import {
   faFacebook,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
-import { getDictionary } from "@/i18n/dictionaries";
-import { isLocale } from "@/i18n/locales";
 import { notFound } from "next/navigation";
-import { localizedPath } from "@/i18n/navigation";
 
 export async function generateMetadata({
   params,
@@ -43,22 +43,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
 
-  if (!isLocale(lang)) {
+  if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
 
-  const t = getDictionary(lang);
+  const t = await getTranslations({ locale: lang, namespace: "landing" });
   const counts = getAmenityCounts();
-  const countStr = counts.total.toLocaleString(
-    lang === "it" ? "it-IT" : "en-US",
-  );
-  const desc = `${t.landing.descriptionParts.prefix}${t.landing.descriptionParts.bold1}${t.landing.descriptionParts.middle}${countStr} ${t.landing.descriptionParts.pointsLabel}${t.landing.descriptionParts.suffix}`;
+
+  const desc = t("descriptionMeta", {
+    total: counts.total,
+  });
 
   return createMetadata({
     locale: lang,
-    title: t.landing.title,
+    title: t("title"),
     description: desc,
-    socialDescription: t.landing.descriptionSecondary,
+    socialDescription: t("descriptionSecondary"),
     keywords:
       lang === "it"
         ? [
@@ -98,12 +98,14 @@ export default async function Home({
 }) {
   const { lang } = await params;
 
-  if (!isLocale(lang)) {
+  if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
 
-  const t = getDictionary(lang);
+  const t = await getTranslations({ locale: lang, namespace: "landing" });
+  const tRoot = await getTranslations({ locale: lang });
   const counts = getAmenityCounts();
+  const format = await getFormatter({ locale: lang });
 
   const statIcons = [faFaucetDrip, faParking, faRestroom, faFutbol];
   const statColors = [
@@ -112,7 +114,15 @@ export default async function Home({
     "text-toilet",
     "text-playground",
   ];
+  const statKeys = ["fountains", "bikeParking", "toilets", "playgrounds"] as const;
   const benefitIcons = [faSearch, faFaucetDrip, faLeaf, faUsers, faSyncAlt];
+  const benefitKeys = [
+    "search",
+    "freeWater",
+    "environment",
+    "everyone",
+    "updated",
+  ] as const;
   const cityIcons = [
     faLandmark,
     faBuilding,
@@ -120,6 +130,16 @@ export default async function Home({
     faMountain,
     faSun,
     faMap,
+  ];
+  const cityKeys = ["rome", "milan", "florence", "turin", "naples", "more"] as const;
+  const stepKeys = ["openMap", "searchArea", "filter"] as const;
+  const faqKeys = ["potable", "report", "search", "coverage", "offline"] as const;
+
+  const countsArr = [
+    counts.fountains,
+    counts.bicycleParkings,
+    counts.toilets,
+    counts.playgrounds,
   ];
 
   return (
@@ -131,16 +151,11 @@ export default async function Home({
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             generateAppJsonLd({
-              title: t.landing.title,
-              description:
-                t.landing.descriptionParts.prefix +
-                t.landing.descriptionParts.bold1 +
-                t.landing.descriptionParts.middle +
-                counts.total.toLocaleString(lang === "it" ? "it-IT" : "en-US") +
-                " " +
-                t.landing.descriptionParts.pointsLabel +
-                t.landing.descriptionParts.suffix,
-              targetPath: localizedPath(lang, "/app"),
+              title: t("title"),
+              description: t("descriptionMeta", {
+                total: counts.total,
+              }),
+              targetPath: `/${lang}/app`,
             }),
           ),
         }}
@@ -152,9 +167,9 @@ export default async function Home({
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             generateFAQJsonLd(
-              t.landing.faq.map((faq) => ({
-                question: faq.question,
-                answer: faq.answer,
+              faqKeys.map((key) => ({
+                question: t(`faq.${key}`),
+                answer: t(`faq.${key}Answer`),
               })),
             ),
           ),
@@ -167,50 +182,47 @@ export default async function Home({
           <div className="flex flex-direction-row justify-end w-full">
             <div className="m-4 z-20 flex gap-2">
               <Link
-                href={localizedPath("it", "/")}
+                href="/"
+                locale="it"
                 className={`btn btn-sm ${lang === "it" ? "btn-primary" : "btn-ghost"}`}
               >
-                {t.languages.it}
+                {tRoot("languages.it")}
               </Link>
               <Link
-                href={localizedPath("en", "/")}
+                href="/"
+                locale="en"
                 className={`btn btn-sm ${lang === "en" ? "btn-primary" : "btn-ghost"}`}
               >
-                {t.languages.en}
+                {tRoot("languages.en")}
               </Link>
             </div>
           </div>
           <div className="hero-content text-center relative z-10 flex-1 flex items-center justify-center pb-20 sm:pb-16">
             <div className="max-w-4xl">
               <p className="text-sm sm:text-base uppercase tracking-wide text-primary/80 font-semibold mb-3">
-                {t.landing.eyebrow}
+                {t("eyebrow")}
               </p>
               <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-balance">
-                {t.landing.title}
+                {t("title")}
               </h1>
               <p className="text-lg sm:text-xl mb-4 text-balance max-w-3xl mx-auto leading-relaxed">
-                {t.landing.descriptionParts.prefix}
-                <strong>{t.landing.descriptionParts.bold1}</strong>
-                {t.landing.descriptionParts.middle}
-                <strong>
-                  {counts.total.toLocaleString(
-                    lang === "it" ? "it-IT" : "en-US",
-                  )}{" "}
-                  {t.landing.descriptionParts.pointsLabel}
-                </strong>
-                {t.landing.descriptionParts.suffix}
+                {t.rich("description", {
+                  total: counts.total,
+                  bold: (c) => <strong>{c}</strong>,
+                  count: (c) => <>{c}</>,
+                })}
               </p>
               <p className="text-base sm:text-lg mb-8 text-balance max-w-2xl mx-auto opacity-90">
-                {t.landing.descriptionSecondary}
+                {t("descriptionSecondary")}
               </p>
               <div className="flex justify-center">
                 <Link
-                  href={localizedPath(lang, "/app")}
+                  href="/app"
                   className="btn btn-primary btn-lg text-base sm:text-lg px-6 sm:px-8"
-                  aria-label={t.landing.cta}
+                  aria-label={t("cta")}
                 >
                   <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
-                  {t.landing.cta}
+                  {t("cta")}
                 </Link>
               </div>
             </div>
@@ -223,34 +235,27 @@ export default async function Home({
         <section id="dati" className="py-16 px-4 bg-base-200">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-4xl font-bold text-center mb-4">
-              {t.landing.statsTitle}
+              {t("statsTitle")}
             </h2>
             <p className="text-lg text-center mb-12 opacity-80">
-              {t.landing.statsSubtitle}
+              {t("statsSubtitle")}
             </p>
 
             <div className="flex justify-center">
               <div className="stats stats-vertical lg:stats-horizontal shadow-lg bg-base-100 rounded-2xl">
-                {t.landing.stats.map((stat, index) => (
-                  <div className="stat" key={stat.title}>
+                {statKeys.map((key, index) => (
+                  <div className="stat" key={key}>
                     <div className={`stat-figure ${statColors[index] || ""}`}>
                       <FontAwesomeIcon
                         icon={statIcons[index]}
                         className="text-3xl"
                       />
                     </div>
-                    <div className="stat-title">{stat.title}</div>
+                    <div className="stat-title">{t(`stats.${key}`)}</div>
                     <div className={`stat-value ${statColors[index] || ""}`}>
-                      {[
-                        counts.fountains,
-                        counts.bicycleParkings,
-                        counts.toilets,
-                        counts.playgrounds,
-                      ][index].toLocaleString(
-                        lang === "it" ? "it-IT" : "en-US",
-                      )}
+                      {format.number(countsArr[index])}
                     </div>
-                    <div className="stat-desc">{stat.description}</div>
+                    <div className="stat-desc">{t(`stats.${key}Desc`)}</div>
                   </div>
                 ))}
               </div>
@@ -260,15 +265,13 @@ export default async function Home({
               <div className="stats bg-primary text-primary-content rounded-2xl shadow-lg inline-block px-8 py-4">
                 <div className="stat">
                   <div className="stat-title text-primary-content opacity-80">
-                    {t.landing.totalPoints}
+                    {t("totalPoints")}
                   </div>
                   <div className="stat-value text-4xl lg:text-5xl">
-                    {counts.total.toLocaleString(
-                      lang === "it" ? "it-IT" : "en-US",
-                    )}
+                    {format.number(counts.total)}
                   </div>
                   <div className="stat-desc text-primary-content opacity-80">
-                    {t.landing.totalPointsSuffix}
+                    {t("totalPointsSuffix")}
                   </div>
                 </div>
               </div>
@@ -279,11 +282,11 @@ export default async function Home({
         <section id="come-funziona" className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-4xl font-bold text-center mb-12">
-              {t.landing.benefitsTitle}
+              {t("benefitsTitle")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-              {t.landing.benefits.map((benefit, index) => (
-                <div className="card bg-base-200 shadow-lg" key={benefit.title}>
+              {benefitKeys.map((key, index) => (
+                <div className="card bg-base-200 shadow-lg" key={key}>
                   <div className="card-body text-center">
                     <div className="flex justify-center mb-4">
                       <FontAwesomeIcon
@@ -292,9 +295,9 @@ export default async function Home({
                       />
                     </div>
                     <h3 className="card-title justify-center">
-                      {benefit.title}
+                      {t(`benefits.${key}`)}
                     </h3>
-                    <p>{benefit.description}</p>
+                    <p>{t(`benefits.${key}Desc`)}</p>
                   </div>
                 </div>
               ))}
@@ -305,34 +308,36 @@ export default async function Home({
         <section className="py-16 px-4 bg-base-200">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-4xl font-bold text-center mb-6">
-              {t.landing.howItWorksTitle}
+              {t("howItWorksTitle")}
             </h2>
             <p className="text-lg text-center mb-10 opacity-80">
-              {t.landing.howItWorksSubtitle}
+              {t("howItWorksSubtitle")}
             </p>
             <ol className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {t.landing.steps.map((step, index) => (
+              {stepKeys.map((key, index) => (
                 <li
                   className="card bg-base-100 shadow-lg border border-primary/10"
-                  key={step.title}
+                  key={key}
                 >
                   <div className="card-body text-center">
                     <div className="text-2xl font-bold text-primary mb-2">
                       {index + 1}
                     </div>
-                    <h3 className="card-title justify-center">{step.title}</h3>
-                    <p>{step.description}</p>
+                    <h3 className="card-title justify-center">
+                      {t(`steps.${key}`)}
+                    </h3>
+                    <p>{t(`steps.${key}Desc`)}</p>
                   </div>
                 </li>
               ))}
             </ol>
             <div className="text-center mt-10">
               <Link
-                href={localizedPath(lang, "/app")}
+                href="/app"
                 className="btn btn-secondary btn-lg text-base sm:text-lg px-8"
               >
                 <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
-                {t.landing.cta}
+                {t("cta")}
               </Link>
             </div>
           </div>
@@ -341,24 +346,24 @@ export default async function Home({
         <section id="citta" className="py-16 px-4">
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-4xl font-bold text-center mb-4">
-              {t.landing.citiesTitle}
+              {t("citiesTitle")}
             </h2>
             <p className="text-lg text-center mb-12 opacity-80">
-              {t.landing.citiesSubtitle}
+              {t("citiesSubtitle")}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {t.landing.cities.map((city, index) => (
-                <div className="card bg-base-100 shadow-lg" key={city.title}>
+              {cityKeys.map((key, index) => (
+                <div className="card bg-base-100 shadow-lg" key={key}>
                   <div className="card-body">
                     <h3 className="card-title text-xl">
                       <FontAwesomeIcon
                         icon={cityIcons[index]}
                         className="text-primary mr-2"
                       />
-                      {city.title}
+                      {t(`cities.${key}`)}
                     </h3>
-                    <p>{city.description}</p>
+                    <p>{t(`cities.${key}Desc`)}</p>
                   </div>
                 </div>
               ))}
@@ -366,11 +371,11 @@ export default async function Home({
 
             <div className="text-center mt-10">
               <Link
-                href={localizedPath(lang, "/app")}
+                href="/app"
                 className="btn btn-primary btn-lg text-base sm:text-lg px-8"
               >
                 <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
-                {t.landing.cta}
+                {t("cta")}
               </Link>
             </div>
           </div>
@@ -379,21 +384,18 @@ export default async function Home({
         <section id="faq" className="py-16 px-4 bg-base-200">
           <div className="container mx-auto max-w-4xl">
             <h2 className="text-4xl font-bold text-center mb-12">
-              {t.landing.faqTitle}
+              {t("faqTitle")}
             </h2>
 
             <div className="space-y-6">
-              {t.landing.faq.map((faqItem) => (
-                <div
-                  className="collapse collapse-plus bg-base-200"
-                  key={faqItem.question}
-                >
+              {faqKeys.map((key) => (
+                <div className="collapse collapse-plus bg-base-200" key={key}>
                   <input type="radio" name="faq-accordion" />
                   <div className="collapse-title text-xl font-medium">
-                    <h3>{faqItem.question}</h3>
+                    <h3>{t(`faq.${key}`)}</h3>
                   </div>
                   <div className="collapse-content">
-                    <p>{faqItem.answer}</p>
+                    <p>{t(`faq.${key}Answer`)}</p>
                   </div>
                 </div>
               ))}
@@ -403,35 +405,26 @@ export default async function Home({
 
         <section className="py-16 px-4 bg-primary text-primary-content">
           <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl font-bold mb-6">{t.landing.finalTitle}</h2>
+            <h2 className="text-3xl font-bold mb-6">{t("finalTitle")}</h2>
             <p className="text-lg mb-8 opacity-90">
-              {t.landing.finalDescription}
+              {t("finalDescription")}
             </p>
-            <Link
-              href={localizedPath(lang, "/app")}
-              className="btn btn-secondary btn-lg text-lg px-8"
-            >
+            <Link href="/app" className="btn btn-secondary btn-lg text-lg px-8">
               <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" />
-              {t.landing.cta}
+              {t("cta")}
             </Link>
           </div>
         </section>
 
         <footer className="footer footer-center p-10 bg-base-200 text-base-content flex flex-col sm:flex-row justify-between">
           <nav className="grid grid-flow-col gap-4">
-            <Link
-              href={localizedPath(lang, "/credits")}
-              className="link link-hover"
-            >
+            <Link href="/credits" className="link link-hover">
               <FontAwesomeIcon icon={faInfoCircle} className="mr-1" />
-              {t.common.credits}
+              {tRoot("common.credits")}
             </Link>
-            <Link
-              href={localizedPath(lang, "/legend")}
-              className="link link-hover"
-            >
+            <Link href="/legend" className="link link-hover">
               <FontAwesomeIcon icon={faBookOpen} className="mr-1" />
-              {t.common.legend}
+              {tRoot("common.legend")}
             </Link>
             <a
               href="https://www.facebook.com/profile.php?id=61579750226046"
@@ -463,8 +456,8 @@ export default async function Home({
           </nav>
           <aside>
             <p>
-              © {new Date().getFullYear()} <strong>Fontanelle in Italia</strong>{" "}
-              - {t.landing.footerNote}{" "}
+              © {new Date().getFullYear()}{" "}
+              <strong>Fontanelle in Italia</strong> - {t("footerNote")}{" "}
               <a
                 href="https://www.openstreetmap.org/"
                 target="_blank"

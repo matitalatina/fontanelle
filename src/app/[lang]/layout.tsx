@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
-import { SUPPORTED_LOCALES, isLocale } from "@/i18n/locales";
-import { getDictionary } from "@/i18n/dictionaries";
-import { I18nProvider } from "@/i18n/I18nProvider";
+import { hasLocale } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { routing } from "@/i18n/routing";
 import { InstallPromptProvider } from "@/contexts/InstallPromptContext";
 import Meta from "../meta";
 import Script from "next/script";
@@ -14,7 +15,7 @@ export const metadata: Metadata = baseMetadata;
 export const viewport: Viewport = createViewport({ themeColor: undefined });
 
 export function generateStaticParams() {
-  return SUPPORTED_LOCALES.map((lang) => ({ lang }));
+  return routing.locales.map((lang) => ({ lang }));
 }
 
 export default async function LocaleLayout({
@@ -26,11 +27,11 @@ export default async function LocaleLayout({
 }>) {
   const { lang } = await params;
 
-  if (!isLocale(lang)) {
+  if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
 
-  const dictionary = getDictionary(lang);
+  const messages = await getMessages();
 
   return (
     <html lang={lang}>
@@ -45,9 +46,9 @@ export default async function LocaleLayout({
         />
       </head>
       <body>
-        <I18nProvider locale={lang} dictionary={dictionary}>
+        <NextIntlClientProvider locale={lang} messages={messages}>
           <InstallPromptProvider>{children}</InstallPromptProvider>
-        </I18nProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

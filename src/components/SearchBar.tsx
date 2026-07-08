@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef } from "react";
 import L from "leaflet";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 interface SearchBarProps {
   value: string;
@@ -20,7 +20,7 @@ export default function SearchBar({
   error,
 }: SearchBarProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  const t = useI18n();
+  const t = useTranslations('app');
 
   useEffect(() => {
     if (formRef.current) {
@@ -39,7 +39,7 @@ export default function SearchBar({
       <input
         type="text"
         className="input input-bordered join-item w-full bg-base-100"
-        placeholder={t.app.searchPlaceholder}
+        placeholder={t('searchPlaceholder')}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

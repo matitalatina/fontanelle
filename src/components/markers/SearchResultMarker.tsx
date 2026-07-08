@@ -6,7 +6,7 @@ import SharePositionButton from "../SharePositionButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 const searchMarkerIcon = new Icon({
   contentHtml: createMarkerIconHTML(faSearch),
@@ -27,7 +27,7 @@ export default function SearchResultMarker({
   displayName,
   onClear,
 }: SearchResultMarkerProps) {
-  const t = useI18n();
+  const t = useTranslations();
 
   return (
     <Marker position={[position.lat, position.lng]} icon={searchMarkerIcon}>
@@ -37,7 +37,7 @@ export default function SearchResultMarker({
       >
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
-            <div className="text-lg font-bold">{t.search.resultTitle}</div>
+            <div className="text-lg font-bold">{t('search.resultTitle')}</div>
             <div className="text-sm">{displayName}</div>
           </div>
           <div className="flex justify-between flex-row gap-2">
@@ -50,7 +50,7 @@ export default function SearchResultMarker({
             </button>
             <SharePositionButton
               latLng={position}
-              markerType={t.app.markerTypes.searchResult}
+              markerType={t('app.markerTypes.searchResult')}
             />
             <GoToButton latLng={position} />
           </div>

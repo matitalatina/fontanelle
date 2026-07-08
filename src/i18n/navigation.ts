@@ -1,9 +1,5 @@
-import type { Locale } from "./locales";
+import { createNavigation } from "next-intl/navigation";
+import { routing } from "./routing";
 
-export function localizedPath(locale: Locale, path: string): string {
-  if (!path || path === "/") {
-    return `/${locale}`;
-  }
-
-  return path.startsWith("/") ? `/${locale}${path}` : `/${locale}/${path}`;
-}
+export const { Link, redirect, useRouter, usePathname, getPathname } =
+  createNavigation(routing);

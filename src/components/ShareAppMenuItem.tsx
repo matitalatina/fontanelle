@@ -5,7 +5,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import { trackEvent } from "@/lib/analytics";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 type ShareData = {
   title: string;
@@ -60,27 +60,27 @@ export function useTooltip() {
 
 export default function ShareAppMenuItem() {
   const { tooltipIsOpen, showTooltip } = useTooltip();
-  const t = useI18n();
+  const t = useTranslations();
 
   return (
     <div
       className={` ${
         tooltipIsOpen ? "tooltip tooltip-open" : ""
       } tooltip-bottom`}
-      data-tip={t.share.copied}
+      data-tip={t('share.copied')}
     >
       <li>
         <a
           onClick={() =>
             shareApp(showTooltip, {
-              appTitle: t.share.appTitle,
-              appText: t.share.appText,
-              unableToShareApp: t.share.appUnavailable,
+              appTitle: t('share.appTitle'),
+              appText: t('share.appText'),
+              unableToShareApp: t('share.appUnavailable'),
             })
           }
         >
           <FontAwesomeIcon icon={faShareNodes} className="mr-2" />{" "}
-          {t.app.sharingLabel}
+          {t('app.sharingLabel')}
         </a>
       </li>
     </div>

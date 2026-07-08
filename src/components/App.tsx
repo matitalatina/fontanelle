@@ -4,7 +4,7 @@ import ShareAppMenuItem from "./ShareAppMenuItem";
 import AddToHome from "./AddToHome";
 import TileLayerSelector from "./TileLayerSelector";
 import useTileLayer from "@/hooks/useTileLayer";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,13 +13,11 @@ import {
   faBookOpen,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { useI18n, useLocale } from "@/i18n/I18nProvider";
-import { localizedPath } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function App() {
   const { selectedTileLayer, selectTileLayer } = useTileLayer();
-  const t = useI18n();
-  const locale = useLocale();
+  const t = useTranslations();
 
   return (
     <div className="drawer">
@@ -44,7 +42,7 @@ export default function App() {
         ></label>
         <ul
           className="menu menu-xl bg-base-200/85 backdrop-blur-sm text-base-content min-h-full w-80"
-          aria-label={t.app.appMenuLabel}
+          aria-label={t('app.appMenuLabel')}
         >
           <ThemeToggle />
           <TileLayerSelector
@@ -52,15 +50,15 @@ export default function App() {
             onChange={selectTileLayer}
           />
           <li>
-            <Link href={localizedPath(locale, "/legend")}>
+            <Link href="/legend">
               <FontAwesomeIcon icon={faBookOpen} className="mr-2" />{" "}
-              {t.common.legend}
+              {t('common.legend')}
             </Link>
           </li>
           <li>
-            <Link href={localizedPath(locale, "/credits")}>
+            <Link href="/credits">
               <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />{" "}
-              {t.common.credits}
+              {t('common.credits')}
             </Link>
           </li>
           <div className="flex-1"></div>

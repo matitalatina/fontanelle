@@ -1,5 +1,6 @@
-import { getDictionary } from "@/i18n/dictionaries";
-import { isLocale } from "@/i18n/locales";
+import { getTranslations } from "next-intl/server";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
 import { MetadataRoute } from "next";
 import { notFound } from "next/navigation";
 import { NextRequest } from "next/server";
@@ -10,15 +11,15 @@ export async function GET(
 ) {
   const { lang } = await params;
 
-  if (!isLocale(lang)) {
+  if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
 
-  const t = getDictionary(lang);
+  const t = await getTranslations({ locale: lang, namespace: "manifest" });
 
   const manifest: MetadataRoute.Manifest = {
-    name: t.manifest.name,
-    short_name: t.manifest.shortName,
+    name: t("name"),
+    short_name: t("shortName"),
     theme_color: "#74c0fc",
     background_color: "#183153",
     display: "standalone",

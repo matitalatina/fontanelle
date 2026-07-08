@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { BASE_URL } from "./seo-config";
-import { SUPPORTED_LOCALES } from "@/i18n/locales";
+import { routing } from "@/i18n/routing";
+
+const SUPPORTED_LOCALES = routing.locales;
 
 // Define the routes with their relative priorities
 const routes = [

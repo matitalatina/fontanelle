@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 import { trackEvent } from "@/lib/analytics";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 type ShareData = {
   title: string;
@@ -65,7 +65,7 @@ export default function SharePositionButton({
   markerType: string;
 }) {
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
-  const t = useI18n();
+  const t = useTranslations();
 
   function showTooltip() {
     setTooltipIsOpen(true);
@@ -79,20 +79,20 @@ export default function SharePositionButton({
       className={`${
         tooltipIsOpen ? "tooltip tooltip-open" : ""
       } tooltip-bottom`}
-      data-tip={t.share.shared}
+      data-tip={t('share.shared')}
     >
       <button
         className="btn btn-outline"
-        aria-label={t.app.sharingLabel}
+        aria-label={t('app.sharingLabel')}
         onClick={() =>
           sharePosition(
             latLng,
             markerType,
             {
-              positionTitle: t.share.positionTitle,
-              positionPrefix: t.share.positionPrefix,
-              positionSuffix: t.share.positionSuffix,
-              unableToSharePosition: t.share.positionUnavailable,
+              positionTitle: t('share.positionTitle'),
+              positionPrefix: t('share.positionPrefix'),
+              positionSuffix: t('share.positionSuffix'),
+              unableToSharePosition: t('share.positionUnavailable'),
             },
             showTooltip,
           )

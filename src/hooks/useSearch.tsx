@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { trackEvent } from "@/lib/analytics";
-import { useI18n, useLocale } from "@/i18n/I18nProvider";
+import { useTranslations, useLocale } from "next-intl";
 
 export interface SearchResult {
   lat: number;
@@ -24,7 +24,7 @@ export default function useSearch() {
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const t = useI18n();
+  const t = useTranslations('search');
   const locale = useLocale();
 
   const handleSearch = async (e?: React.FormEvent) => {
@@ -62,12 +62,12 @@ export default function useSearch() {
         setError(null);
       } else {
         setSearchResult(null);
-        setError(t.search.noResults);
+        setError(t('noResults'));
       }
     } catch (error) {
       console.error("Search error:", error);
       setSearchResult(null);
-      setError(t.search.error);
+      setError(t('error'));
     } finally {
       setLoading(false);
     }

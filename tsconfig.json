@@ -23,7 +23,8 @@
     },
     "target": "ES2017",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "allowArbitraryExtensions": true
   },
   "include": [
     "next-env.d.ts",

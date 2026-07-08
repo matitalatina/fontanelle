@@ -4,10 +4,10 @@ import { flushSync } from "react-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 export default function ThemeToggle() {
-  const t = useI18n();
+  const t = useTranslations('app');
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("isDark");
@@ -86,7 +86,7 @@ export default function ThemeToggle() {
       >
         <div className="flex items-center gap-2">
           <FontAwesomeIcon icon={isDark ? faMoon : faSun} className="mr-2" />
-          <span>{t.app.themeLabel}</span>
+          <span>{t('themeLabel')}</span>
         </div>
         <div className="toggle text-base-content">
           <input ref={ref} type="checkbox" checked={!isDark} readOnly />

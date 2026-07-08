@@ -7,7 +7,7 @@ import GoToButton from "../GoToButton";
 import SharePositionButton from "../SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faFaucetDrip } from "@fortawesome/free-solid-svg-icons";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 const fountainMarker = new Icon({
   contentHtml: createMarkerIconHTML(faFaucetDrip),
@@ -26,7 +26,7 @@ const houseMarker = new Icon({
 });
 
 export default function StationMarker({ station }: { station: Station }) {
-  const t = useI18n();
+  const t = useTranslations('app');
 
   return (
     <Marker
@@ -41,8 +41,8 @@ export default function StationMarker({ station }: { station: Station }) {
           <div className="flex flex-col flex-1 space-y-2">
             <div className="text-lg">
               {station.type === "fountain"
-                ? t.app.markerLabels.fountain
-                : t.app.markerLabels.waterHouse}
+                ? t('markerLabels.fountain')
+                : t('markerLabels.waterHouse')}
             </div>
             {station.name && (
               <div className="text-sm font-light">{station.name}</div>
@@ -51,7 +51,7 @@ export default function StationMarker({ station }: { station: Station }) {
           <div className="flex flex-row justify-between">
             <SharePositionButton
               latLng={{ lat: station.lat, lng: station.lng }}
-              markerType={t.app.markerTypes.fountain}
+              markerType={t('markerTypes.fountain')}
             />
             <GoToButton latLng={{ lat: station.lat, lng: station.lng }} />
           </div>

@@ -6,7 +6,7 @@ import {
   faParking,
   faFutbol,
 } from "@fortawesome/free-solid-svg-icons";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 export type AvailableOverlay =
   | "stations"
@@ -24,7 +24,7 @@ export default function OverlaySelector({
   selectedOverlays,
   onChange,
 }: OverlaySelectorProps) {
-  const t = useI18n();
+  const t = useTranslations('app');
 
   return (
     <div
@@ -40,13 +40,13 @@ export default function OverlaySelector({
         <FontAwesomeIcon icon={faLayerGroup} size="lg" />
       </div>
       <div className="collapse-content px-2 mt-0.5 peer-checked:pb-2">
-        <div className="sr-only">{t.app.overlayLabel}</div>
+        <div className="sr-only">{t('overlayLabel')}</div>
         <div className="join join-vertical">
           <button
             className={`btn join-item px-2 ${
               selectedOverlays.stations ? "btn-neutral dark:btn-primary" : ""
             }`}
-            aria-label={t.app.overlays.stations}
+            aria-label={t('overlays.stations')}
             onClick={() =>
               onChange({
                 ...selectedOverlays,
@@ -60,7 +60,7 @@ export default function OverlaySelector({
             className={`btn join-item px-2 ${
               selectedOverlays.toilets ? "btn-neutral dark:btn-primary" : ""
             }`}
-            aria-label={t.app.overlays.toilets}
+            aria-label={t('overlays.toilets')}
             onClick={() =>
               onChange({
                 ...selectedOverlays,
@@ -76,7 +76,7 @@ export default function OverlaySelector({
                 ? "btn-neutral dark:btn-primary"
                 : ""
             }`}
-            aria-label={t.app.overlays.bicycleParkings}
+            aria-label={t('overlays.bicycleParkings')}
             onClick={() =>
               onChange({
                 ...selectedOverlays,
@@ -90,7 +90,7 @@ export default function OverlaySelector({
             className={`btn join-item px-2 ${
               selectedOverlays.playgrounds ? "btn-neutral dark:btn-primary" : ""
             }`}
-            aria-label={t.app.overlays.playgrounds}
+            aria-label={t('overlays.playgrounds')}
             onClick={() =>
               onChange({
                 ...selectedOverlays,

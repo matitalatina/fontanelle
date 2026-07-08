@@ -1,8 +1,9 @@
-import Link from "next/link";
 import { Metadata, Viewport } from "next";
+import { getTranslations } from "next-intl/server";
+import { hasLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { createMetadata, createViewport } from "@/app/seo-config";
-import { getDictionary } from "@/i18n/dictionaries";
-import { isLocale } from "@/i18n/locales";
 import { notFound } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,7 +22,6 @@ import {
   faVideo,
   faBicycle,
 } from "@fortawesome/free-solid-svg-icons";
-import { localizedPath } from "@/i18n/navigation";
 
 export async function generateMetadata({
   params,
@@ -30,21 +30,29 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
 
-  if (!isLocale(lang)) {
+  if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
 
-  const t = getDictionary(lang);
+  const t = await getTranslations({ locale: lang, namespace: "legend" });
 
   return createMetadata({
     locale: lang,
-    title: t.legend.title,
-    description: t.legend.description,
+    title: t("title"),
+    description: t("description"),
     path: "/legend",
   });
 }
 
 export const viewport: Viewport = createViewport();
+
+const iconRows = [
+  { key: "fountain" as const, icon: faFaucetDrip, bg: "bg-fountain", fg: "text-fountain-content", shape: "rounded-md" },
+  { key: "waterHouse" as const, icon: faFaucetDrip, bg: "bg-blue-600", fg: "text-water-house-content", shape: "rounded-md" },
+  { key: "toilet" as const, icon: faRestroom, bg: "bg-toilet", fg: "text-toilet-content", shape: "rounded-md" },
+  { key: "bicycleParking" as const, icon: faParking, bg: "bg-bicycle", fg: "text-bicycle-content", shape: "rounded-md" },
+  { key: "playground" as const, icon: faFutbol, bg: "bg-playground", fg: "text-playground-content", shape: "rounded-full" },
+];
 
 export default async function LegendPage({
   params,
@@ -53,22 +61,22 @@ export default async function LegendPage({
 }) {
   const { lang } = await params;
 
-  if (!isLocale(lang)) {
+  if (!hasLocale(routing.locales, lang)) {
     notFound();
   }
 
-  const t = getDictionary(lang);
+  const t = await getTranslations({ locale: lang, namespace: "legend" });
 
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6 ml-6">
         <h1 className="text-2xl font-bold">
           <FontAwesomeIcon icon={faBookOpen} className="mr-2" />
-          {t.legend.title}
+          {t("title")}
         </h1>
-        <Link href={localizedPath(lang, "/app")} className="btn btn-primary">
+        <Link href="/app" className="btn btn-primary">
           <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
-          {t.legend.backToMap}
+          {t("backToMap")}
         </Link>
       </div>
 
@@ -79,104 +87,31 @@ export default async function LegendPage({
               icon={faMapMarkerAlt}
               className="text-primary mr-2"
             />
-            {t.legend.iconTableTitle}
+            {t("iconTableTitle")}
           </h2>
 
           <div className="overflow-x-auto">
             <table className="table w-full text-left">
               <thead>
                 <tr>
-                  <th className="text-right">{t.legend.iconHeader}</th>
-                  <th>{t.legend.descriptionHeader}</th>
+                  <th className="text-right">{t("iconHeader")}</th>
+                  <th>{t("descriptionHeader")}</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-fountain rounded-md">
-                      <FontAwesomeIcon
-                        icon={faFaucetDrip}
-                        className="text-fountain-content text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p className="font-bold">{t.legend.rows.fountain.title}</p>
-                    <p className="text-sm">
-                      {t.legend.rows.fountain.description}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-blue-600 rounded-md">
-                      <FontAwesomeIcon
-                        icon={faFaucetDrip}
-                        className="text-water-house-content text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p className="font-bold">
-                      {t.legend.rows.waterHouse.title}
-                    </p>
-                    <p className="text-sm">
-                      {t.legend.rows.waterHouse.description}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-toilet rounded-md">
-                      <FontAwesomeIcon
-                        icon={faRestroom}
-                        className="text-toilet-content text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p className="font-bold">{t.legend.rows.toilet.title}</p>
-                    <p className="text-sm">
-                      {t.legend.rows.toilet.description}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-bicycle rounded-md">
-                      <FontAwesomeIcon
-                        icon={faParking}
-                        className="text-bicycle-content text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p className="font-bold">
-                      {t.legend.rows.bicycleParking.title}
-                    </p>
-                    <p className="text-sm">
-                      {t.legend.rows.bicycleParking.description}
-                    </p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-right">
-                    <div className="w-12 h-12 ml-auto flex items-center justify-center bg-playground rounded-full">
-                      <FontAwesomeIcon
-                        icon={faFutbol}
-                        className="text-playground-content text-xl"
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <p className="font-bold">
-                      {t.legend.rows.playground.title}
-                    </p>
-                    <p className="text-sm">
-                      {t.legend.rows.playground.description}
-                    </p>
-                  </td>
-                </tr>
+                {iconRows.map(({ key, icon, bg, fg, shape }) => (
+                  <tr key={key}>
+                    <td className="text-right">
+                      <div className={`w-12 h-12 ml-auto flex items-center justify-center ${bg} ${shape}`}>
+                        <FontAwesomeIcon icon={icon} className={`${fg} text-xl`} />
+                      </div>
+                    </td>
+                    <td>
+                      <p className="font-bold">{t(`rows.${key}`)}</p>
+                      <p className="text-sm">{t(`rows.${key}Desc`)}</p>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -192,14 +127,14 @@ export default async function LegendPage({
                 className="text-fountain-content"
               />
             </div>
-            {t.legend.attributesTitle} {t.legend.rows.fountain.title}
+            {t("attributesTitle")} {t("rows.fountain")}
           </h2>
           <div className="overflow-x-auto">
             <table className="table w-auto text-left">
               <thead>
                 <tr>
-                  <th className="text-right">{t.legend.iconHeader}</th>
-                  <th>{t.legend.descriptionHeader}</th>
+                  <th className="text-right">{t("iconHeader")}</th>
+                  <th>{t("descriptionHeader")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -221,7 +156,7 @@ export default async function LegendPage({
                     </div>
                   </td>
                   <td>
-                    <p>{t.legend.attributeRows.paidOrFree}</p>
+                    <p>{t("attributeRows.paidOrFree")}</p>
                   </td>
                 </tr>
               </tbody>
@@ -239,14 +174,14 @@ export default async function LegendPage({
                 className="text-toilet-content"
               />
             </div>
-            {t.legend.attributesTitle} {t.legend.rows.toilet.title}
+            {t("attributesTitle")} {t("rows.toilet")}
           </h2>
           <div className="overflow-x-auto">
             <table className="table w-auto text-left">
               <thead>
                 <tr>
-                  <th className="text-right">{t.legend.iconHeader}</th>
-                  <th>{t.legend.descriptionHeader}</th>
+                  <th className="text-right">{t("iconHeader")}</th>
+                  <th>{t("descriptionHeader")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -268,7 +203,7 @@ export default async function LegendPage({
                     </div>
                   </td>
                   <td>
-                    <p>{t.legend.attributeRows.paidOrFree}</p>
+                    <p>{t("attributeRows.paidOrFree")}</p>
                   </td>
                 </tr>
                 <tr>
@@ -289,7 +224,7 @@ export default async function LegendPage({
                     </div>
                   </td>
                   <td>
-                    <p>{t.legend.attributeRows.changingTable}</p>
+                    <p>{t("attributeRows.changingTable")}</p>
                   </td>
                 </tr>
               </tbody>
@@ -307,14 +242,14 @@ export default async function LegendPage({
                 className="text-bicycle-content"
               />
             </div>
-            {t.legend.attributesTitle} {t.legend.rows.bicycleParking.title}
+            {t("attributesTitle")} {t("rows.bicycleParking")}
           </h2>
           <div className="overflow-x-auto">
             <table className="table w-auto text-left">
               <thead>
                 <tr>
-                  <th className="text-right">{t.legend.iconHeader}</th>
-                  <th>{t.legend.descriptionHeader}</th>
+                  <th className="text-right">{t("iconHeader")}</th>
+                  <th>{t("descriptionHeader")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -336,7 +271,7 @@ export default async function LegendPage({
                     </div>
                   </td>
                   <td>
-                    <p>{t.legend.attributeRows.paidOrFree}</p>
+                    <p>{t("attributeRows.paidOrFree")}</p>
                   </td>
                 </tr>
                 <tr>
@@ -357,7 +292,7 @@ export default async function LegendPage({
                     </div>
                   </td>
                   <td>
-                    <p>{t.legend.attributeRows.coveredOrOpen}</p>
+                    <p>{t("attributeRows.coveredOrOpen")}</p>
                   </td>
                 </tr>
                 <tr>
@@ -378,7 +313,7 @@ export default async function LegendPage({
                     </div>
                   </td>
                   <td>
-                    <p>{t.legend.attributeRows.indoorOrOutdoor}</p>
+                    <p>{t("attributeRows.indoorOrOutdoor")}</p>
                   </td>
                 </tr>
                 <tr>
@@ -399,7 +334,7 @@ export default async function LegendPage({
                     </div>
                   </td>
                   <td>
-                    <p>{t.legend.attributeRows.surveillance}</p>
+                    <p>{t("attributeRows.surveillance")}</p>
                   </td>
                 </tr>
                 <tr>
@@ -410,7 +345,7 @@ export default async function LegendPage({
                     </div>
                   </td>
                   <td>
-                    <p>{t.legend.attributeRows.capacity}</p>
+                    <p>{t("attributeRows.capacity")}</p>
                   </td>
                 </tr>
               </tbody>

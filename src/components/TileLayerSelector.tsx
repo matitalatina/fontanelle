@@ -5,7 +5,7 @@ import {
   faMapMarkedAlt,
   faBicycle,
 } from "@fortawesome/free-solid-svg-icons";
-import { useI18n } from "@/i18n/I18nProvider";
+import { useTranslations } from "next-intl";
 
 export interface TileLayerSelectorProps {
   selectedTileLayer: TileLayerType;
@@ -16,14 +16,14 @@ export default function TileLayerSelector({
   selectedTileLayer,
   onChange,
 }: TileLayerSelectorProps) {
-  const t = useI18n();
+  const t = useTranslations('common');
 
   return (
     <li>
       <details>
         <summary>
           <FontAwesomeIcon icon={faMap} className="mr-2" />
-          {t.common.mapStyle}
+          {t('mapStyle')}
         </summary>
         <ul>
           <li>
@@ -36,7 +36,7 @@ export default function TileLayerSelector({
                 size="sm"
                 className="mr-2"
               />
-              <span>{t.common.openStreetMap}</span>
+              <span>{t('openStreetMap')}</span>
             </a>
           </li>
           <li>
@@ -45,7 +45,7 @@ export default function TileLayerSelector({
               onClick={() => onChange("cyclosm")}
             >
               <FontAwesomeIcon icon={faBicycle} size="sm" className="mr-2" />
-              <span>{t.common.cyclosm}</span>
+              <span>{t('cyclosm')}</span>
             </a>
           </li>
         </ul>
