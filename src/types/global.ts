@@ -7,3 +7,9 @@ declare module "next-intl" {
     Messages: typeof enMessages;
   }
 }
+
+declare global {
+  interface Window {
+    umami: (typeof globalThis)["umami"];
+  }
+}
