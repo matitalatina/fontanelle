@@ -88,13 +88,24 @@ export function getRequestOrigin(
   headers: Headers,
   fallbackOrigin: string,
 ): string {
-  const forwardedHost = headers.get("x-forwarded-host")?.split(",")[0]?.trim();
-  if (!forwardedHost) {
+  const host =
+    headers.get("x-forwarded-host")?.split(",")[0]?.trim() ||
+    headers.get("host")?.trim();
+  if (!host) {
     return fallbackOrigin;
   }
-  const forwardedProto =
-    headers.get("x-forwarded-proto")?.split(",")[0]?.trim() || "https";
-  return `${forwardedProto}://${forwardedHost}`;
+  const forwardedProto = headers
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    ?.trim();
+  if (forwardedProto) {
+    return `${forwardedProto}://${host}`;
+  }
+  try {
+    return `${new URL(fallbackOrigin).protocol}//${host}`;
+  } catch {
+    return fallbackOrigin;
+  }
 }
 
 export function relativeRedirectTarget(
