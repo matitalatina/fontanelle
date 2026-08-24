@@ -7,7 +7,9 @@ import {
   OSM_VERIFIER_COOKIE,
   exchangeCodeForToken,
   getCallbackUrl,
+  getRequestOrigin,
   oauthTempCookieOptions,
+  relativeRedirectTarget,
   sanitizeReturnTo,
   tokenCookieOptions,
 } from "@/lib/osm/oauth";
@@ -19,11 +21,8 @@ export async function GET(request: NextRequest) {
     "/";
 
   const redirectBack = (error: string | null) => {
-    const url = new URL(returnTo, request.nextUrl.origin);
-    if (error) {
-      url.searchParams.set("osm_auth_error", error);
-    }
-    const response = NextResponse.redirect(url);
+    const response = new NextResponse(null, { status: 307 });
+    response.headers.set("Location", relativeRedirectTarget(returnTo, error));
     clearTempCookies(response);
     return response;
   };
@@ -50,7 +49,9 @@ export async function GET(request: NextRequest) {
   try {
     const accessToken = await exchangeCodeForToken({
       code,
-      redirectUri: getCallbackUrl(request.nextUrl.origin),
+      redirectUri: getCallbackUrl(
+        getRequestOrigin(request.headers, request.nextUrl.origin),
+      ),
       codeVerifier,
     });
     const response = redirectBack(null);

@@ -8,7 +8,9 @@ import {
   createState,
   getCallbackUrl,
   getOsmConfig,
+  getRequestOrigin,
   oauthTempCookieOptions,
+  relativeRedirectTarget,
   sanitizeReturnTo,
 } from "@/lib/osm/oauth";
 
@@ -45,11 +47,9 @@ export async function GET(request: NextRequest) {
     sanitizeReturnTo(request.nextUrl.searchParams.get("returnTo")) || "/";
 
   const redirectBack = (error: string | null) => {
-    const url = new URL(returnTo, request.nextUrl.origin);
-    if (error) {
-      url.searchParams.set("osm_auth_error", error);
-    }
-    return NextResponse.redirect(url);
+    const response = new NextResponse(null, { status: 307 });
+    response.headers.set("Location", relativeRedirectTarget(returnTo, error));
+    return response;
   };
 
   try {
@@ -64,7 +64,9 @@ export async function GET(request: NextRequest) {
 
   const response = NextResponse.redirect(
     buildAuthorizeUrl({
-      redirectUri: getCallbackUrl(request.nextUrl.origin),
+      redirectUri: getCallbackUrl(
+        getRequestOrigin(request.headers, request.nextUrl.origin),
+      ),
       state,
       codeChallenge: challenge,
     }),

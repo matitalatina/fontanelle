@@ -84,6 +84,30 @@ export function getAppOrigin(requestOrigin: string): string {
   return (process.env.APP_ORIGIN || requestOrigin).replace(/\/+$/, "");
 }
 
+export function getRequestOrigin(
+  headers: Headers,
+  fallbackOrigin: string,
+): string {
+  const forwardedHost = headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+  if (!forwardedHost) {
+    return fallbackOrigin;
+  }
+  const forwardedProto =
+    headers.get("x-forwarded-proto")?.split(",")[0]?.trim() || "https";
+  return `${forwardedProto}://${forwardedHost}`;
+}
+
+export function relativeRedirectTarget(
+  returnTo: string,
+  error: string | null,
+): string {
+  const url = new URL(returnTo, "http://internal");
+  if (error) {
+    url.searchParams.set("osm_auth_error", error);
+  }
+  return `${url.pathname}${url.search}`;
+}
+
 export function buildAuthorizeUrl(params: {
   redirectUri: string;
   state: string;
