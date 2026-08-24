@@ -182,7 +182,40 @@
     "financialSupportBody": "If the app is useful to you and you'd like to support it financially, you can do so through:",
     "shareProjectButton": "Share app",
     "supportFinancialButton": "Financial support",
-    "closingNote": "Every contribution, big or small, makes a difference. Thanks for supporting this open source project!"
+    "closingNote": "Every contribution, big or small, makes a difference. Thanks for supporting this open source project!",
+    "devModeEnabled": "Developer mode enabled",
+    "devModeDisabled": "Developer mode disabled",
+    "devModeProgress": "{count, number} more taps"
+  },
+  "contribute": {
+    "title": "Add a POI",
+    "description": "Add a drinking fountain, public toilet, bike parking or playground directly on OpenStreetMap.",
+    "backToMap": "Back to map",
+    "osmNote": "This tool adds the point directly to OpenStreetMap, the shared map database, and NOT to this app. Your contribution won't be visible here right away: Fontanelle refreshes its data from OpenStreetMap periodically, so the new POI will appear after the next update.",
+    "authFailed": "OpenStreetMap authentication failed. Please try logging in again.",
+    "missingCoords": "No starting point provided. Tap the minimap to choose the position.",
+    "loginTitle": "Sign in with OpenStreetMap",
+    "loginDescription": "To add a new point you need to authorize this app with your OpenStreetMap account. You will be asked for write access to the map data.",
+    "loginButton": "Sign in with OpenStreetMap",
+    "loggedInAs": "Signed in as {name}",
+    "logout": "Log out",
+    "positionTitle": "Position",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "minimapHint": "Drag the pin or tap the map to adjust the exact position.",
+    "typeTitle": "What do you want to add?",
+    "types": {
+      "fountain": "Drinking fountain",
+      "toilet": "Public toilet",
+      "bicycleParking": "Bike parking",
+      "playground": "Playground"
+    },
+    "submit": "Add to OpenStreetMap",
+    "submitting": "Adding...",
+    "successTitle": "POI added to OpenStreetMap!",
+    "viewOnOsm": "View on OpenStreetMap",
+    "addAnother": "Add another POI",
+    "submitError": "Something went wrong while adding the POI. Please try again."
   },
   "legend": {
     "title": "Legend",

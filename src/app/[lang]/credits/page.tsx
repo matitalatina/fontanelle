@@ -1,4 +1,5 @@
 import ShareAppButton from "./ShareAppButton";
+import DevModeHeading from "./DevModeToggle";
 import { Metadata, Viewport } from "next";
 import { getTranslations } from "next-intl/server";
 import { hasLocale } from "next-intl";
@@ -13,7 +14,6 @@ import {
   faBicycle,
   faDatabase,
   faLightbulb,
-  faCode,
   faHeart,
   faShareAlt,
   faDonate,
@@ -56,8 +56,6 @@ export default async function CreditsPage({
   }
 
   const t = await getTranslations({ locale: lang, namespace: "credits" });
-
-  const bodyIndices = [0, 1, 2, 3, 4, 5];
 
   return (
     <div className="container mx-auto p-4">
@@ -106,10 +104,7 @@ export default async function CreditsPage({
 
       <div className="card bg-base-200 shadow-xl mb-8">
         <div className="card-body">
-          <h2 className="card-title">
-            <FontAwesomeIcon icon={faCode} className="text-primary mr-2" />
-            {t("developmentTitle")}
-          </h2>
+          <DevModeHeading />
           <p className="py-2">{t("developmentBody0")}</p>
           <p className="py-2">{t("developmentBody1")}</p>
         </div>

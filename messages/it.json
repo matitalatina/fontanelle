@@ -182,7 +182,40 @@
     "financialSupportBody": "Se l'app ti è utile e vuoi sostenerla economicamente, puoi farlo attraverso:",
     "shareProjectButton": "Condividi App",
     "supportFinancialButton": "Supporto finanziario",
-    "closingNote": "Ogni contributo, grande o piccolo, fa la differenza. Grazie per supportare questo progetto open source!"
+    "closingNote": "Ogni contributo, grande o piccolo, fa la differenza. Grazie per supportare questo progetto open source!",
+    "devModeEnabled": "Modalità sviluppatore attivata",
+    "devModeDisabled": "Modalità sviluppatore disattivata",
+    "devModeProgress": "Ancora {count, number} tocchi"
+  },
+  "contribute": {
+    "title": "Aggiungi un punto",
+    "description": "Aggiungi una fontanella, un bagno pubblico, un parcheggio bici o un parco giochi direttamente su OpenStreetMap.",
+    "backToMap": "Torna alla mappa",
+    "osmNote": "Questo strumento aggiunge il punto direttamente su OpenStreetMap, il database condiviso della mappa, e NON su questa app. Il contributo non sarà visibile subito qui: Fontanelle aggiorna i propri dati da OpenStreetMap periodicamente, quindi il nuovo punto apparirà dopo il prossimo aggiornamento.",
+    "authFailed": "Autenticazione con OpenStreetMap non riuscita. Prova ad accedere di nuovo.",
+    "missingCoords": "Nessun punto di partenza fornito. Tocca la mini mappa per scegliere la posizione.",
+    "loginTitle": "Accedi con OpenStreetMap",
+    "loginDescription": "Per aggiungere un nuovo punto devi autorizzare questa app con il tuo account OpenStreetMap. Ti verrà chiesto il permesso di modifica dei dati della mappa.",
+    "loginButton": "Accedi con OpenStreetMap",
+    "loggedInAs": "Accesso effettuato come {name}",
+    "logout": "Esci",
+    "positionTitle": "Posizione",
+    "latitude": "Latitudine",
+    "longitude": "Longitudine",
+    "minimapHint": "Trascina il puntatore o tocca la mappa per regolare la posizione esatta.",
+    "typeTitle": "Cosa vuoi aggiungere?",
+    "types": {
+      "fountain": "Fontanella",
+      "toilet": "Bagno pubblico",
+      "bicycleParking": "Parcheggio bici",
+      "playground": "Parco giochi"
+    },
+    "submit": "Aggiungi su OpenStreetMap",
+    "submitting": "Aggiunta in corso...",
+    "successTitle": "Punto aggiunto su OpenStreetMap!",
+    "viewOnOsm": "Vedi su OpenStreetMap",
+    "addAnother": "Aggiungi un altro punto",
+    "submitError": "Si è verificato un errore durante l'aggiunta del punto. Riprova."
   },
   "legend": {
     "title": "Legenda",

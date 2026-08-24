@@ -1,0 +1,188 @@
+import { createHash, randomBytes } from "node:crypto";
+
+const DEFAULT_SERVER_URL = "https://www.openstreetmap.org";
+
+export const OSM_SERVER_URL = (
+  process.env.OSM_SERVER_URL || DEFAULT_SERVER_URL
+).replace(/\/+$/, "");
+
+export const OSM_TOKEN_COOKIE = "osm_access_token";
+
+const OSM_SCOPES = ["write_api", "read_prefs"];
+const PENDING_AUTH_TTL_MS = 600_000;
+
+export interface OsmConfig {
+  clientId: string;
+  clientSecret: string;
+}
+
+export function getOsmConfig(): OsmConfig {
+  const clientId = process.env.OSM_CLIENT_ID;
+  const clientSecret = process.env.OSM_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    throw new Error(
+      "OSM OAuth is not configured: set OSM_CLIENT_ID and OSM_CLIENT_SECRET",
+    );
+  }
+  return { clientId, clientSecret };
+}
+
+export function getCallbackUrl(requestOrigin: string): string {
+  const appOrigin = (
+    process.env.APP_ORIGIN || requestOrigin
+  ).replace(/\/+$/, "");
+  return `${appOrigin}/api/v1/osm/auth/callback`;
+}
+
+export function sanitizeReturnTo(returnTo: string | null): string | null {
+  if (!returnTo || !returnTo.startsWith("/")) {
+    return null;
+  }
+  if (returnTo.startsWith("//")) {
+    return null;
+  }
+  return returnTo;
+}
+
+export function createPkcePair(): { verifier: string; challenge: string } {
+  const verifier = randomBytes(32).toString("base64url");
+  const challenge = createHash("sha256").update(verifier).digest("base64url");
+  return { verifier, challenge };
+}
+
+export function createState(): string {
+  return randomBytes(16).toString("hex");
+}
+
+interface CookieBase {
+  httpOnly: true;
+  sameSite: "lax";
+  secure: boolean;
+}
+
+function cookieBase(): CookieBase {
+  return {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  };
+}
+
+export function tokenCookieOptions() {
+  return { ...cookieBase(), path: "/" };
+}
+
+interface PendingAuth {
+  codeVerifier: string;
+  returnTo: string;
+  expiresAt: number;
+}
+
+const pendingAuths = new Map<string, PendingAuth>();
+
+function prunePendingAuths() {
+  const now = Date.now();
+  for (const [state, pending] of pendingAuths) {
+    if (pending.expiresAt <= now) {
+      pendingAuths.delete(state);
+    }
+  }
+}
+
+export function storePendingAuth(
+  state: string,
+  codeVerifier: string,
+  returnTo: string,
+): void {
+  prunePendingAuths();
+  pendingAuths.set(state, {
+    codeVerifier,
+    returnTo,
+    expiresAt: Date.now() + PENDING_AUTH_TTL_MS,
+  });
+}
+
+export function takePendingAuth(state: string | null): PendingAuth | null {
+  if (!state) {
+    return null;
+  }
+  const pending = pendingAuths.get(state);
+  if (!pending) {
+    return null;
+  }
+  pendingAuths.delete(state);
+  if (pending.expiresAt <= Date.now()) {
+    return null;
+  }
+  return pending;
+}
+
+export function buildAuthorizeUrl(params: {
+  redirectUri: string;
+  state: string;
+  codeChallenge: string;
+}): string {
+  const url = new URL("/oauth2/authorize", OSM_SERVER_URL);
+  url.searchParams.set("response_type", "code");
+  url.searchParams.set("client_id", getOsmConfig().clientId);
+  url.searchParams.set("redirect_uri", params.redirectUri);
+  url.searchParams.set("scope", OSM_SCOPES.join(" "));
+  url.searchParams.set("state", params.state);
+  url.searchParams.set("code_challenge", params.codeChallenge);
+  url.searchParams.set("code_challenge_method", "S256");
+  return url.toString();
+}
+
+export async function exchangeCodeForToken(params: {
+  code: string;
+  redirectUri: string;
+  codeVerifier: string;
+}): Promise<string> {
+  const response = await fetch(`${OSM_SERVER_URL}/oauth2/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      code: params.code,
+      redirect_uri: params.redirectUri,
+      client_id: getOsmConfig().clientId,
+      client_secret: getOsmConfig().clientSecret,
+      code_verifier: params.codeVerifier,
+    }),
+  });
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(
+      `OSM token exchange failed with status ${response.status}: ${detail}`,
+    );
+  }
+  const data = await response.json();
+  const accessToken = data?.access_token;
+  if (typeof accessToken !== "string" || accessToken.length === 0) {
+    throw new Error("OSM token endpoint did not return an access token");
+  }
+  return accessToken;
+}
+
+export interface OsmUser {
+  id: number;
+  displayName: string;
+}
+
+export async function fetchOsmUser(accessToken: string): Promise<OsmUser> {
+  const response = await fetch(`${OSM_SERVER_URL}/api/0.6/user/details.json`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  if (!response.ok) {
+    throw new Error(`OSM user details failed with status ${response.status}`);
+  }
+  const data = await response.json();
+  const user = data?.user;
+  if (!user || typeof user.display_name !== "string") {
+    throw new Error("Unexpected OSM user details payload");
+  }
+  return { id: Number(user.id), displayName: user.display_name };
+}
