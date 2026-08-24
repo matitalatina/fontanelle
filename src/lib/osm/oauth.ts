@@ -17,21 +17,23 @@ const TEMP_COOKIE_MAX_AGE = 600;
 export interface OsmConfig {
   clientId: string;
   clientSecret: string;
+  appOrigin: string;
 }
 
 export function getOsmConfig(): OsmConfig {
   const clientId = process.env.OSM_CLIENT_ID;
   const clientSecret = process.env.OSM_CLIENT_SECRET;
-  if (!clientId || !clientSecret) {
+  const appOrigin = process.env.APP_ORIGIN?.replace(/\/+$/, "");
+  if (!clientId || !clientSecret || !appOrigin) {
     throw new Error(
-      "OSM OAuth is not configured: set OSM_CLIENT_ID and OSM_CLIENT_SECRET",
+      "OSM OAuth is not configured: set OSM_CLIENT_ID, OSM_CLIENT_SECRET and APP_ORIGIN",
     );
   }
-  return { clientId, clientSecret };
+  return { clientId, clientSecret, appOrigin };
 }
 
-export function getCallbackUrl(requestOrigin: string): string {
-  return `${getAppOrigin(requestOrigin)}/api/v1/osm/auth/callback`;
+export function getCallbackUrl(): string {
+  return `${getAppOrigin()}/api/v1/osm/auth/callback`;
 }
 
 export function sanitizeReturnTo(returnTo: string | null): string | null {
@@ -80,32 +82,12 @@ export function oauthTempCookieOptions() {
   };
 }
 
-export function getAppOrigin(requestOrigin: string): string {
-  return (process.env.APP_ORIGIN || requestOrigin).replace(/\/+$/, "");
-}
-
-export function getRequestOrigin(
-  headers: Headers,
-  fallbackOrigin: string,
-): string {
-  const host =
-    headers.get("x-forwarded-host")?.split(",")[0]?.trim() ||
-    headers.get("host")?.trim();
-  if (!host) {
-    return fallbackOrigin;
+export function getAppOrigin(): string {
+  const appOrigin = process.env.APP_ORIGIN?.replace(/\/+$/, "");
+  if (!appOrigin) {
+    throw new Error("APP_ORIGIN is not set");
   }
-  const forwardedProto = headers
-    .get("x-forwarded-proto")
-    ?.split(",")[0]
-    ?.trim();
-  if (forwardedProto) {
-    return `${forwardedProto}://${host}`;
-  }
-  try {
-    return `${new URL(fallbackOrigin).protocol}//${host}`;
-  } catch {
-    return fallbackOrigin;
-  }
+  return appOrigin;
 }
 
 export function relativeRedirectTarget(

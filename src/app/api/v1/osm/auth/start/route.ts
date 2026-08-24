@@ -8,65 +8,46 @@ import {
   createState,
   getCallbackUrl,
   getOsmConfig,
-  getRequestOrigin,
   oauthTempCookieOptions,
   relativeRedirectTarget,
   sanitizeReturnTo,
 } from "@/lib/osm/oauth";
 
-function canonicalRedirectOrNull(request: NextRequest): NextResponse | null {
-  const appOrigin = process.env.APP_ORIGIN?.replace(/\/+$/, "");
-  if (
-    !appOrigin ||
-    request.nextUrl.searchParams.get("osm_src") === "canonical"
-  ) {
-    return null;
-  }
-  try {
-    if (new URL(appOrigin).origin === request.nextUrl.origin) {
-      return null;
-    }
-  } catch {
-    return null;
-  }
-  const url = new URL(request.nextUrl.pathname, appOrigin);
-  for (const [key, value] of request.nextUrl.searchParams.entries()) {
-    url.searchParams.set(key, value);
-  }
-  url.searchParams.set("osm_src", "canonical");
-  return NextResponse.redirect(url);
-}
-
 export async function GET(request: NextRequest) {
-  const canonicalRedirect = canonicalRedirectOrNull(request);
-  if (canonicalRedirect) {
-    return canonicalRedirect;
+  let appOrigin: string;
+  try {
+    appOrigin = getOsmConfig().appOrigin;
+  } catch (error) {
+    console.error(error);
+    const response = new NextResponse(null, { status: 307 });
+    response.headers.set(
+      "Location",
+      relativeRedirectTarget("/", "not_configured"),
+    );
+    return response;
+  }
+
+  if (
+    request.nextUrl.searchParams.get("osm_src") !== "canonical" &&
+    request.nextUrl.origin !== new URL(appOrigin).origin
+  ) {
+    const url = new URL(request.nextUrl.pathname, appOrigin);
+    for (const [key, value] of request.nextUrl.searchParams.entries()) {
+      url.searchParams.set(key, value);
+    }
+    url.searchParams.set("osm_src", "canonical");
+    return NextResponse.redirect(url);
   }
 
   const returnTo =
     sanitizeReturnTo(request.nextUrl.searchParams.get("returnTo")) || "/";
-
-  const redirectBack = (error: string | null) => {
-    const response = new NextResponse(null, { status: 307 });
-    response.headers.set("Location", relativeRedirectTarget(returnTo, error));
-    return response;
-  };
-
-  try {
-    getOsmConfig();
-  } catch (error) {
-    console.error(error);
-    return redirectBack("not_configured");
-  }
 
   const state = createState();
   const { verifier, challenge } = createPkcePair();
 
   const response = NextResponse.redirect(
     buildAuthorizeUrl({
-      redirectUri: getCallbackUrl(
-        getRequestOrigin(request.headers, request.nextUrl.origin),
-      ),
+      redirectUri: getCallbackUrl(),
       state,
       codeChallenge: challenge,
     }),

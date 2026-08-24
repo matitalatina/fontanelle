@@ -7,7 +7,6 @@ import {
   OSM_VERIFIER_COOKIE,
   exchangeCodeForToken,
   getCallbackUrl,
-  getRequestOrigin,
   oauthTempCookieOptions,
   relativeRedirectTarget,
   sanitizeReturnTo,
@@ -49,9 +48,7 @@ export async function GET(request: NextRequest) {
   try {
     const accessToken = await exchangeCodeForToken({
       code,
-      redirectUri: getCallbackUrl(
-        getRequestOrigin(request.headers, request.nextUrl.origin),
-      ),
+      redirectUri: getCallbackUrl(),
       codeVerifier,
     });
     const response = redirectBack(null);
