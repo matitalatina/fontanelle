@@ -8,14 +8,7 @@ import SharePositionButton from "../SharePositionButton";
 import { createMarkerIconHTML } from "@/lib/marker-icons";
 import { faFaucetDrip } from "@fortawesome/free-solid-svg-icons";
 import { useTranslations } from "next-intl";
-
-const fountainMarker = new Icon({
-  contentHtml: createMarkerIconHTML(faFaucetDrip),
-  color: "var(--color-fountain-content)",
-  contentColor: "var(--color-fountain)",
-  accentColor: "var(--color-fountain)",
-  svg: PinSquarePanel,
-});
+import { POI_TYPE_MARKERS } from "./poi-markers";
 
 const houseMarker = new Icon({
   contentHtml: createMarkerIconHTML(faFaucetDrip),
@@ -26,12 +19,14 @@ const houseMarker = new Icon({
 });
 
 export default function StationMarker({ station }: { station: Station }) {
-  const t = useTranslations('app');
+  const t = useTranslations("app");
 
   return (
     <Marker
       position={[station.lat, station.lng]}
-      icon={station.type === "fountain" ? fountainMarker : houseMarker}
+      icon={
+        station.type === "fountain" ? POI_TYPE_MARKERS.fountain : houseMarker
+      }
     >
       <Popup
         className={`station-popup ${station.type === "fountain" ? "popup-fountain" : "popup-water-house"}`}
@@ -41,8 +36,8 @@ export default function StationMarker({ station }: { station: Station }) {
           <div className="flex flex-col flex-1 space-y-2">
             <div className="text-lg">
               {station.type === "fountain"
-                ? t('markerLabels.fountain')
-                : t('markerLabels.waterHouse')}
+                ? t("markerLabels.fountain")
+                : t("markerLabels.waterHouse")}
             </div>
             {station.name && (
               <div className="text-sm font-light">{station.name}</div>
@@ -51,7 +46,7 @@ export default function StationMarker({ station }: { station: Station }) {
           <div className="flex flex-row justify-between">
             <SharePositionButton
               latLng={{ lat: station.lat, lng: station.lng }}
-              markerType={t('markerTypes.fountain')}
+              markerType={t("markerTypes.fountain")}
             />
             <GoToButton latLng={{ lat: station.lat, lng: station.lng }} />
           </div>

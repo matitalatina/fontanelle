@@ -10,57 +10,14 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import type { Map as LeafletMap } from "leaflet";
-import {
-  Icon,
-  PinSquarePanel,
-  PinStarPanel,
-  PinTrianglePanel,
-} from "leaflet-extra-markers";
-import { createMarkerIconHTML } from "@/lib/marker-icons";
-import {
-  faFaucetDrip,
-  faRestroom,
-  faParking,
-  faFutbol,
-} from "@fortawesome/free-solid-svg-icons";
 import { TILE_LAYERS } from "@/hooks/useTileLayer";
 import type { LatLng, LocationState } from "@/hooks/useLocation";
 import LocateButton from "@/components/LocateButton";
+import { POI_TYPE_MARKERS } from "@/components/markers/poi-markers";
 import type { PoiType } from "@/lib/osm/types";
 
 const MILAN_CENTER: LatLng = { lat: 45.464664, lng: 9.18854 };
 const LOCATE_ZOOM = 17;
-
-const POI_MARKERS: Record<PoiType, Icon> = {
-  fountain: new Icon({
-    contentHtml: createMarkerIconHTML(faFaucetDrip),
-    color: "var(--color-fountain-content)",
-    contentColor: "var(--color-fountain)",
-    accentColor: "var(--color-fountain)",
-    svg: PinSquarePanel,
-  }),
-  toilet: new Icon({
-    contentHtml: createMarkerIconHTML(faRestroom),
-    color: "var(--color-toilet-content)",
-    contentColor: "var(--color-toilet)",
-    accentColor: "var(--color-toilet)",
-    svg: PinStarPanel,
-  }),
-  bicycle_parking: new Icon({
-    contentHtml: createMarkerIconHTML(faParking),
-    color: "var(--color-bicycle-content)",
-    contentColor: "var(--color-bicycle)",
-    accentColor: "var(--color-bicycle)",
-    svg: PinSquarePanel,
-  }),
-  playground: new Icon({
-    contentHtml: createMarkerIconHTML(faFutbol),
-    color: "var(--color-playground-content)",
-    contentColor: "var(--color-playground)",
-    accentColor: "var(--color-playground)",
-    svg: PinTrianglePanel,
-  }),
-};
 
 function ClickCatcher({ onChange }: { onChange: (position: LatLng) => void }) {
   useMapEvents({
@@ -160,7 +117,7 @@ export default function ContributeMiniMap({
         {position && (
           <Marker
             position={[position.lat, position.lng]}
-            icon={POI_MARKERS[poiType]}
+            icon={POI_TYPE_MARKERS[poiType]}
             draggable={true}
             eventHandlers={{
               dragend: (event) => {

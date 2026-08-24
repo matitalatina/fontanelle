@@ -1,40 +1,31 @@
 "use client";
 
 import { BicycleParking } from "@/lib/bicycleParking";
-import { Icon, PinSquarePanel } from "leaflet-extra-markers";
 import { Marker, Popup } from "react-leaflet";
 import FeatureIcon from "../FeatureIcon";
 import GoToButton from "../GoToButton";
 import SharePositionButton from "../SharePositionButton";
-import { createMarkerIconHTML } from "@/lib/marker-icons";
-import { faParking, faBicycle } from "@fortawesome/free-solid-svg-icons";
+import { faBicycle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslations } from "next-intl";
-
-const bicycleParkingMarker = new Icon({
-  contentHtml: createMarkerIconHTML(faParking),
-  color: "var(--color-bicycle-content)",
-  contentColor: "var(--color-bicycle)",
-  accentColor: "var(--color-bicycle)",
-  svg: PinSquarePanel,
-});
+import { POI_TYPE_MARKERS } from "./poi-markers";
 
 export default function BicycleParkingMarker({
   bicycleParking,
 }: {
   bicycleParking: BicycleParking;
 }) {
-  const t = useTranslations('app');
+  const t = useTranslations("app");
 
   return (
     <Marker
       position={[bicycleParking.lat, bicycleParking.lng]}
-      icon={bicycleParkingMarker}
+      icon={POI_TYPE_MARKERS.bicycle_parking}
     >
       <Popup className="station-popup popup-bicycle" closeButton={false}>
         <div className="w-full min-w-32 max-w-64 flex flex-col space-y-4">
           <div className="flex flex-col flex-1 space-y-2">
-            <div className="text-lg">{t('markerLabels.bicycleParking')}</div>
+            <div className="text-lg">{t("markerLabels.bicycleParking")}</div>
             <div className="flex flex-row space-x-2 items-center min-h-4 text-base">
               <FeatureIcon
                 icon="fas fa-euro-sign"
@@ -58,15 +49,15 @@ export default function BicycleParkingMarker({
                 <FontAwesomeIcon icon={faBicycle} className="mr-1" />
                 {bicycleParking.capacity}{" "}
                 {bicycleParking.capacity === 1
-                  ? t('capacitySingular')
-                  : t('capacityPlural')}
+                  ? t("capacitySingular")
+                  : t("capacityPlural")}
               </div>
             )}
           </div>
           <div className="flex flex-row justify-between">
             <SharePositionButton
               latLng={{ lat: bicycleParking.lat, lng: bicycleParking.lng }}
-              markerType={t('markerTypes.bicycleParking')}
+              markerType={t("markerTypes.bicycleParking")}
             />
             <GoToButton
               latLng={{ lat: bicycleParking.lat, lng: bicycleParking.lng }}
