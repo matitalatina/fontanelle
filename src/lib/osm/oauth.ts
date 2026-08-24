@@ -7,9 +7,12 @@ export const OSM_SERVER_URL = (
 ).replace(/\/+$/, "");
 
 export const OSM_TOKEN_COOKIE = "osm_access_token";
+export const OSM_STATE_COOKIE = "osm_oauth_state";
+export const OSM_VERIFIER_COOKIE = "osm_oauth_verifier";
+export const OSM_RETURN_TO_COOKIE = "osm_return_to";
 
 const OSM_SCOPES = ["write_api", "read_prefs"];
-const PENDING_AUTH_TTL_MS = 600_000;
+const TEMP_COOKIE_MAX_AGE = 600;
 
 export interface OsmConfig {
   clientId: string;
@@ -28,17 +31,14 @@ export function getOsmConfig(): OsmConfig {
 }
 
 export function getCallbackUrl(requestOrigin: string): string {
-  const appOrigin = (
-    process.env.APP_ORIGIN || requestOrigin
-  ).replace(/\/+$/, "");
-  return `${appOrigin}/api/v1/osm/auth/callback`;
+  return `${getAppOrigin(requestOrigin)}/api/v1/osm/auth/callback`;
 }
 
 export function sanitizeReturnTo(returnTo: string | null): string | null {
   if (!returnTo || !returnTo.startsWith("/")) {
     return null;
   }
-  if (returnTo.startsWith("//")) {
+  if (returnTo.startsWith("//") || returnTo.includes("\\")) {
     return null;
   }
   return returnTo;
@@ -57,14 +57,14 @@ export function createState(): string {
 interface CookieBase {
   httpOnly: true;
   sameSite: "lax";
-  secure: boolean;
+  secure: true;
 }
 
 function cookieBase(): CookieBase {
   return {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
   };
 }
 
@@ -72,49 +72,16 @@ export function tokenCookieOptions() {
   return { ...cookieBase(), path: "/" };
 }
 
-interface PendingAuth {
-  codeVerifier: string;
-  returnTo: string;
-  expiresAt: number;
+export function oauthTempCookieOptions() {
+  return {
+    ...cookieBase(),
+    maxAge: TEMP_COOKIE_MAX_AGE,
+    path: "/api/v1/osm/auth",
+  };
 }
 
-const pendingAuths = new Map<string, PendingAuth>();
-
-function prunePendingAuths() {
-  const now = Date.now();
-  for (const [state, pending] of pendingAuths) {
-    if (pending.expiresAt <= now) {
-      pendingAuths.delete(state);
-    }
-  }
-}
-
-export function storePendingAuth(
-  state: string,
-  codeVerifier: string,
-  returnTo: string,
-): void {
-  prunePendingAuths();
-  pendingAuths.set(state, {
-    codeVerifier,
-    returnTo,
-    expiresAt: Date.now() + PENDING_AUTH_TTL_MS,
-  });
-}
-
-export function takePendingAuth(state: string | null): PendingAuth | null {
-  if (!state) {
-    return null;
-  }
-  const pending = pendingAuths.get(state);
-  if (!pending) {
-    return null;
-  }
-  pendingAuths.delete(state);
-  if (pending.expiresAt <= Date.now()) {
-    return null;
-  }
-  return pending;
+export function getAppOrigin(requestOrigin: string): string {
+  return (process.env.APP_ORIGIN || requestOrigin).replace(/\/+$/, "");
 }
 
 export function buildAuthorizeUrl(params: {

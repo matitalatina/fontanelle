@@ -1,8 +1,33 @@
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import { OSM_TOKEN_COOKIE, fetchOsmUser } from "@/lib/osm/oauth";
+import { createHash } from "node:crypto";
+import {
+  OSM_SERVER_URL,
+  OSM_TOKEN_COOKIE,
+  fetchOsmUser,
+} from "@/lib/osm/oauth";
 import { closeChangeset, createChangeset, createNode } from "@/lib/osm/api";
 import { isPoiType } from "@/lib/osm/types";
+
+const RATE_LIMIT = 6;
+const RATE_WINDOW_MS = 60_000;
+
+const submissionCounts = new Map<
+  string,
+  { count: number; windowStart: number }
+>();
+
+function isRateLimited(accessToken: string): boolean {
+  const key = createHash("sha256").update(accessToken).digest("hex");
+  const now = Date.now();
+  const entry = submissionCounts.get(key);
+  if (!entry || now - entry.windowStart >= RATE_WINDOW_MS) {
+    submissionCounts.set(key, { count: 1, windowStart: now });
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > RATE_LIMIT;
+}
 
 export async function POST(request: NextRequest) {
   const cookieStore = await cookies();
@@ -43,6 +68,10 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Invalid session" }, { status: 401 });
   }
 
+  if (isRateLimited(accessToken)) {
+    return Response.json({ error: "Too many requests" }, { status: 429 });
+  }
+
   try {
     const changesetId = await createChangeset(accessToken, type);
     try {
@@ -50,7 +79,7 @@ export async function POST(request: NextRequest) {
       return Response.json({
         nodeId,
         changesetId,
-        osmUrl: `${process.env.OSM_SERVER_URL?.replace(/\/+$/, "") || "https://www.openstreetmap.org"}/node/${nodeId}`,
+        osmUrl: `${OSM_SERVER_URL}/node/${nodeId}`,
       });
     } finally {
       try {

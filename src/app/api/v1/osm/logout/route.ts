@@ -6,7 +6,7 @@ export async function POST() {
   cookieStore.set(OSM_TOKEN_COOKIE, "", {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     path: "/",
     maxAge: 0,
   });
