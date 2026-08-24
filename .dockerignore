@@ -6,3 +6,4 @@ generated/
 README.md
 .next
 .git
+.env

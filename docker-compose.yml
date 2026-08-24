@@ -2,6 +2,8 @@ services:
   app:
     image: fontanelle:${VERSION}
     restart: unless-stopped
+    env_file:
+      - .env
     labels:
       - traefik.enable=true
       - traefik.http.routers.fontanelle.rule=Host(`fontanelleitalia.com`)
