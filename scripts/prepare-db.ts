@@ -97,7 +97,7 @@ async function downloadLatestData(force = false) {
   const queries = getOverpassQueries();
 
   try {
-    await downloader.downloadAll(queries);
+    await downloader.downloadAll(queries, { force });
     console.log("✅ All data downloaded successfully!");
   } catch (error) {
     console.error("❌ Download failed:", error);

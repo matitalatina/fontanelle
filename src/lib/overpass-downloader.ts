@@ -7,52 +7,118 @@ export interface OverpassQuery {
   outputFile: string;
 }
 
+interface DownloadOptions {
+  force?: boolean;
+}
+
+const MAX_ATTEMPTS = 3;
+const RETRY_BASE_DELAY_MS = 5000;
+const INTER_QUERY_DELAY_MS = 1000;
+
 export class OverpassDownloader {
   private baseUrl = "https://overpass-api.de/api/interpreter";
 
-  async downloadQuery(query: OverpassQuery): Promise<void> {
-    console.log(`Downloading ${query.name}...`);
-
+  private isAlreadyDownloadedToday(query: OverpassQuery): boolean {
     try {
-      const response = await fetch(this.baseUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "User-Agent": "Downloader/1.0 (https://fontanelleitalia.com/)",
-          Referer: "https://fontanelleitalia.com/",
-        },
-        body: `data=${encodeURIComponent(query.query)}`,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.text();
-
-      // Ensure directory exists
-      const dir = path.dirname(query.outputFile);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-
-      fs.writeFileSync(query.outputFile, data, "utf8");
-      console.log(
-        `Successfully downloaded ${query.name} to ${query.outputFile}`,
-      );
-    } catch (error) {
-      console.error(`Error downloading ${query.name}:`, error);
-      throw error;
+      return fs.statSync(query.outputFile).size > 0;
+    } catch {
+      return false;
     }
   }
 
-  async downloadAll(queries: OverpassQuery[]): Promise<void> {
+  private cleanupOldFiles(currentFile: string): void {
+    const dir = path.dirname(currentFile);
+    const keep = path.basename(currentFile);
+    if (!fs.existsSync(dir)) {
+      return;
+    }
+    for (const entry of fs.readdirSync(dir)) {
+      if (entry !== keep && entry.endsWith(".csv")) {
+        const oldFile = path.join(dir, entry);
+        fs.unlinkSync(oldFile);
+        console.log(`🗑️  Removed outdated data file: ${oldFile}`);
+      }
+    }
+  }
+
+  private async sleep(ms: number): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async downloadQuery(
+    query: OverpassQuery,
+    options: DownloadOptions = {},
+  ): Promise<void> {
+    const { force = false } = options;
+
+    if (!force && this.isAlreadyDownloadedToday(query)) {
+      console.log(
+        `⏭️  ${query.name} was already downloaded today, skipping (${query.outputFile})`,
+      );
+      return;
+    }
+
+    console.log(`Downloading ${query.name}...`);
+
+    let lastError: unknown;
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      try {
+        const response = await fetch(this.baseUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "Downloader/1.0 (https://fontanelleitalia.com/)",
+            Referer: "https://fontanelleitalia.com/",
+          },
+          body: `data=${encodeURIComponent(query.query)}`,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.text();
+
+        // Ensure directory exists
+        const dir = path.dirname(query.outputFile);
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+
+        fs.writeFileSync(query.outputFile, data, "utf8");
+        console.log(
+          `Successfully downloaded ${query.name} to ${query.outputFile}`,
+        );
+
+        this.cleanupOldFiles(query.outputFile);
+        return;
+      } catch (error) {
+        lastError = error;
+        console.error(
+          `❌ Attempt ${attempt}/${MAX_ATTEMPTS} failed for ${query.name}:`,
+          error instanceof Error ? error.message : error,
+        );
+        if (attempt < MAX_ATTEMPTS) {
+          const delay = RETRY_BASE_DELAY_MS * attempt;
+          console.log(`⏳ Retrying in ${delay / 1000}s...`);
+          await this.sleep(delay);
+        }
+      }
+    }
+
+    throw lastError;
+  }
+
+  async downloadAll(
+    queries: OverpassQuery[],
+    options: DownloadOptions = {},
+  ): Promise<void> {
     console.log(`Starting download of ${queries.length} queries...`);
 
     for (const query of queries) {
-      await this.downloadQuery(query);
+      await this.downloadQuery(query, options);
       // Add a small delay between requests to be respectful to the API
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, INTER_QUERY_DELAY_MS));
     }
 
     console.log("All downloads completed successfully!");

@@ -21,7 +21,8 @@ async function main() {
   console.log("");
 
   try {
-    await downloader.downloadAll(queries);
+    const force = process.argv.includes("--force");
+    await downloader.downloadAll(queries, { force });
     console.log("✅ All data downloaded successfully!");
     console.log("🔄 You can now run the database preparation script.");
   } catch (error) {
