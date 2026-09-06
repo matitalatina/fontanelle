@@ -10,11 +10,17 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import type { Map as LeafletMap } from "leaflet";
-import { TILE_LAYERS } from "@/hooks/useTileLayer";
+import {
+  CONTRIBUTE_BASEMAPS,
+  type ContributeBasemapType,
+} from "@/hooks/useTileLayer";
 import type { LatLng, LocationState } from "@/hooks/useLocation";
 import LocateButton from "@/components/LocateButton";
 import { POI_TYPE_MARKERS } from "@/components/markers/poi-markers";
 import type { PoiType } from "@/lib/osm/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMap, faSatellite } from "@fortawesome/free-solid-svg-icons";
+import { useTranslations } from "next-intl";
 
 const MILAN_CENTER: LatLng = { lat: 45.464664, lng: 9.18854 };
 const LOCATE_ZOOM = 17;
@@ -55,10 +61,13 @@ export default function ContributeMiniMap({
   onChange: (position: LatLng) => void;
 }) {
   const mapRef = useRef<LeafletMap | null>(null);
+  const t = useTranslations("contribute");
+  const [basemap, setBasemap] = useState<ContributeBasemapType>("osm");
   const [locateStatus, setLocateStatus] = useState<LocateStatus>({
     status: "idle",
   });
   const center = position ?? MILAN_CENTER;
+  const basemapConfig = CONTRIBUTE_BASEMAPS[basemap];
 
   const handleLocate = useCallback(() => {
     if (!navigator.geolocation) {
@@ -109,8 +118,10 @@ export default function ContributeMiniMap({
         className="w-full h-full"
       >
         <TileLayer
-          attribution={TILE_LAYERS.osm.attribution}
-          url={TILE_LAYERS.osm.url}
+          key={basemap}
+          attribution={basemapConfig.attribution}
+          url={basemapConfig.url}
+          maxZoom={basemapConfig.maxZoom ?? 19}
         />
         <ClickCatcher onChange={onChange} />
         <MapRefSetter mapRef={mapRef} />
@@ -128,6 +139,31 @@ export default function ContributeMiniMap({
           ></Marker>
         )}
       </MapContainer>
+      <div
+        className="absolute top-2 right-2 join shadow-xl"
+        style={{ zIndex: 4000 }}
+        role="group"
+        aria-label={t("basemapLabel")}
+      >
+        <button
+          type="button"
+          className={`btn btn-xs join-item ${basemap === "osm" ? "btn-primary" : "bg-base-100"}`}
+          onClick={() => setBasemap("osm")}
+          aria-pressed={basemap === "osm"}
+        >
+          <FontAwesomeIcon icon={faMap} className="mr-1" />
+          {t("basemapOsm")}
+        </button>
+        <button
+          type="button"
+          className={`btn btn-xs join-item ${basemap === "esriAerial" ? "btn-primary" : "bg-base-100"}`}
+          onClick={() => setBasemap("esriAerial")}
+          aria-pressed={basemap === "esriAerial"}
+        >
+          <FontAwesomeIcon icon={faSatellite} className="mr-1" />
+          {t("basemapSatellite")}
+        </button>
+      </div>
       <LocateButton onClick={handleLocate} locationState={locationState} />
     </div>
   );

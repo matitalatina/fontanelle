@@ -203,6 +203,9 @@
     "latitude": "Latitude",
     "longitude": "Longitude",
     "minimapHint": "Drag the pin or tap the map to adjust the exact position.",
+    "basemapLabel": "Map background",
+    "basemapOsm": "Map",
+    "basemapSatellite": "Satellite",
     "typeTitle": "What do you want to add?",
     "types": {
       "fountain": "Drinking fountain",

@@ -203,6 +203,9 @@
     "latitude": "Latitudine",
     "longitude": "Longitudine",
     "minimapHint": "Trascina il puntatore o tocca la mappa per regolare la posizione esatta.",
+    "basemapLabel": "Sfondo mappa",
+    "basemapOsm": "Mappa",
+    "basemapSatellite": "Satellite",
     "typeTitle": "Cosa vuoi aggiungere?",
     "types": {
       "fountain": "Fontanella",
